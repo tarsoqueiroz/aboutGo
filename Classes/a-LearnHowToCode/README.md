@@ -58,7 +58,7 @@ go list -m all
   * [4.07 Iota](section_04/4.07.md)  
   * [4.08 Bit Shifting](section_04/4.08.md)
 
-## Section 5: Exercises - Level 2
+## Exercises Level 2 (Section 7)
 
   * [5.01 Hands-on Exercise #1](section_05/5.01.md)
   * [5.02 Hands-on Exercise #2](section_05/5.02.md)
@@ -69,7 +69,7 @@ go list -m all
   * [5.07 Hands-on Exercise #7](section_05/5.07.md)
   * [5.07a Hands-on Exercise #7 Answers](section_05/5.07a.md)
 
-## Section 6: Control Flow
+## Control Flow (Section 8)
 
   * [6.01 Understanding Control Flow](section_06/6.01.md)
   * [6.02 Loop - Init, Condition, Post](section_06/6.02.md)
