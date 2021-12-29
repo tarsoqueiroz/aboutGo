@@ -1,32 +1,59 @@
 # Golang Tutorial for Beginners
 
-Full Go Course by TechWorld with Nana
+Full Golang Tutorial to learn the Go Programming Language while building a simple CLI application on [Youtube](https://www.youtube.com/watch?v=yyUHQIec83I)
 
-> `https://www.youtube.com/watch?v=yyUHQIec83I`
+## About this course
 
-## Intro & Course Overview about INTRODUCTION TO GO (0:00)
+In this full Golang course you will learn about one of the youngest programming languages that is becoming more and more popular in the cloud engineering world, which is Go or also commonly known as Golang.
 
-## 02:47 - What is Go? Why Go? How it's different?
+You will learn everything you need to get started with Go and start using it in your projects. We're going to write a very simple CLI application to learn the basics of Go. So instead of learning the concepts and syntax of Go with isolated examples, you will learn them while building an actual application throughout the tutorial.
 
-## 06:50 - Characteristics of Go and Go Use Cases
+Before diving right into the syntax you will first understand why Go was even developed, its use cases or what Golang is used for and how Go is different from other programming languages.
 
-## GO SYNTAX & CONCEPTS
+### L I N K S
 
-## 08:59 - Local Setup - Install Go & Editor
+Git Repo: ► `https://gitlab.com/nanuchi/go-full-course-youtube`
 
-## 12:54 - Write our First Program & Structure of a Go File
+## 1ª part
 
-## 22:02 - Variables & Constants in Go
+### Intro & Course Overview (0:00)
 
-## 30:43 - Formatted Output - printf 
+### What is Go? Why Go? How it's different? (02:47)
 
-## 33:43 - Data Types in Go
+### Characteristics of Go and Go Use Cases (06:50)
 
-## 45:18 - Getting User Input
+### GO SYNTAX & CONCEPTS
 
-## 47:19 - What is a Pointer?
+### Local Setup - Install Go & Editor (08:59)
 
-## 53:55 - Book Ticket Logic
+### Write our First Program & Structure of a Go File (12:54)
+
+> `01-basic.go` ==> `main.go`
+
+```Shell
+go mod init booking-app
+go run main.go 
+```
+
+### Variables & Constants in Go (22:02)
+
+> `02-variables.go` ==> `main.go`
+
+### Formatted Output - printf (30:43)
+
+### Data Types in Go (33:43)
+
+### Getting User Input (45:18)
+
+### What is a Pointer? (47:19)
+
+```Shell
+go run main.go
+```
+
+## 2ª part
+
+## Book Ticket Logic (53:55)
 
 ## 57:16 - Arrays & Slices
 
@@ -34,7 +61,7 @@ Full Go Course by TechWorld with Nana
 
 ## 1:24:24 - Conditionals (if / else) and Boolean Data Type
 
-## 1:39:33 - Validate User Input
+## 2ª part OK 1:39:33 - Validate User Input
 
 ## 1:54:02 - Switch Statement
 
@@ -42,7 +69,7 @@ Full Go Course by TechWorld with Nana
 
 ## 2:22:36 - Organize Code with Go Packages
 
-## 2:35:39 - Scope Rules in Go
+## 3ª part OK 2:35:39 - Scope Rules in Go
 
 ## 2:37:16 - Maps
 
