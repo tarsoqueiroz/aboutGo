@@ -38,7 +38,7 @@ go list -m all
 - [2.08 Creating Your Own Type](section_02/2.08.md)
 - [2.09 Conversion, Not Casting](section_02/2.09.md)
 
-## Exercises Level 1 (Section 5) TODO
+## Exercises Level 1 (Section 5)
 
   * [3.01 Hands-on Exercise #1](section_03/3.01.md)
   * [3.02 Hands-on Exercise #2](section_03/3.02.md)
@@ -83,6 +83,8 @@ go list -m all
   * [6.10 Conditional - Switch Statement](section_06/6.10.md)
   * [6.11 Conditional - Switch Statement Documentation](section_6/6.11.md)
   * [6.12 Conditional Logic Operators ](section_06/6.12.md)
+
+Evaluate on `switch` the `fallthrough` for continue test condition.
 
 ## Section 7: Exercises - Level 3
 
