@@ -53,28 +53,32 @@ go run main.go
 
 ## 2ª part
 
-## Book Ticket Logic (53:55)
+### Book Ticket Logic (53:55)
 
-## 57:16 - Arrays & Slices
+### Arrays & Slices (57:16)
 
-## 1:11:12 - Loops in Go
+### Loops in Go (1:11:12)
 
-## 1:24:24 - Conditionals (if / else) and Boolean Data Type
+### Conditionals (if / else) and Boolean Data Type (1:24:24)
 
-## 2ª part OK 1:39:33 - Validate User Input
+## 3ª part
 
-## 1:54:02 - Switch Statement
+### Validate User Input (1:39:33)
 
-## 1:58:37 - Encapsulate Logic with Functions
+### 1:54:02 - Switch Statement
 
-## 2:22:36 - Organize Code with Go Packages
+### 1:58:37 - Encapsulate Logic with Functions
 
-## 3ª part OK 2:35:39 - Scope Rules in Go
+### 2:22:36 - Organize Code with Go Packages
 
-## 2:37:16 - Maps
+## 4ª part 
 
-## 2:53:20 - Structs
+### 2:35:39 - Scope Rules in Go
 
-## 3:02:15 - Goroutines - Concurrency in Go
+### 2:37:16 - Maps
+
+### 2:53:20 - Structs
+
+### 3:02:15 - Goroutines - Concurrency in Go
 
 ## 3:23:51 - Congratulations!
