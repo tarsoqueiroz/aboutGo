@@ -65,20 +65,20 @@ go run main.go
 
 ### Validate User Input (1:39:33)
 
-### 1:54:02 - Switch Statement
+### Switch Statement (1:54:02)
 
-### 1:58:37 - Encapsulate Logic with Functions
+### Encapsulate Logic with Functions (1:58:37)
 
-### 2:22:36 - Organize Code with Go Packages
+### Organize Code with Go Packages (2:22:36) <===============
 
 ## 4ª part 
 
-### 2:35:39 - Scope Rules in Go
+### Scope Rules in Go (2:35:39)
 
-### 2:37:16 - Maps
+### Maps (2:37:16)
 
-### 2:53:20 - Structs
+### Structs (2:53:20)
 
-### 3:02:15 - Goroutines - Concurrency in Go
+### Goroutines - Concurrency in Go (3:02:15)
 
 ## 3:23:51 - Congratulations!
