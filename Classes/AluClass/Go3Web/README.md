@@ -12,7 +12,7 @@ Faça esse curso de GoLang e:
 - Aprofunde seus conhecimentos na linguagem criada pelo Google
 - Melhore seu código com partials
 
-## Servidor e struct de produtos (32m)
+## Servidor e struct de produtos
 
 ### Introdução
 
