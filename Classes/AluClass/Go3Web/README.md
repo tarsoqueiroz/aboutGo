@@ -388,21 +388,341 @@ Vamos instalar o Postgres para armazenar nossos produtos de forma segura, conect
 
 ### Instalando o Postgres
 
+[00:00] Vamos exibindo os produtos de forma dinâmica, porém existe um ponto muito sensível no projeto, todos os produtos estão cadastrados no arquivo main.go. Vamos no terminal e conseguimos ver a camiseta, fone e o produto novo.
+
+[00:21] Se eu removo a linha “Produto novo” no nosso código, meu produto novo vai simplesmente desaparecer. Observa que todos os dados da nossa aplicação que são o que temos de mais importante, são os nossos produtos, eles estão no arquivo chamado no ponto Go.
+
+[00:45] Podemos perder muito fácil os nossos dados, será que existe alguma forma melhorar os nossos dados, deixá-los mais seguros, existe, pode usar um banco de dados SQL.
+
+[00:57] Depois mostra os nossos produtos no Go, conecta o nosso projeto com o banco de dados SQL, pode ser o postgre, por exemplo, e tem os nossos produtos guardados, seguros, vamos fazer isso.
+
+[01:15] Primeira coisa, eu vou abrir aqui o postgre, clique em download, depois baseado no sistema operacional que você estiver utilizando clica no Windows ou Mac, ou no Linux - no meu caso vou usar o Mac versão enterprise para aprender também, ver como que mexe.
+
+[01:37] Na versão 11.4 do post repara que ele não tem suporte ainda para o Linux, a versão 10.9 tem e essa que vai usar o nosso projeto, a versão 11.4 roda no Mac e no Windows 64, mas não roda no Windows 32.
+
+[01:52] Para deixar o nosso projeto de forma que todas as pessoas possam utilizar, ter como base nossos cursos, vou fazer download da versão 10.9, clicando em download se for Mac no seu caso, se for Windows 64, Windows 32 ou se for Linux. Para ganhar tempo já fiz o download, dá um pause no vídeo e pode continuar depois junto comigo.
+
+[02:17] Dando continuidade eu vou clicar no postgre para fazer a instalação, abrir, instalador do postgre, na minha máquina, vou dar um duplo clique para executar este instalador, ele falou isso aqui você baixou da internet tem certeza que você quer abrir? Pode abrir, pediu a senha para instalar os programas no Mac, digita a senha do meu administrador.
+
+[02:39] Ele vai começar abrir aqui o instalador do postgre, está abrindo, next duas vezes, quero instalar esses componentes, um ponto importante, a senha, é essa senha ela é extremamente importante porque vou precisar dela para conseguir conectar com o banco de dados depois.
+
+[03:05] Escrevam uma senha que vocês vão lembrar depois, vou usar a porta padrão 5432, vou deixar default, bloqueio também, next três vezes, ele vai começar a instalação do postgre. Terminou a instalação, perguntou se quer stack builder vou falar que não.
+
+[03:34] Vou desmarcar a opção e clico em terminar, vou fechar essa janela, agora que terminamos, vou apertar o comando de espaço e vou digitar PG e ele já mostra PGAdmin4, se você tiver no Linux ou Windows vai no iniciar e vai aparecer o ícone do tipo novos programas instalados.
+
+[03:57] Eu vou clicar enter PGAdmin4. Eu dou enter e ele está carregando, criando uma porta, novo servidor, apareceu o elefante que é o símbolo do postgre, está carregando, vamos ver, ele abriu.
+
+[04:21] Ele pede para que consiga entrar digitar nossa senha de conexão com banco de dados, vou digitar a senha, consegui acessar a minha base de dados, vou clicar em servers - que são serviços, não quero que salve minha senha, eu tenho uma base de dados que postgre utilliza.
+
+[04:42] Eu quero criar uma base de dados para guardar os produtos da nossa loja - que chamou de Alura loja, vou clicar com botão direito, create data, mês e vou criar uma nova base de dados e essa base de dados vai se chamar alura_loja.
+
+[04:57] Vou clicar em save, repare que agora temos uma base de dados criada, temos Alura, a loja do postgre mesmo, vou acessar Alura loja, vou vir em esquema, em público não tem nenhuma tabela, não criamos uma tabela para armazenar os dados.
+
+[05:19] Eu quero uma tabela que contenha os dados dos meus produtos - o nome, descrição, quantidade, para isso vou vir em tool e vou criar um Script SQL para inicializar a tabela.
+
+[05:37] Create table, cria uma tabela, tabela chamada produtos, porque eu não vou armazenar um, vou armazenar vários produtos dentro dessa tabela. Entre parênteses eu vou colocar o código da minha tabela de produtos, o primeiro campo que vou criar é um identificador de produtos, ou seja, um ID.
+
+[06:00] Cada produto que tiver na nossa tabela, vai ter um identificador único. Eu vou chamar de ID, eu quero que ele seja um serial - um autoincremento sempre cada produto, cada inserção - nome de produto, que fizer eu quero que ele tenha um valor sequencial.
+
+[06:20] Vou falar que ele é primary key, um identificador único, através dele vai conseguir conectar com outras tabelas também, criei ID, com o produto também tem um nome que eu vou identificar como varchar, uma string do SQL.
+
+[06:41] Tem a descrição que também é um varchar, tem o preço que vai chamar de decimal e tem também a quantidade que que é um inteiro integer, tem uma tabela, que tem uma descrição de uma quantidade; eu quero executar esse código SQL.
+
+[07:11] Eu clico no raiozinho embaixo onde estava Alura loja, vamos ver o que ele falou, que eu esqueci de alguma coisa, é integer. Foi criada com sucesso. Será que ela aparece? Vou clicar com botão direito em cima dela e vou selecionar, roda e atualiza a tabela.
+
+[07:44] Tem a tabela de produtos, só que eu não tenho nenhum produto na minha tabela, eu vou clicar com o botão direito e colocar que eu quero visualizar todas as linhas da minha tabela, vai aparecer, não tem nenhum produto.
+
+[07:55] Queremos inserir os produtos na nossa base de dados, mais uma vez eu venho em query tool e vou criar a inserção dos meus produtos. Vou digitar insert into. É o comando para inserir e ele espera o nome da tabela.
+
+[08:12] Vou falar insere na tabela de produtos, em quais campos? Quando vai utilizar um insert que não precisa especificar, vai remover o campo, quero que insira o nome no campo nome, descrição no campo descrição, preço no campo preço e valores values.
+
+[08:44] Os valores eu vou colocar cada valor, eles vão representar um determinado produto, bem parecido com que fizemos na nossa struct, o primeiro produto que eu vou inserir ele vai ser uma camiseta.
+
+[08:56] Um ponto importante no SQL vamos utilizar aspas simples. Então, uma camiseta, tem lá uma camiseta azul, essa uma camiseta preta, o preço dela vai ser 19 e a quantidade eu tenho 10 em estoque, vou colocar uma vírgula e vou criar um outro produto, fazer um outro insert, aspas simples.
+
+[09:18] E vou chamar o próximo produto de fone, 'Fone', 'Muito bom', o preço dele é 99 e eu tenho cinco no estoque. Terminei de fazer as inserções, coloco ponto-e-virgula para ele entender que acaba essa inserção; executar.
+
+[09:44] Ele falou querys executadas com sucesso, com o botão direito vou dar um refresh mais uma vez. Quero visualizar toda minha tabela, todas as colunas e consegui visualizar que tem os dois produtos. O próximo passo é conseguir conectar o banco de dados com a nossa aplicação Go. Veremos a seguir.
+
+**NOTA PESSOAL**
+
+- Docker containers:
+
+```shell
+docker network create --driver bridge go3web-network
+
+docker container run --name go3web-postgres --network=go3web-network -e "POSTGRES_PASSWORD=Go3Web-Postgres" -p 5432:5432 -v /Data/Learn/aboutGo/Classes/AluClass/Go3Web/codes/data:/var/lib/postgresql/data -d postgres:10.20-alpine
+
+docker container run --name go3web--pgadmin --network=go3web-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=tarsoqueiroz@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=Go3Web-PgAdmin" -d dpage/pgadmin4
+```
+
+- Connect to:
+
+```shell
+http://localhost:15432
+```
+
+- Credentials on PgAdmin:
+
+```shell
+Username: tarsoqueiroz@gmail.com
+Password: Go3Web-PgAdmin
+```
+
+- Create connection to Server:
+
+```shell
+Name: Local
+Host name: go3web-postgres
+Port: 5432
+Username: postgres
+Password: Go3Web-Postgres
+```
+
+> *Ref:* `https://renatogroffe.medium.com/postgresql-docker-executando-uma-inst%C3%A2ncia-e-o-pgadmin-4-a-partir-de-containers-ad783e85b1a4`
+
+- Create table
+
+```sql
+create table produtos (
+	id serial primary key,
+	nome varchar,
+	descricao varchar,
+	preco decimal,
+	quantidade integer
+)
+```
+
+- Insert products on table
+
+```sql
+insert into produtos (nome, descricao, preco, quantidade) values 
+('Camiseta', 'Preta', 19, 10),
+('Fone', 'Muito bom', 99, 5);
+```
 
 ### Conectando com o banco
 
+[00:00] Criamos dois produtos, a camiseta e o fone no postgre e queremos conectar com o nosso projeto feito em Go. Vamos no nosso Visual Studio Code e quero conectar o nosso projeto com postgre.
+
+[00:13] Existe alguma biblioteca que facilite essa comunicação entre o postgre e o nosso projeto feito em Go? Existe um local onde pode pesquisar bibliotecas que outras pessoas fizeram e que pode utilizar também em nossos projetos.
+
+[00:31] No Go.org, nesse caminho consegue pesquisar vários pacotes de conexão com banco e outras coisas também, quero pesquisar postgres, aparece “github.com/lib”, uma biblioteca feita em Go para conexão e é justamente o que precisa.
+
+[01:10] A primeira coisa para conseguir utilizar a biblioteca é fazer a instalação dela faz através desse comandinho go get e github.com/lib/pq, vou copiar vou lá no nosso terminal e vou digitar, vou colar e ele vai trazer essa biblioteca para o nosso projeto, só esperar um pouquinho, pronto.
+
+[01:36] Ele trouxe para o nosso terminal, vamos na documentação para ver como que está o passo-a-passo dessa biblioteca, tem que fazer agora para de fato colocar nesse nosso projeto é importar.
+
+[01:50] Então vou copiar a linha _ “github.com/lib/pq” e vou colocar na lista de import, repara uma coisa interessante apareceu underline na frente, que significa esse underline na frente? Vou remover underline e vou salvar o projeto como esse e tudo sumiu.
+
+[02:08] Vou dar “Control + Z” vou salvar de novo, porque o Visual Studio Code tira isso? Na verdade, não pode importar uma biblioteca e não utilizar, só que a biblioteca do postgre não vai utilizar o tempo inteiro, logo quando nosso programa iniciar vai usar durante o tempo de execução da nossa aplicação.
+
+[02:31] Para isso utiliza esse underline na frente vou salvar e tem lá a nossa biblioteca agora incorporada no nosso projeto, onde vai utilizar durante o tempo de execução da nossa aplicação.
+
+[02:48] Já tem a biblioteca quando faz a conexão com banco de dados, eu preciso de fato conectar com banco de dados. Eu não quero ficar nessa tela, eu quero conseguir fazer essa conexão com banco de dados.
+
+[03:05] Vou criar uma nova função e essa função eu vou chamar de chamar de conecta com banco de dados, essa função devo ter um retorno que é um ponteiro para o SQL, eu vou colocar o retorno dessa função sql.db.
+
+[03:35] Precisa passar as informações para essa função que conecta com banco, vou criar uma string de conexão, passando o nome do banco que está utilizando, o nome do usuário, a senha host que vai utilizar para essa nossa stringde conexão.
+
+[03:58] Vou falar conexão ela vai ser := vai fazer uma atribuição e vou passar string para ela, vai ter que passar quem é usuário, depois o nome da tabela que está utilizando, dbname, depois vai pegar todos esses dados, a senha, o host e se está utilizando o modo SSL.
+
+[04:34] Eu preciso passar todas as informações. Mas onde eu encontro essas informações? No nosso postgre de novo vou mostrar para vocês, eu vou clicar lá na nossa propriedade, vou clicar com botão direito em cima dele e tem properties
+
+[04:57] Vou acessar e ele tem algumas informações, tem uma aba chamada conexão, tem as informações que precisa passar então o host name é localhost, vamos lá vai passar essa informação também, subir, vai ficar melhor.
+
+[05:20] O nosso host eu vou passar que vai ser o nosso = localhost, a porta que está utilizando não vai precisar agora, tem user name que é o usuário, que está fazendo a conexão, então usuário é o postgres.
+
+[05:45] Então, ”user=postgres”, o nome do banco de dados. Está fácil, o nome do banco que criamos, Alura loja. Vou pegar ”user=postgres dbname=alura_loja”, para finalizar a nossa senha, nesse momento do curso vai passar a senha direto, mas existe uma forma da conseguir passar essa senha para as variáveis de ambiente da nossa aplicação.
+
+[06:16] Numa aplicação real, faria isso, como esse curso é um curso onde está vendo as principais funcionalidades, consolidando o nosso passo a passo, vai passar o nosso password direto e vocês vão descobrir agora a senha que eu utilizei para subir a minha aplicação.
+
+[06:36] Passei a senha, para finalizar esse modo SSL, eu vou deixar como desabilitado, então, escrever disable, pronto, eu tenho a minha senha de conexão, agora eu quero de fato abrir uma conexão com o banco de dados.
+
+[06:58] Para eu abrir essa conexão com banco de dados, eu vou criar duas variáveis db e uma variável de erro porque que eu estou utilizando essas duas variáveis: db e erro. Lembrando que as funções que utiliza no Go, geralmente nos devolvem um ou mais retornos.
+
+[07:13] Nesse caso, essa função que utilizaremos para abrir conexão, ela devolve esses dois setores, então se conseguir fazer a conexão certa não vai ter nenhuma mensagem de erro. Vou chamar o SQL que é o nosso ponteiro ali em cima.
+
+[07:33] Ele já trouxe algumas opções, eu vou usar sql.open, eu quero abrir uma conexão nova no banco de dados ”postgres”, isso em aspas duplas, eu vou passar a minha string de conexão - que é a conexão que essa variável que eu queria em cima passando essas informações.
+
+[08:00] Vamos verificar se tem algum erro, se se eu recebi uma mensagem de erro, if err !=nil continuo a minha aplicação, senão vou dar panic, exibir qual é o erro. E passa essa função. Se deu tudo certo, se nada de mensagem de erro eu quero retornar.
+
+[08:41] Eu quero retornar essa minha variável. Para finalizar vamos descobrir se a conexão deu certo ou não. Eu vou lá no meu código main, na minha função principal, eu vou abrir uma conexão e fechar conexão só para ver se não recebe nenhuma mensagem de erro.
+
+[09:06] Vou chamar de ver: igual a essa nossa função que conecta com banco, conectar com banco de dados, depois eu quero fechar essa função, para fechar não posso usar um comando que é o defer db.Close.
+
+[09:25] Vou salvar, vamos ver se está tudo certinho, beleza parece que está tudo certo, vamos derrubar a nossa aplicação, já está derrubado, executar go run main.go para subir o nosso servidor; executei, não recebemos nenhuma mensagem de erro.
+
+[09:56] O que *defer faz: ele é executado depois que tudo tiver sido executado na nossa função. A última coisa que ele vai fazer depois de executar as linhas é isso, então ele abriu a conexão, executou tudo e depois fechou.
+
+[10:12] Não recebemos nenhuma mensagem de erro, isso significa que conseguimos conectar com banco de dados. Então se consegue conectar, consegue buscar essas informações que estão no PGAdmin.
+
+[10:28] Eu quero buscar as informações que estão no banco, a camiseta preta e o fone muito. Na próxima aula vai - agora que já tem a conexão - buscar essas informações do banco de dados.
 
 ### Exibindo dados do banco
 
+[00:00] Conectamos o nosso projeto Go com o banco de dados postgres, queremos exibir os dados que estão lá no banco de dados, na nossa função index criávamos nosso slice de produtos, passava para nossa index, não é isso que quero fazer, quero trazer os valores que estão no banco.
+
+[00:21] Eu vou conectar com banco, então db= conectaComBancoDeDados, assim que eu faço conexão eu preciso saber pedir para o banco de dados o que eu quero que ele me ele me traga, eu já tenho a conexão.
+
+[00:38] eu tenho que falar banco eu quero que você me traga tudo relacionado ao produto, eu quero toda a tabela de produtos, vamos criar um select de produtos, de todos os produtos, ele vai ser =, essa função que vamos utilizar, big query, devolve dois retornos, select de todos os produtos que é o que esperamos.
+
+[01:11] E uma mensagem de erro, é possível que não consiga trazer esses produtos, então ele traz esses dois erros, uma mensagem de erro, err:- db.Query, queremos executar uma query, pedir para o banco: “banco seleciona para mim” select.
+
+[01:28] Deixar tudo minúsculo ”select * from produtos”, ou seja, traga tudo relacionado a produtos. Será que deu certo? Vamos verificar, se tiver uma mensagem se o erro não for nulo, existe um erro e eu quero exibir esse erro.
+
+[01:51] Coloco um panic, coloco erro nulo, salvei, aparentemente não deu erro, então vai uma mensagem “o produto não passou ainda”, está tranquilo, já vai passar. Fizemos select em todos os produtos, não exibe todos os produtos, tem que fazer uma forma de conseguir verificar linha a linha o que cada produto representa.
+
+[02:34] No postgres o ID 1 representa a camiseta e a descrição “preta”, o preço dele é 19 e a quantidade é 10; o produto dois, ID 2, nome dele é fone a descrição dele é muito bom, ou seja, linha a linha eu tenho que saber o que eu estou buscando.
+
+[02:54] Eu vou criar um for para esse meu select, vou no Visual Studio Code e vou criar variável chamada de p, ela vai ser igual a instância de um produto apenas. Então vai ser um produto, trata-se de um produto, dentro dessa variável eu vou armazenar todo o conteúdo que estiver vindo do banco de dados.
+
+[03:20] Cada produto do banco de dados vou chamar de p, assim que eu criar todos os meus produtos, eu vou inserir uma variável chamada produtos a nossa lista, nosso slice, passo ele embaixo.
+
+[03:41] Vamos lá, para começar vou criar o for, linha a linha vai vendo o que cada produto é, for do select de produtos e usar uma função chamada next. Ou seja, eu quero a próximo à linha – leu a primeira eu quero a próxima linha, vou abrir parênteses, abro e fecho chaves também.
+
+[04:06] Eu vou criar uma variável que eu vou chamar de id. Lembrando que essa variável precisa criar também no nosso modelo de produto, vou criar para não esquecer id.
+
+[04:30] Assim, var id int depois eu tenho mais uma variável que vai ser o nome e eu tenho também a descrição que eles são uma string e a quantidade, para finalizar eu tenho preço que é float 64.
+
+[05:02] Tenho todas essas variáveis. Vamos escanear linha a linha, var vou guardar isso numa variável de erro, ele vai ser igual a esse meu select de todos os produtos .scan. Eu vou escanear linha a linha.
+
+[05:22] Você viu que eu criei essas variáveis de nome de quantidade, nome, descrição e preço dentro dessas variáveis que eu criei, eu quero que fique armazenado na memória do meu computador, no endereço de memória do meu computador o conteúdo dessas variáveis. Como é que eu faço isso?
+
+[05:37] Eu vou colocar no scan um e comercial, vou escrever o id, depois eu quero na memória do meu computador dessas variáveis que eu acabei de criar - eu quero armazenar o nome, armazenar a descrição, também o preço e quero armazenar por último a quantidade.
+
+[06:04] Tem conteúdo de todos eles, está numa mensagem de erro, pode ser que eu não consiga armazenar. Então vai Verificar também se tem um erro, se o erro não for nulo, faço panic erro, err.error, salvar, parece que está tudo certinho.
+
+[06:29] Eu fiz o scan desse primeiro produto, eu preciso armazenar o conteúdo desse produto na minha variável, que instancia o produto, vou instanciar a variável, p.nome, ela vai ser igual ao nome que eu trouxe.
+
+[06:54] Eu criei uma variável p e aos poucos eu vou atribuindo os valores dessa variável. Então o p.nome vai ser igual o nome que está armazenado na memória, de onde veio esse nome? Eu escaneei do meu banco de dados; o mesmo vou fazer para as nossas outras variáveis também.
+
+[07:09] O p.descricao vai ser igual a descrição, preço vai ser igual ao preço e para finalizar o p.quantidade vai ser igual a quantidade, tudo isso só falta um último passo; eu tenho um produto p, eu criei produto, o que que vamos fazer? Passar esse produto para o meu array de produtos.
+
+[07:36] Vou colocar p. vou falar produtos = append vou adicionar na minha lista de produtos e qual é o valor? Valor desse produto é individual. Vou salvar, vamos ver se está tudo certinho. Aparentemente parece está tudo certo.
+
+[08:04] Depois que eu faço tudo isso, é muito importante: eu abri a conexão com o banco de dados, mas eu não fechei, eu preciso fechar conexão, como que fechou? Usou - depois que abre uma conexão, usou defer para fechar essa conexão.
+
+[08:20] Não precisa dessas duas linhas para abrir e fechar a conexão com o programa, agora tem um momento, um lugar que vai de fato usar essa conexão, eu vou colocar embaixo, depois que fizer tudo, bota defer db.Close, eu quero fechar a conexão.
+
+[08:41] A linha 67 vou deixar só para não perder a ideia. Abriu a conexão, fechou a conexão com banco de dados, agora vem a prova real. Temos a lista as lojas com os produtos que instanciamos manualmente.
+
+[08:58] E tem os produtos do nosso banco de dados. Vamos em abrir para ficar emocionante. Tem a camiseta preta e o fone muito bom; eu vou subir o servidor e vai descobrir se deu certo.
+
+[09:09] Vamos lá go run main.go, executei, aparentemente não recebemos nenhuma mensagem de erro, nenhum panic, vou voltar e atualizar a página, atualizei e tem camiseta preta, o fone muito bom –“Guilherme não sei não será que você não está me enrolando?”
+
+[09:29] Vamos colocar um produto a mais no banco e vamos ver em tools, vou isso deu certo mesmo, vou colocar um produto, mas vou fazer inserção manual. Vou vir na loja na tabela, clica em tools, vou fazer inserção de um produto, então insert into na tabela produtos.
+
+[09:58] Eu quero inserir o nome, descrição, o preço e a quantidade, o seguinte valor, eu quero ir um produto novo, vou colocar de novo produto novo sempre é o teste final.
+
+[10:21] A descrição do produto novo é 2.0 mesmo, preço dele 199 e eu só tenho um, vou mudar essa query foi executada com sucesso, vou voltar no nosso código do Go lá no visual Studio, vou derrubar aplicação “control + C”, “Control + L” para só para limpar o nosso terminal go run main.go.
+
+[10:53] Coloquei um produto novo. Vamos ver mesmo se esse produto está lá na nossa base de dados, só para finalizar, voltei no nosso banco de dados, PGAdmin, eu dou refresh em table; clica com botão direito, em produtos quero visualizar tudo.
+
+[11:20] Em todas as linhas, reparem que eu vou ter três produtos, tem um produto novo 2.0 mesmo. Vamos no meu visual Studio Code. Rodei. Vou atualizar, está lá o produto novo, que conectamos com o banco de dados e trouxemos as informações.
 
 ### Faça como eu fiz na aula
 
+**Sua vez!**
+
+Estamos exibindo os produtos de forma dinâmica, porém existe um ponto muito sensível em nosso projeto: Todos nossos produtos estão cadastrados em nosso arquivo main.go e isso pode ser arriscado, pois se deletarmos uma linha de produto sem querer, perdemos o produto.
+
+> Pensando nisso, instale e utilize o banco PostgreSQL, inserindo alguns produtos e faça a integração com a aplicação, exibindo os produtos que estão no banco de dados.
+
+**Opinião do instrutor - Resumo do código**
+
+- Após a instalação do Postgres e inserção de 2 produtos com código SQL, precisamos conectar com o banco para exibir os produtos que estão cadastrados lá. Pensando nisso, crie uma função:
+
+```go
+func conectaComBancoDeDados() *sql.DB {
+    conexao := "user=postgres dbname=alura_loja password=12345678 host=localhost sslmode=disable"
+    db, err := sql.Open("postgres", conexao)
+    if err != nil {
+        panic(err.Error())
+    }
+    return db
+}
+```
+
+- Altere a função index para exibir os produtos do banco de dados:
+
+```go
+func index(w http.ResponseWriter, r *http.Request) {
+    db := conectaComBancoDeDados()
+
+    selectDeTodosOsProdutos, err := db.Query("select * from produtos")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    p := Produto{}
+    produtos := []Produto{}
+
+    for selectDeTodosOsProdutos.Next() {
+        var id, quantidade int
+        var nome, descricao string
+        var preco float64
+
+        err = selectDeTodosOsProdutos.Scan(&id, &nome, &descricao, &preco, &quantidade)
+        if err != nil {
+            panic(err.Error())
+        }
+
+        p.Nome = nome
+        p.Descricao = descricao
+        p.Preco = preco
+        p.Quantidade = quantidade
+
+        produtos = append(produtos, p)
+    }
+
+    temp.ExecuteTemplate(w, "Index", produtos)
+    defer db.Close()
+}
+```
+
+O gabarito deste exercício é o passo a passo demonstrado no vídeo. Tenha certeza de que tudo está certo antes de continuar.
 
 ### Imports
 
+Durante o desenvolvimento de uma aplicação feita em Go com banco de dados Postgres, uma pessoa importou os seguintes pacotes:
+
+```go
+import (
+    "database/sql"
+    "html/template"
+    "net/http"
+
+    _ "github.com/lib/pq"
+)
+```
+
+Com base no código acima, analise as informações abaixo e marque as verdadeiras:
+
+- **O pacote "html/template" é usado para criar textos orientados a dados no HTML.**
+  - *Certo! Este pacote implementa templates controlados por dados para gerar saída em HTML segura contra injeção de código.*
+- O pacote "database/sql" é um pacote projetado para conectar apenas com 2 bancos de dados: Postgres e SQLite.
+- **O pacote "net/http"da biblioteca padrão da Go, possibilita a criação de servidores.**
+  - *Certo! Esse pacote torna incrivelmente fácil a criação de servidores HTTP. Por exemplo o comando ListenAndServe() inicia um servidor HTTP pertence a este biblioteca.*
 
 ### O que aprendemos?
 
+Nessa aula:
+
+- Instalamos o Postgres para armazenar nossos produtos de forma segura;
+- Criamos uma função chamada conectaComBancoDeDados() para abrir a conexão com o banco de dados;
+- Alteramos nosso código para exibir os produtos que estão cadastrados lá no banco de dados.
+
+Projeto desenvolvido nesta aula
+
+Neste [link](https://github.com/alura-cursos/web_com_golang/archive/aula_2.zip), você fará o download do projeto feito até esta aula.
+
+Caso queira visualizar o código desenvolvido até aqui, clique neste [link](https://github.com/alura-cursos/web_com_golang/tree/aula_2).
+
+Na próxima aula
+Vamos modularizar nosso código, criar uma página para cadastrar novos produtos e salvar esses produtos no banco de dados!
+
+![print001.png](./images/print001.png)
 
 ## Refatoração e página de novos produtos (47m)
 
