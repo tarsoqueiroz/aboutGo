@@ -728,18 +728,295 @@ Vamos modularizar nosso código, criar uma página para cadastrar novos produtos
 
 ### Modularizando o código
 
+[00:00] Agora que fizemos a conexão da nossa aplicação com banco de dados postgres e exibimos todos os produtos que estão lá na nossa base de dados, existe um ponto importante. Observe que nosso arquivo main.go realiza muitas coisas e tem muitas funções.
+
+[00:21] A gente começa a usar o arquivo main.go, faz um import de tudo que é necessário para que ele funcione, depois conecta com banco de dados, cria struct de produtos, cria uma variável com todos os nossos templates, temos a função main que tem uma rota especificando quem vai atender a essa rota.
+
+[00:42] Quem atende essa rota é essa função index, que abre conexão com o banco de dados, faz o select do banco de dados para trazer todos os produtos, pega produto por produto para ver nome, descrição, preço e quantidades.
+
+[00:54] Cria uma lista e passa a lista para o template, muita coisa. Nosso arquivo main.go possui muitas responsabilidades, e manter um código assim vai ficar difícil conforme nosso projeto for crescendo.
+
+[01:08] Vamos começar a modularizar o nosso projeto, cada trecho de código vai ser responsável por uma determinada função. Observe que fazemos na função conectaComBancoDeDados() a conexão com o banco de dados. Repare que esse é um arquivo de configuração, passamos usuário, nome.
+
+[01:29] Podemos deixar isso numa pasta de configuração do banco de dados. Vou clicar no ícone de criar nova pasta e vou chamá-la de "db". Dei enter. Dentro da pasta "db" vou criar um arquivo db.go, para deixar todos os arquivos relacionados a configuração do banco de dados da nossa aplicação.
+
+[01:52] Então vou colocar que o pacote é o pacote db, que é o que queremos fazer, vou pegar todo o código da função conectaComBancoDeDados, farei um “Control + X” e vou colocar ele aqui no arquivo db.go.
+
+[02:08] Quando salvar, repara que ele já fez um import do SQL - só que temos que ficar atentos, porque esse nosso import também é relacionado a essa função que conecta com banco de dados, então também precisamos passar esse import para o arquivo de db.
+
+[02:31] Vou fazer mais um import, colocar entre parêntesis, coloca o que quero fazer e fecho parêntese. Temos um local específico para funções de configuração de acesso ao banco de dados. Vamos ver outra coisa que pode fazer.
+
+[02:47] Repara que o type Produto struct, ou seja, a criação da nossa structure de produtos também está no arquivo main.go. Não está legal. No banco de dados tem também id, nome, descrição, preço, quantidade.
+
+[03:01] Geralmente quem faz o relacionamento dos dados da nossa aplicação com o banco de dados é um arquivo chamado modelo, que vamos armazenar numa pasta chamada models.
+
+[03:12] Vou criar uma nova pasta chamada models, dentro dela eu vou criar um arquivo (new file) que vou chamar de produtos.go.
+
+[03:29] Dentro de produtos.go vou falar qual é o pacote que pertence, pacote de modelos, e vou passar essa minha structure de produtos para dentro, quando eu salvo, está tudo certo.
+
+[03:44] Antes da darmos continuidade, a função index faz o acesso a um banco de dados traz todos os produtos, pega produto por produto, e cria uma lista de produtos que depóis é passada para ser executada em nosso template.
+
+[04:04] Tudo isso é relacionado ao nosso modelo de produtos. Então vamos criar uma função que faz isso no nosso modelo de produtos.
+
+[04:20] Vou criar uma função chamada BuscaTodosOsProdutos. Essa função vai devolver alguma coisa. No nosso arquivo main temos uma lista de produtos, criamos uma lista de produtos.
+
+[04:36] Então, vou passar uma lista de produtos ([]Produto). Vou dar um “Control + C” desse código e vou passar para o arquivo produto.go. Na nossa lista de produtos fazemos a conexão com banco de dados, já especificamos e vamos retornar uma lista de produtos.
+
+[05:03] Em BuscaTodosOsProdutos eu abri a conexão com banco de dados, só que eu não fechei - eu vou colocar defer para fechar essa conexão depois que tudo que for executado, defer db.Close(), e vou retornar com a palavra return, essa nossa lista de produtos.
+
+[05:25] Vou salvar, vamos ver, e ele apontou um erro, dizendo "essa função conecta com banco de dados eu não sei onde está, não está definido, eu não consegui achar". Mas criamos um arquivo e o pacote db, e criamos a função conectaComBancoDeDados.
+
+[05:42] Aqui tem dois pontos importantes. Da mesma forma que importamos outras bibliotecas para um determinado arquivo, precisa fazer isso também para outros arquivos que temos.
+
+[05:57] Então precisamos importar, especificar o caminho onde está esse arquivo. Além disso, para conseguirmos acessar esses dados, executar essa função, a primeira letra precisa ser maiúscula.
+
+[06:12] Alterei, deixei a primeira letra maiúscula (ConectaComBancoDeDados). Em produtos.go, e vou fazer um import dessa nossa biblioteca. Repare que eu cloquei com letra maiúscula também. Ele continua não achando, então temos que fazer o import do arquivo db.go. Vou especificar o caminho.
+
+[06:38] Lembra que a gente criou nosso arquivo no Github.com seguido do nome do usuário? Eu vou colocar o nome do pacote que estou utilizando no projeto, que é "Alura/db". Repare que quando eu salvar o erro continua, mas quando eu coloco db.ConectaComBancoDeDados eu consigo acessar os dados em outro arquivo.
+
+[07:01] Dessa forma a gente modulariza o nosso projeto. Então já passei todas as informações para os produtos do nosso modelo de produtos. Voltando em nosso main, não precisamos executar o código que fecha conexão com o banco de dados, porque o nosso main.go não vai ter essa responsabilidade. Então vou remover esse trecho de código.
+
+[07:34] Agora eu quero acessar os dados da pasta models, do nosso pacote de modelos. Queremos acessar a função BuscaTodosOsProdutos para retornar a lista dos produtos. Então vou criar uma variável todosOsProdutos. Como eu faço o acesso dessa variável?
+
+[07:57] Preciso importar. Vou criar o import de "github.com/Alura/models". Dentro da pasta models eu tenho essa função que busca todos os produtos. Então eu vou falar models.BuscaTodosOsProdutos, repare que já aparece a opção.
+
+[08:31] Quando eu buscar todos os produtos e armazenar messa variável, eu quero que seja exibido assim. Quando eu salvo parece que está tudo certo. Vamos executar para ver. "Command + J" para abrir o nosso terminal. Vou parar aqui o servidor e rodar de novo com go run main.go. Quando eu volto e atualizo, temos o mesmo resultado mas com o código mais modularizado.
 
 ### Modularizando um Pouco Mais
 
+[00:00] Vamos ver o que que podemos fazer para deixar nosso código ainda melhor. No produtos.go criamos e isolou a parte de conexão com o banco, deixou tudo o que é referente a esse relacionamento do banco de dados com os dados da nossa aplicação no nosso modelo de produtos - eu posso até minimizar.
+
+[00:19] Vamos ver o que pode melhorar ainda mais o nosso arquivo Go, nós carregamos uma variável com todas as rotas e depois tem a nossa função que responde a essa rota, esse carregamento de rotas no main.go.
+
+[00:41] Tem o arquivo main que tem como principal responsabilidade subir nosso servidor, então poderia isolar também em um outro local, onde carrega as nossas rotas. Vou criar uma nova pasta, eu vou chamar essa pasta de routes.
+
+[01:03] Dentro dela eu quero passar o código que carrega endereça melhor quem vai atender essa rota, vou dar um “Control + X” para remover essa linha, vou lá no routes, vou criar um novo arquivo chamado routes.go.
+
+[01:25] Dentro desse pacote consegue fazer acesso em outras partes da nossa aplicação, dentro do nosso arquivo eu quero criar uma função que vai carregar essas rotas.
+
+[01:46] Então vou colocar carrega rotas, vou passar nosso código. Vou salvar, quando eu salvo vai falar “esse index eu não reconheço”, não está definido em nenhum lugar, então essa nossa função index onde ela deve estar?
+
+[02:11] Será que deve ficar no nosso arquivo main? A index vê quem está fazendo requisição, endereça. Fala assim “modelo eu preciso de todos os produtos” e depois eu quero esse template.
+
+[02:31] Isso é referente a quem? Ao controle. Temos o nosso model, temos routes no template vamos criar uma pasta de controle; chama controllers dentro dela, vou criar novo arquivo.
+
+[02:49] Vou chamar de produtos, dentro da nossa pasta de produtos eu vou ter qual é o pacote que pertence e no main.go vou colocar nosso código que carrega todos os templates.
+
+[03:10] Coloquei o código dos templates também vou colocar a nossa função index, repara que quando salvar já importa tudo que é necessário. Vamos voltar no routes - tem problema porque ele não sabe especificar de onde vem a nossa requisição.
+
+[03:38] Para que possamos acessar, dentro do nosso pacote de controles a função, vou deixar a letra maiúscula, vou fazer mais um recorte, vou informar da minha pasta de controle.
+
+[04:05] Vou colocar o que quero importar, pasta local /Alura/controllers, o index quero que seja controllers.Index, vou salvar, vou ver no arquivo Go, no meu código, na minha função, preciso carregar.
+
+[04:45] Carregar a nossa rota, vamos fazer da mesma forma, vai importar o nosso Go, não precisa dessa linha. Já passamos para nosso controle. Então vou importar “github.com/Alura/routes” quero que routes faça; vou colocar routes.CarregaRotas.
+
+[05:20] Vou salvar, importou, quando o arquivo main começar, vai buscar do importa que fizemos da pasta routes a função que carrega as rotas. Modularizamos o projeto que era mvc, tem os nossos controles e vai ver qual a requisição que está vindo e vai pedir para o modelo.
+
+[05:44] Agora eu preciso passar para o template, preciso passar para minha view depois que ele passa e tem nossos modelos, que foi lá conectar com banco de dados, que isolamos ainda mais, tem uma um arquivo que só faz essa conexão.
+
+[06:00] Passa todas essas informações, modularizamos muito o nosso projeto, vamos testar, vou parar minha aplicação, limpar no terminal e vou rodar go run main.go. Aparentemente não tem nenhum erro, quando eu clicar para atualizar precisa visualizar a mesma página.
+
+[06:21] Não queremos alterar o nosso código, alterar o comportamento da aplicação, queremos melhorar o nosso código e sem alterar o comportamento, quando eu atualizo funciona da mesma forma com meu código modularizado.
 
 ### Página de novos produtos
 
+[00:00] Eu quero criar novos produtos na minha loja só que para isso eu vou lá no postgres, abro a base de dados da Alura, eu desço em tables, produtos, tools, eu posso vir aqui em query tools, criar insert em SQL: “insert into”.
+
+[00:19] Repara que está muito trabalhoso, sendo que o que eu quero fazer é criar um novo produto na minha loja e eu tenho lá no postgres para criar esse produto, vamos otimizar esse trabalho de criação de novos produtos.
+
+[00:34] Que tal criar um botão escrito “criar novo produto” que quando clica abre uma outra janela, uma outra aba, nova tela no formulário onde preenche o nome, descrição, o preço e a quantidade do produto novo que quer inserir; clique em salvar e esse produto já aparece.
+
+[00:55] Vamos fazer isso, vamos dividir essa tarefa em duas etapas, vamos otimizar o trabalho. Vou criar um botão no final da lista, no bootstrap utilizando uma seção chamadaclass, para deixar os nossos layouts com o formato esperado.
+
+[01:18] Vou criar uma classe div card, onde acaba a seção, utilizando o “card-footer” então que eu vou fazer: onde acaba a nossa sessão, vou criar uma div, enter, dentro da div eu vou chamar uma classe, class.
+
+[01:39] Vou colocar um botão, como estou usando bootstrap vou colocar atalhos, a.btn.btn- primary, que é a estilização do botão azul e eu quero dar um espacinho para ele também, para que não fique tão colado na página, vou colocar aqui mb-2.
+
+[02:02] Quando dou enter já aparece lá, então ele está pedindo aqui qual é o endereço, qual é o caminho que você quer ir quando clicar nesse botão eu quero/New legal/New de novo em inglês estilização já nesse botão.
+
+[02:11] Quero /new, novo, tem a estilização do botão, salvar, reiniciar o meu servidor, “Control + C” para parar, “Control + L” para limpar e rodei go run, quando eu atualizo não subiu ainda, atualizando, apareceu um botãozinho mas está muito pequeno.
+
+[02:41] Eu não sei nem o que faz esse botão. Está vendo que pode colocar um texto, vamos colocar um texto nele. Criar novo produto, salvei, fazer o mesmo processo, derrubei o terminal, o servidor. Criar novo produto, repara que quando eu coloco só o mouse em cima já aparece.
+
+[03:08] Observa no canto aparece escrito “localhost: 8000/1000”, quando eu clico não acontece nada, ele não sabe ainda chegar nessa nova tela, porque não criamos essa nova tela. Vou otimizar o nosso tempo e criar novo um arquivo - new file, e esse arquivo vou chamar “new.html”.
+
+[03:37] Eu quero que esse arquivo tenha o mesmo cabeçalho do index.html.
+
+[03:44] Vou copiar, descer, quero que tenha um navbar do Alura loja, vou descer até a linha 16, para não ficar quebrada a nossa tela, eu vou criar aqui um body e vou criar um h1 escrito “Tela de novo produtos”.
+
+[04:17] Temos a tela de new.html. Fechei no terminal, fechei servidor, repara que não aconteceu nada, mas já temos a nossa tela, tem HTML escrito tela de nossos produtos. Porém não conseguiu acessar.
+
+[04:42] Vamos relembrar algumas dicas, a nossa página de index não embedamos, não colocou além do HTML, código Go para conseguir identificar essa página, depois no arquivo de rotas, em específico handleFunc toda vez que tiver uma requisição para essa rota vai encaminhar para o controle index.
+
+[05:04] Nesse caso para o controle index responder. Tem uma nova rota, vou colocar http.HandleFunc e eu quero uma nova rota, essa minha rota nova se chama /New e eu quero alguém consiga renderizar esse template.
+
+[05:29] Eu vou lá em Controllers, nos controlamos nossos produtos, o controle vai precisar fazer algo bem parecido com o que a nossa função index faz, então vou colocar func e vai ter uma função para o código New.
+
+[05:52] Vai ter essa mesma assinatura, os parâmetros para nossa função também, queremos renderizar o nosso template de new; precisa passar alguma informação para ele, não. Só quero abrir o template com o novo formulário.
+
+[06:12] Vou utilizar a mesma coisa que fiz para nossa tela de index, passando esse conteúdo vazio. Para esse nosso formulário de New eu vou pegar o temp - que é o local onde está renderizando nossos templates.
+
+[06:34] Vou falar para ele “executa o template, dentro desse template eu vou passar o nosso responsewriter através do W”, preciso falar qual vai ser a página que eu quero exibir; nesse caso eu quero exibir aqui a página New.
+
+[06:55] Não quero passar nenhum conteúdo para ela, passar o terceiro parâmetro como vazio, eu salvei, como que consegue falar que o new é a página new.html?
+
+[07:09] Viemos na linha dois, colocamos duas chaves e vou definir essa página como new e ela acaba em linhas 23. Salvei, temos o nosso controle preparado, “produtos controle”, já tinha preparado uma requisição para ele no routes.go.
+
+[07:40] Toda vez que chegar uma requisição para /New eu vou chamar controllers.new, salvei, vamos fazer o teste, vou rodar de novo Go lá no meu código ou clicar no Alura loja ele vem sempre para raiz do nosso projeto.
+
+[08:08] Quando eu clico criar um produto vai para tela de nossos produtos e não tem nada nessa tela ainda. Na atividade seguinte a este vídeo vai ter um formulário utilizando as classes do Bootstrap para otimizar o tempo, dar o foco total na linguagem Go e pegar o conteúdo que está disponível para colar na nossa página de New.
 
 ### Formulário de novos produtos
 
+Vamos adicionar um formulário para criar novos produtos?
+
+- Altere o conteúdo do arquivo new.html, substituindo o código desenvolvido pelo conteúdo abaixo:
+
+```html
+{{define "New"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <title>Alura loja</title>
+</head>
+<nav class="navbar navbar-light bg-light mb-4">
+    <a class="navbar-brand" href="/">Alura Loja</a>
+</nav>
+<div class="container">
+
+    <body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-5">Novo produto</h1>
+                <p class="lead">Insira os detalhes</p>
+            </div>
+        </div>
+        <form method="POST" action="insert">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" name="nome" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <input type="text" name="descricao" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="preco">Preço:</label>
+                        <input type="number" name="preco" class="form-control" step="0.01">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade:</label>
+                        <input type="number" name="quantidade" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" value="salvar" class="btn btn-success">Salvar</button>
+            <a class="btn btn-info" href="/">Voltar</a>
+        </form>
+    </body>
+
+</html>
+</div>
+</body>
+
+</html>
+{{end}}
+```
 
 ### Buscando dados da página
 
+[00:00] Eu colei as informações da página de new com o formulário que eu vou fazer subir meu servidor Go. Vou visualizá-lo, carregou, vou ficar para criar um novo produto e tem um formulário “bonitão”, botão para voltar.
+
+[00:19] Tem novo produto, insere detalhes, nome do novo produto vai ser um boné bem bonito, preço dele vai ser 199 e a quantidade dele 10, clico em salvar, eu volto na tela principal, mas ele não apareceu.
+
+[00:42] A minha tela ficou com localhost 8000/insert, vamos ver no nosso new.html, vai utilizar o método post para poder de fato criar, postar nosso produto e estamos falando da ação que é uma ação de inserir, mas ao voltarmos, ao visualizar bem, o produto boné que eu criei não apareceu.
+
+[01:07] Ou seja, não inseriu esse produto no banco de dados. E por que que não? Eu escrevi, preenchi um campo e falei que era o boné, descrição era bem bonito, o preço 199, quantidade 10 cada.
+
+[01:20] Nós criamos pode ver cada campo tem o nome do campo que estamos trabalhando. Tem a Label nome e embaixo o campo criado, de input e demos um nome para ele, na descrição tem o nome de descrição, no preço o preço, quantidade.
+
+[01:52] Onde nós pegamos esses produtos e inserimos no banco? Lembra como que inserimos o nosso produto no banco de dados, usando insert - que fez o nome da tabela, o nome dos campos, quem seria valor e os valores? Tem que fazer o mesmo aqui com nosso projeto.
+
+[02:11] Para começar quando cria um novo produto, clique em salvar ele vai para insert, de alguma forma temos de conseguir acessar essa requisição. Vamos lá nos nossos produtos.Controller - nos nossos controles de produtos do Go e eu vou criar um novo método.
+
+[02:38] Um novo método, func vai ser um novo método que eu vou chamar de “Insert” para de fato inserir o nosso produto no banco de dados; a assinatura que vai receber é a mesa, os parâmetros o mesmo, response writer e request.
+
+[03:00] Eu tenho que verificar o método é post, se o método for post, de fato estou querendo criar um novo produto, eu vou perguntar se essa requisição o método for igual igual, if r.Method == “POST” ou seja, se o método for post de fato estou querendo criar um novo produto.
+
+[03:26] Então, abre chaves, fecha chaves. De fato, estou querendo criar esse novo produto. Eu tenho que pegar o conteúdo que eu escrevi no meu formulário - nome boné, eu quero pegar esse conteúdo e armazenar esse conteúdo.
+
+[03:50] Vou criar uma variável chamada nome := para atribuir, vou pegar essa requisição que está vindo e vou colocar FormValue para conseguir buscar a informação que está querendo.
+
+[04:06] Mas qual a informação que está querendo buscar? O nome. Como que eu sei que ele vai buscar valor do formulário nome? Através desse nome que demos em linha 57. Repara que cada um tem um name (linhas 32).
+
+[04:25] Então o que fizemos para o nome vamos fazer para os outros campos que têm no nosso formulário, descrição := r.FormValue(“descricao”). Exatamente com o mesmo nome que está. Lembrando que não está utilizando os caracteres especiais.
+
+[04:53] No preço vai fazer a mesma coisa preco :=r.FormValue(“preco”). Para finalizar tem a quantidade quantidade :=r.FormValue(“quantidade”), eu consigo pegar todas essas informações, todos esses valores. Tem um ponto importante.
+
+[05:29] As informações que virão do meu formulário quando eu escrevo o nome, a descrição, preço e a quantidade, por mais que o nosso HTML esteja especificando o preço é do tipo número - significa que não consigo colocar valor não numérico.
+
+[05:46] Quando coloco número, funciona. Todas essas informações mesmo sendo o número vai vir para mim no formato de string, assim, vamos ter um problema no nosso modelo.
+
+[06:00] Repare que o nosso preço é um float64 e a quantidade é int e os valores que estão vindo para nós eles são strings mesmo colocando lá no New que é do tipo numérico, mas ele vai vir do tipo string.
+
+[06:21] Precisa converter esses valores para os tipos que tem no nosso modelo, vou até deixar aberto nosso modelo para relembrar. O nome e a descrição são do tipo string não vai ter problema nenhum. No preço precisa converter.
+
+[06:40] Depois que trouxemos os valores, antes de armazená-los, estou com a chave aberta da nossa requisição, eu vou criar uma variável que eu vou chamar de preço precoConvertido :=strconv e vai utilizar uma biblioteca para converter string para float/, porque o nosso preço é um *float64.
+
+[07:11] Então vamos lá. A biblioteca que vamos utilizar é essa aqui “strconv”, vou passar valor para ela que vai ser ParseFloat, o que eu quero converter: o preço. E qual é o tipo? Eu quero float64.
+
+[07:44] Essa função vai devolver dois retornos para o valor da variável convertido e uma mensagem que pode ser de erro, vai devolver também uma mensagem de erro. Vou colocar o erro e vai verificar se tem algum erro dentro dessa nossa variável.
+
+[08:03] Se esse erro não for nulo, ou se tiver alguma coisa no erro, não conseguiu converter. Então vou colocar uma mensagem para só para validar esse nosso erro, se o erro não for igual a new eu vou imprimir uma mensagem.
+
+[08:20] Vou colocar um log log.Printlnt, vou falar que nessa mensagem por exemplo “erro na conversão do preço:”, err coloco a mensagem de erro; tem o nosso preço convertido. Vai também converter a nossa quantidade, vai vir string só que no banco de dados, no nosso modelo, precisa receber int.
+
+[09:00] Eu vou escrever quantidadeConvertidaParaInt e precoConvertidoParaFloat nome da variável ficou grande, vai ficar claro para entender o que que está acontecendo. Lembrando que o preço convertido vai usar a mesma função para fazer essa conversão.
+
+[09:35] Também recebe uma mensagem de erro strconv. quer converter para o int, vai usar uma função para converter para inteiro é Atoi, coloca entre parêntesis que quer converter passa o que quer converter.
+
+[10:11] Verifica se tem alguma mensagem de erro, mensagem de erro que vai ser exatamente igual a do preço, se o erro não for nulo, erro na quantidade, se der algum conseguiremos identificar melhor, tem o nome, a descrição, o preço convertido para float e a quantidade convertida para int.
+
+[10:35] Assim como nosso modelo foi criado. Precisa pedir para o nosso modelo de fato pegar esses valores e criar, por que não vai criar aqui? Porque isso não é uma responsabilidade do nosso controle, o nosso controle buscou os dados.
+
+[10:50] Agora o controle precisa salvar no banco de dados, “modelo aqui os dados convertidos para você”; então vai chamar e criar em models uma função, por exemplo, criar novo produto e nessa função que vai criar um novo produto vai passar esses valores: o nome, a descrição, o preço convertido para float e a quantidade convertida para int.
+
+[11:21] No nosso modelo vai passar esses dados, depois que passa esses dados não querem ficar parado na tela de nosso formulário, quer voltar para página de new e visualizar esse nosso produto.
+
+[11:35] Vou colocar http.Redirect e vai voltar para nossa página principal. Então eu vou passar nosso parâmetro response writer e request, falar para qual página vai, eu quero voltar para minha página principal, para minha página raiz do projeto.
+
+[12:00] Então, ”/”, 301 e aqui eu coloco o código da nossa página que pode ver bem na documentação. Deu tudo certo e vamos retornar para essa página. Vou passar o código 301. No meu modelo eu falei: “modelo cria um novo produto”.
+
+[12:22] Não existe essa função para criar um novo produto, vou criar uma função com esse nome, então (linhas 44) func CriaNovoProduto - essa função recebe alguns parâmetros. Quais são os parâmetros que a função criar um novo produto recebe?
+
+[12:48] Recebe o nome, a descrição, os dois são do tipo string, eu posso colocar o nome de inscrição do tipo string; recebe preço que é tipo float64 - que você converteu.
+
+[13:11] Recebe a quantidade que é um inteiro. Eu tenho todos esses valores, eu já sei que minha função precisa, quais são os parâmetros para a função funcionar; vou abrir uma conexão com o banco de dados.
+
+[13:32] Então, {}db := db.ConectaComBancoDeDados, faz a conexão. Estamos conectados com o banco dados, agora que já fez a conexão com banco de dados precisa de fato inserir esse produto no banco de dados. E é isso que veremos a seguir.
 
 ### Salvando produto no banco
 
