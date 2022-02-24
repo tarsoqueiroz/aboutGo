@@ -1020,15 +1020,168 @@ Vamos adicionar um formulário para criar novos produtos?
 
 ### Salvando produto no banco
 
+[00:00] Agora que nós recebemos os dados do nosso controle e abrimos a conexão com banco de dados, o que nós queremos fazer? Queremos inserir esses dados lá no nosso banco de dados e criar um novo produto.
+
+[00:12] Para começar vamos preparar o nosso script de inserção no banco de dados, eu vou criar uma variável chamada “insere dados no banco” que eu vou armazenar o nosso script de inserção, essa nossa função tem dois retornos: vai ter o retorno dessa função e talvez uma mensagem de erro.
+
+[00:46] Eu já preparei duas variáveis e vou preparar o meu banco de dados através de := db.Prepare. Ou seja, que prepara o meu banco de dados. Vou preparar como criar um insert into - colocar aqui entre aspas duplas, na tabela de produtos - o que que eu quero inserir na tabela de produtos, em quais campos?
+
+[01:16] Quero inserir no campo nome, no campo descrição, no campo preço e no campo quantidade. Não precisa inserir no ID porque deixamos o nosso banco tomar conta desse identificador único para nós.
+
+[01:32] Não coloca o id aqui, coloca os valores values e quais são os valores que nós queremos inserir? Vai passar direto o nome, descrição, preço e quantidade? Não. Precisa verificar, ter certeza de que o nosso script de inserção está certo.
+
+[01:58] Vai passar $1 para o primeiro valor, $2 para o segundo, três e quatro, fazendo isso está verificando se esse nosso script no banco vai estar certo ou não, pode ser que tenha um erro - receber uma mensagem de erro.
+
+[02:20] Assim, é importante verificar se tem algum erro, vou perguntar se o erro não for igual a nulo, se de fato tiver um erro, eu quero exibir esse erro e vou usar o Panic panic.(err.Error), vou exibir essa função de erro.
+
+[02:52] Caso não receba nenhuma mensagem de erro, eu quero executar de fato esse nosso “insere dados” no banco com os valores que eu busquei no meu produtos controle, que eu trouxe lá do meu formulário.
+
+[03:12] Vou falar insereDadosNoBanco.Exec, ou seja, executa para mim a inserção dos dados - só que eu quero que você coloque o nome, a descrição, o preço e a quantidade, estão vindo esses valores lá do nosso controle.
+
+[03:35] Vamos executar nossa inserção no banco de dados através desses valores, depois que faz isso abriu a conexão, preparou nosso script de inserção, tem algum erro, não. Executa para mim com esses dados. Eu terminei de fazer isso.
+
+[03:58] Vou fechar a minha conexão com banco de dados, depois que tudo for executado, passa defer no db.Close. Para fechar a execução do banco de dados. Salvei, está certinho nos produtos controle, só veio essa função existe, maravilha.
+
+[04:18] Vamos testar, eu acho que agora vai conseguir criar produto de uma forma simples, subir meu servidor, aparentemente está tudo funcionando, criar um novo produto o produto que eu quero criar um boné, a descrição é muito bonito boné, o preço dele 199, a quantidade dele 10.
+
+[04:37] Vou clicar em salvar e o boné não apareceu, estranho. Vou tentar de novo, colocar o boné, muito bonito, o preço 199 e a quantidade 10, estou no New quando eu coloco salvar ele fica aqui com insert.
+
+[04:56] Que estranho o que está acontecendo? Na verdade, nós precisamos rotear este caminho, nós falamos no nosso HTML “esse método é um método post vai inserir ação, vai utilizar, vai ser um insert.
+
+[05:20] No controle ele vai falar “quando eu receber uma requisição por um insert eu quero buscar os dados, enviar para o modelo, salvar” - só que quando está passando para essa função ser executada? Vamos ver lá no routes.
+
+[05:34] Não está passando essa função de inserção não está sendo invocado nem buscando os dados, então no nosso arquivo routes.rb vai criar a nossa inserção, então http.HandleFuncso funk quando tiver uma requisição para /insert eu quero chamar o controllers.Insert.
+
+[06:08] Vou salvar, vou fechar o meu controle insert, I é maiúsculo, senão ele não consegue acessar. Vamos ver, vou rodar go run main.go, está funcionando. Vou criar um novo produto boné, descrição muito bonito, o preço 199, quantidade 10.
+
+[06:52] Vou clicar em salvar para instalar o nosso boné, deu certo, beleza! Dessa forma conseguiu criar uma maneira de gerar produtos novos, sem sair do nosso sistema e conversando com o banco de dados.
+
+[07:10] Apenas para relembrar o que que fizemos. Criamos a nossa página de new e para conseguir acessá-la em routes.go criamos uma rota que encaminha toda vez que tiver uma requisição, uma rota para /New manda para o Controller New.
+
+[07:29] No controle New quer executar o template não precisa passar informação, alteramos e deixamos o nosso template bem bonito para exibir o formulário de inserção.
+
+[07:42] Porém, quando clicava em salvar não acontecia nada, porque era necessário criar uma segunda rota para de fato inserir os dados no nosso controle. Criamos toda vez tem um /insert especificamos no nosso formulário a ação de inserir, busca os dados controle, todos os dados no controle e converte os dados.
+
+[08:09] Porque todos virão em forma de string, convertemos os dados necessários e mandamos para o modelo - falou “modelo já busquei todos os dados agora a responsabilidade de colocar esses dados no banco é sua”.
+
+[08:20] Ou modelo fala “ pode deixar comigo”, modelo foi lá abriu a conexão com banco de dados, preparou os *scripts de inserção e fez a inserção, fechou o banco de dados; ficou com código dividido modularizado e agora com a inserção de Novos Produtos também.
 
 ### Faça como eu fiz na aula
 
+**Sua vez!**
+
+Melhoramos nosso código dividindo as responsabilidades em pacotes diferentes e exibimos os produtos que estão no banco de dados. Porém, quando preciso cadastrar um produto novo para exibir na minha loja, é necessário abrir o banco de dados e fazer a inserção com código sql.
+
+Pensando nisso, crie uma página para cadastrar a chamada new.html com um formulário para salvar os produtos no banco de dados.
+
+**Resumo do código**
+
+Após a criação da página com o formulário, crie uma rota para atender a requisição da página new.html:
+
+```go
+http.HandleFunc("/new", controllers.New)
+```
+
+No pacote de controllers, crie a função New para executar o novo template:
+
+```go
+func New(w http.ResponseWriter, r *http.Request) {
+    temp.ExecuteTemplate(w, "New", nil)
+}
+```
+
+Para buscar os dados do novo produto no template index.html, vamos usar o método POST seguido da ação insert:
+
+```html
+<form method="POST" action="insert">
+```
+
+No controle de produtos, busque todos os valores do formulário:
+
+```go
+func Insert(w http.ResponseWriter, r *http.Request) {
+    if r.Method == "POST" {
+        nome := r.FormValue("nome")
+        descricao := r.FormValue("descricao")
+        preco := r.FormValue("preco")
+        quantidade := r.FormValue("quantidade")
+
+        precoConvertidoParaFloat, err := strconv.ParseFloat(preco, 64)
+        if err != nil {
+            log.Println("Erro na conversão do preço:", err)
+        }
+
+        quantidadeConvertidaParaInt, err := strconv.Atoi(quantidade)
+        if err != nil {
+            log.Println("Erro na conversão do quantidade:", err)
+        }
+
+        models.CriaNovoProduto(nome, descricao, precoConvertidoParaFloat, quantidadeConvertidaParaInt)
+    }
+    http.Redirect(w, r, "/", 301)
+}
+```
+
+Crie uma função no modelo de produtos, capaz de salvar os valores recuperados pelo controle no banco dados:
+
+```go
+func CriaNovoProduto(nome, descricao string, preco float64, quantidade int) {
+    db := db.ConectaComBancoDeDados()
+
+    insereDadosNoBanco, err := db.Prepare("insert into produtos(nome, descricao, preco, quantidade) values($1, $2, $3, $4)")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    insereDadosNoBanco.Exec(nome, descricao, preco, quantidade)
+    defer db.Close()
+}
+```
+
+Para finalizar, adicione a rota de /insert para o controle de produto executando a função Insert:
+
+```go
+http.HandleFunc("/insert", controllers.Insert)
+```
+
+O gabarito deste exercício é o passo a passo demonstrado no vídeo. Tenha certeza de que tudo está certo antes de continuar.
 
 ### Dividindo o código
 
+Inicialmente, em nossa aplicação, haviam 2 arquivos principais: main.go e index.html. Porém, à medida que inserimos novas funcionalidades, muitas linhas de código eram acrescentadas.
+
+Pensando nisso, melhoramos a arquitetura da nossa aplicação dividindo nosso código por responsabilidades, criando um arquivo para as rotas e utilizamos também o padrão MVC.
+
+Sabendo disso, analise as afirmações abaixo e marque as verdadeiras em relação a modularizar uma aplicação.
+
+- **O padrão MVC é uma forma de dividir a aplicação em três partes.**
+    - *Certo! Nesse padrão, dividimos as responsabilidades em três partes: modelo, visão e controlador.*
+- **A divisão do código por responsabilidade no nosso projeto, tornou o desenvolvimento da aplicação mais organizada.**
+    - *Certo! Ao adotarmos em nossa aplicação o modelo MVC, dividimos as responsabilidade de código do nosso projeto, tornando o mais organizado.*
+- Dividir um código em arquivos e funções que realizam uma única tarefa leva tempo de desenvolvimento e não é necessário.
 
 ### O que aprendemos?
 
+***Nessa aula:***
+
+- Modularizamos o código para tornar a manutenção e/ou atualização mais clara, criando as pastas controllers, db, models, routes e templates;
+- Criamos uma página para criar novos produtos e uma rota capaz de atender essa requisição http.HandleFunc("/new", controllers.New);
+- Buscamos os dados da página new com o código r.FormValue() para cada input (nome, descrição, preço e quantidade) no controller de produtos;
+- Salvamos o produto através do modelo de produto criando a função CriaNovoProduto().
+
+**Projeto desenvolvido nesta aula**
+
+Neste [link](https://github.com/alura-cursos/web_com_golang/archive/aula_3.zip), você fará o download do projeto feito até esta aula.
+
+Caso queira visualizar o código desenvolvido até aqui, clique neste [link](https://github.com/alura-cursos/web_com_golang/tree/aula_3).
+
+Lembrando que é necessário alterar o caminho para seu workspace: "github.com/seuWorkspace/routes"
+
+**Na próxima aula**
+
+Vamos criar um botão capaz de deletar um produto que está no banco dados e remover o código HTML duplicado da index e new através de partials!
+
+![aula-3.gif](./images/aula-3.gif)
 
 ## Deletando produtos e partials (25m)
 
