@@ -1431,26 +1431,429 @@ Vamos possibilitar editar nossos produtos, atualizando as informações no banco
 
 ### Tela para atualizar produto
 
+[00:00] Com base no que desenvolvemos até aqui, pode criar um produto novo ou remover esse produto, deletar esse produto, aparece uma mensagem de validação, mas eu quero conseguir alterar as informações dos nossos produtos, a quantidade do fone não são mais cinco, agora são 3.
+
+[05:18] E a descrição desse produto “bem bonito” eu quero colocar outra descrição. Com base no que nós fizemos não conseguimos e é um problema. Eu quero conseguir editar os meus produtos.
+
+[00:30] Então que tal criar na frente do botão deletar um botão escrito editar, quando clica editar abre uma tela escrito editando produto, insira detalhes da edição - em seus detalhes da atualização do produto e depois eu insiro os valores, clico no botão salvar.
+
+[00:53] Eu coloco atualizar produto e eu atualizo as informações desse produto, vamos fazer isso. Vou colocar um botão na frente do deletar escrito editar, vou em templates na minha tela de index - eu tenho o botão que deleta.
+
+[01:13] Antes do botão de deletar vou criar uma nova td, vou criar uma tag a que é hrf, vou chamar de edit? – nossos nomes de rotas estão em inglês, interrogação vai editar quem?
+
+[01:27] Vai editar pelo ID, vou colocar id={{.id}}, buscamos ID, mas não quero deixar com um link, quero deixar com formato de botão, vou usar uma classe Bootstrap class=”btn btn-info”, e eu quero que nesse botão esteja escrito editar.
+
+[01:53] Salvei, fechei o terminal “Control + C”, vou dar go run main.go, atualiza a página, tem o nosso botão de editar, repara que no canto esquerdo está pegando ID certo.
+
+[02:06] ID 2, ID 10, legal. Quando eu clico não acontece nada, ele mudou a minha URL colocou edit de dois, só que não aconteceu nada, eu quero exibir uma tela parecida com essa a de new.
+
+[02:29] Vamos preparar a rota – quem vai responder a requisição, http.HandleFunc (“/edit, controllers.Edit”) eu quero que alguém seja responsável por atender essa nossa requisição, eu vou chamar no meu controle, vou criar essa função edit.
+
+[02:52] Quando eu salvo ele vai marcar não existe ninguém em controles com edit, então vamos criar e controle dos produtos.go, a nova função que eu vou chamar de edit e a essa nova função tem o response writer e request.
+
+[03:13] Inicialmente eu quero só exibir a informação desse meu template, eu quero só conseguir visualizar isso, tem que colocar temp execute o template e eu vou passar os parâmetros relacionados a ele.
+
+[03:29] Vou passar response writer, vou precisar passar temp.ExecuteTemplate e vou passar os parâmetros relacionados a ele, quem vai ser o template, que vai atender a requisição, que vamos criar a seguir.
+
+[03:34] Vou falar com template vau se chamar edit e para finalizar eu vou passar um valor vazio, depois vai alterar esse valor porque eu quero visualizar o meu produto; criamos essa função - o vermelhinho sumiu, ele falou que já existe.
+
+[03:49] Mas preparou uma rota, preparou alguém para executar esse template só que não tem esse template ainda, vou criar dentro de template, new files, novo arquivo chamado edit.html, para conseguir identificar que se esse template é o mesmo usado no controle Go, precisa definir o template com o nome.
+
+[04:17] Vou usar código Go define “Edit”, entre aspas duplas, vou finalizar esse template (end), temos nosso modelo, não quero que seja vazio, abrir uma tela em branco, eu quero que abra uma tela parecida com a que tem na tela de *new.
+
+[04:43] Então vou lá na tela de new, vou copiar toda a tela, pegar todo esse conteúdo até HTML, vou lá na minha tela de edit e vou colocar esse meu conteúdo todo, vou alterar alguns valores, não quero que apareça novo produto quero que apareça editando o produto, insira os dados para atualizar ou editar, algo desse tipo.
+
+[05:24] Tem o nome, quantidade de todos eles, eu não quero que esteja escrito salvar no botão, quero que esteja escrito atualizar, salvei, fechei meu terminal “Control + C”, mais uma vez go run main.go, vem na tela principal para ver se a rota está funcionando, certinho.
+
+[05:43] Subiu servidor, vou clicar nesse produto e apareceu lá “editando produto insira os dados para atualizar ou editar” e quando quero editar o fone repare embaixo no canto esquerdo aparece ID 2, quando eu clico editar ele colocou URL 2, abriu a tela do template tempo.
+
+[06:04] No entanto, cadê as informações? Eu vou editar com base no nada, não é isso que eu quero fazer, então quando eu clicar nesse editar eu quero buscar as informações desse ID, desse produto preenchidos e consegui alterar esses valores e salvar essa atualização no banco. Isso que faremos a seguir.
 
 ### Exibindo dados do produto
 
+[00:00] Assim que eu clico no botão para editar um produto, abre uma tela de edição, só que todos os campos estão vazios e eu queria que esses como se estivessem preenchidos com os dados do produto que eu quero digitar - fone muito bom, 99, 5.
+
+[00:15] Eu queria que esses valores aparecessem nessa tela, para conseguir atualizar o meu produto, sabendo disso, no produtos controle cria uma função e não está passando informação nenhuma para o nosso template.
+
+[00:29] Quero passar a informação que vem de onde? Repara que na URL tem uma ID do nosso produto é igual a 2, se eu tenho ID do produto eu posso buscar esse ID do produto que está lá na URL e passar para o modelo - fala “modelo me devolve esse produto que tem esse ID.
+
+[00:50] Ele vai lá no banco e traz essa ID, vamos fazer. Vou buscar o ID do produto, idDoProduto := r.URL.Query.get que quer buscar da URL, quer pegar, parâmetro ID, trouxe o parâmetro ID da nossa URL.
+
+[01:22] Quero pedir para o nosso modelo “traz para mim esse o produto, que tem esse ID”, então produto - eu quero que você me devolva um produto que tenha esse ID, models.EditaProduto, vou criar lá no modelo uma função chamada edita produto.
+
+[01:49] qual o produto? Passa Id do produto que quero editar. No final depois que eu já sei qual é ID do que eu quero editar, em vez de passar new eu vou passar o produto, quando eu salvar ele vai falar “lá em modelos não tem ninguém que responde essa função, não existe esse editar produto”.
+
+[02:07] Vamos lá no nosso models e produtos.go e criamos a nossa função chamada EditaProduto, quando salvo repara a luzinha a marcação vermelha desaparece. A Id do produto, quando criamos a nossa função está passando uma informação, passando ID do produto.
+
+[02:29] Então, eu vou receber esse ID, vou deixá-lo com forma de string mesmo, essa função quando invoca o modo editar produto passando a ID, tem um retorno. Espero que volte um produto para ele, assim vou colocar um produto, eu vou retornar um produto.
+
+[02:48] Já temos o controle passando informação certa no nosso modelo, vai pedir para o nosso banco de dados trazer as informações desse produto, db = db.ConectaComBancoDeDados.
+
+[03:07] Estamos conectados com banco de dados para, quero trazer ID daquele produto, vou falar produtoDoBanco, err := db.Query(“select * from produtos where id=$1, id”) que está vindo do banco de dados, só que a função que usar para ele retorna uma mensagem de erro.
+
+[03:30] Para buscar esse produto, para fazer o select desse produto, dentro aspas duplas eu vou escrever * traga todas as informações da tabela de produtos, colocar todas as informações de produtos onde a nossa condição ID precisa ser exatamente igual ao cifrão. Vou fazer algo diferente.
+
+[04:02] Em vez de passar todo o valor vou colocar vírgula e vou passar ID buscado em cima, a sua função db.Query nos devolve o segundo parâmetro que pode ser uma mensagem de erro, vamos verificar se tem algum erro, se o erro foi não for igual a nulo exibe o erro.
+
+[04:32] Vou exibir através do Panic a mensagem de erro, eu preciso preparar para armazenar as informações que vão vir do banco de dados – nome, descrição, preço e a quantidade do nosso produto.
+
+[04:52] Vou falar que o produtoParaAtualizar ele vai ser igual a instância de um determinado produto, vai ser igual a um produto, vou chamar aqui a instância de um produto, vai trazer as informações desse produto, nome, descrição... Vão vir do banco de dados.
+
+[05:17] Como que eu faço para que cada informação do banco, por exemplo, nome, descrição, preço e quantidade, eu consiga aos poucos colocando informação de produtos para atualizar e depois eu passo de volta informação lá para o meu edite.
+
+[05:29] Eu vou usar um for e vou falar essa informação query que traz produtos do banco e vou usar a propriedade .Next que realmente prepara um resultado de uma linha, que pode buscar as informações depois através do scan.
+
+[05:51] Vou usar next produto do banco que buscou e dentro eu vou criar algumas variáveis para criar essa Instância de produto para atualizar, ID e quantidade eles são do tipo inteiro, mais uma variável que é o nome e descrição, são do tipo string.
+
+[06:24] Tem o var é preço do tipo float64, depois que tem um local para armazenar as informações, vamos usar scan para conseguir pegar as informações e criar esses dados do nosso produto, a função que faz isso geralmente devolve uma mensagem de erro.
+
+[06:57] E essa mensagem de erro vai ser baseada nosso produtoDoBanco.Scan e dentro eu vou falar que essa variável que criei precisa ser exatamente igual ao ID, eu vou colocar esse ID que eu trouxe do banco na memória dessa minha variável.
+
+[07:19] Eu faço isso através do & e do ID para todos os outros campos, vou pegar o nome também, vou pegar a descrição, o preço, nome e para finalizar a quantidade, depois que eu peguei todas essas informações vou verificar se o erro não for igual a nulo quero exibi-lo.
+
+[07:54] Para exibir o erro vou usar o panic panic(err.Error), se não tem erro e consegui armazenar dentro dessas variáveis, esse meu produto para atualizar eu vou pegar o nome dele produtoParaAtualizar.Nome ele vai ser igual ao nome do produto que eu quero atualizar e vou fazer o mesmo para os meus outros campos.
+
+[08:26] O produto para atualizar produtoParaAtualizar.Nome.Descricao := descricao igual a descrição que eu trouxe do banco, depois o produto para atualizar. Mesma coisa para preço e quantidade, produtoParaAtualizar.Nome.Preco := preco, produtoParaAtualizar.Nome.Quantidade := quantidade.
+
+[09:17] Depois que eu peguei todas essas informações fecho a minha conexão. Depois que tudo foi executado defer db.Close, só para manter o padrão do nosso projeto, sempre fechando a nossa conexão com banco.
+
+[09:30] Vou retornar o meu produto para atualizar, salvei, eu pedi para o meu modelo ir lá no banco de dados e trazer as informações do produto que eu quero atualizar - o nome, descrição, preço, quantidade - eu passei as informações para produto e esse meu produto para editar na minha index.html, quero passar um valor.
+
+[10:19] Não quero que o campo fique vazio, eu não quero que na minha variável nome ele fique sem uma informação dentro. Eu quero passar a informação do produto que eu criei do nome, vou criar mais uma propriedade chamada value.
+
+[10:46] Dentro dessa propriedade eu vou passar pode Google e vou passar aqui o ponto nome aqui na descrição vou fazer o código Go .nome, na descrição vou fazer o mesmo, assim como para preço e quantidade.
+
+[11:34] Vamos ver se deu certo, se conseguiu exibir as informações, fechei o meu terminal “Control + C”, vou executar de novo, go run main.go, vem na Alura loja e clica em criar novo produto certinho, clica em editar, e temos as informaçôes: "fone", "muito bom", o preço e a quantidade; mesma coisa para o "boné", "bem bonito", preço igual a 29 e quantidade igual a 42.
+
+[12:02] Consegui trazer as informações para editar nosso produto, mas se eu clicar em atualizar o que que vai acontecer? Vamos descobrir no próximo vídeo.
 
 ### Atualizando o produto
 
+[00:00] Vamos descobrir o que acontece quando clicamos naquele botão de editar, fone, muito bom, 99, vou chamar aqui o fone 2.0, a descrição vou alterar para legal, preço 1999, quantidade um.
+
+[00:15] Quando eu clico em atualizar vamos ver o que acontece, ele cria um produto novo fone 2.0, legal, 1999 preço e a quantidade de 1, não era isso que eu queria que acontecesse eu queria conseguir editar esse produto.
+
+[00:28] Acontece que essa função de update precisa de duas ações, o edite para de fato buscar os nossos dados, aqueles dados que queremos editar e de fato o método para atualizar.
+
+[00:42] Mas por que será que ele está criando um produto novo? Se for aqui no nosso template edit.html observa que a ação que nós estamos utilizando é Search na linha 15, método post, na verdade não é isso que quero fazer.
+
+[01:00] Quero atualizar o nosso produto, então vou precisar de todas as informações necessárias do produto; conseguiu colocar aparece o nome, descrição, preço e a quantidade e o ID como eu consegui editar identificar o produto que eu quero editar.
+
+[01:22] Sem ID do produto não tem como, se formos no modelo de produtos, observa que tem um campo ID, mas na hora de criar o nosso produto, de exibe na tela trouxe só os valores referentes aos dados que pode enviar: nome, descrição, preço, quantidade.
+
+[01:38] Também precisa passar produtos para atualizar id = id, que salvamos em nossa memória, tem ID mas não precisa exibir esse ID, precisa desse conteúdo, desse dado para conseguir atualizar.
+
+[01:59] Como consigo colocar campo que seja invisível? Eu vou criar um campo input e vou falar que ele vai tipo type=”hydden” e vou usar essa propriedade escondido; o nome desse meu campo vai ser o valor dele.
+
+[02:27] Que é o valor que eu trouxe na nossa função para editar, vai ser o .id eu salvo esse valor. Agora sim eu tenho ID. Só que essa minha ação de atualizar ainda não existe, eu preciso criar ela, preparar uma rota para atender essa requisição.
+
+[02:50] Vou criar um novo http.HandleFunc, que seja capaz de atender o /update alguém que esteja no meus controllers.Update, já existe uma rota capaz de atender a requisição.
+
+[03:12] Ele está falando (ficou vermelhinho) ninguém encontrou, chama update ou não é definido em updates, vou lá no meu produtos.go Controller, para editar, vou minimizar ela que não precisa dela.
+
+[03:33] Essa nossa função possui as mesmas assinaturas das nossas outras funções, update, o response writer e o request. Preciso verificar será que de fato o método é post? Se o método for if r.Method == post, eu quero buscar aqueles conteúdos.
+
+[04:08] Então, id := r.FormValue eu busco e vou fazer isso para os meus outros campos também - o nome, a descrição, o preço e a quantidade. No nome nome := r.FormValue(“nome”), da mesma forma para todos os campos.
+
+[05:06] Pegamos essas informações, porém algo interessante sempre quando eu passo o mouse em cima ele fala string, o método post é string mas no meu modelo eu tenho id do tipo int o preço é do tipo float, quantidade int. Ou seja, preciso converter esses valores se não eles vão dar conflitos no meu modelo.
+
+[05:37] Vou converter ID, vou criar uma variável chamada ID convertida para int e a função retorna dois valores - o valor da variável convertida e uma mensagem de erro, então vou usar strconv. para converter para string utiliza essa função atoi.
+
+[05:59] E vou passar dentro ID que quer converter, verificar se tem erro, se o erro não for igual a nulo eu quero imprimi-lo, estou usando o log.Println e posso colocar uma mensagem “ erro na conversão do ID para int”.
+
+[06:28] E coloca aqui qual é o meu erro, : “,” e a mensagem de erro, vou fazer no preço convertido para float essa função vai ter dois retornos := str.conv.ParseFloat quem eu quero converter – preço, qual é o bitsize 64 ou 32.
+
+[07:08] Eu vou passar 64, no final faz essa mesma verificação de erro, vou verificar se tem algum erro, vou alterar o conteúdo “erro na conversão do preço para float64” e passo a mensagem para finalizar.
+
+[07:30] Vou fazer a conversão da quantidade para inteiro, quantidade convertida para int, uma possível mensagem de erro := stronv.Atoi(quantidade), faz a verificação de erro, se tem algum erro na conversão da quantidade para int; ele exibe o erro.
+
+[08:05] Depois que tem todos os valores já convertidos vão chamar modelo, “modelo atualiza para mim esse produto”; então atualiza produto, vou passar as informações ID, comum eu quero ID de convertido para int.
+
+[08:28] O nome, eu quero a descrição, eu quero preço convertido para float e a quantidade convertida para int, depois de eu passar todas essas informações para o meu modelo, vou redirecionar a minha página de index, então a pessoa vai atualizar e eu quero que ela volte para a página principal.
+
+[08:48] http.Redirect e eu vou passar quatro parâmetros responsewriter, vou passar request, vou passar URL que eu quero ir e para passar o código da página dessa minha atualização, quando eu salvo aparentemente está tudo certinho.
+
+[09:15] Porém, ele falou undefined, ou seja, não tem ninguém e modelos que consiga atualizar o produto, vamos criar alguém capaz de atualizar o produto; repare que tem uma função que edita os nossos produtos, vamos criar uma função que atualiza produto, alguém para atualizar o produto e para atualizar o produto tem ID.
+
+[09:52] Tem a quantidade, descrição, tipo string, o preço, preço que é do tipo float64. Vou deixar um por um para ficar certinho, nome, descrição, preço e vou colocar quantidade para receber certinho a quantidade tipo int.
+
+[10:18] Preparei a função, não tem retorno, queremos de fato atualizar o produto que está lá no nosso banco de dados, vamos conectar com o banco de dados db.ConectaComBancoDeDados. Vou preparar o script para conseguir atualizar esse produto.
+
+[10:43] Atualiza produto, essa função de script nos devolve também dois retornos é o script e uma mensagem de erro, db.Prepare, preparei banco de dados que eu quero fazer um update, produtos set nome=$1, descrição=$2, preco=$3, quantidade=$4 e para finalizar eu preciso falar aqui ID.
+
+[11:38] Eu coloquei a quantidade não tem virgula nessa da quantidade, vou colocar where id=$5, atualiza o produto com nome, descrição, preco, quantidade, que tenha ID igual esse que eu fiz, eu preciso verificar se tem algum erro.
+
+[12:01] Se o erro não for igual a nulo, quero exibir panic, vou Chamar as propriedades de exibir o erro, já preparei a função que atualiza um produto. Preciso de fato executar essa função.
+
+[12:20] AtualizaProduto.exec - só que eu quero executar essa função passando parâmetros que nós recebemos na nossa função; eu vou passar update no nome, vou passar na mesma ordem: nome, descrição, preço, quantidade.
+
+[12:49] Para finalizar conexão com o banco de dados defer db.Close, salvei e encontrou - não fica mais vermelho, não fica indicando que não existe, existe, passamos ele. Vamos testar.
+
+[13:18] Vou interromper o meu servidor “control + c”, vou dar mais uma vez go run, já está de pé o nosso servidor, vou alterar esse fone 2.0 de 1999 para 19 e vou falar que eu tenho 10 - fone superlegal, vou clicar em atualizar.
+
+[13:45] Repara que tem fone 2.0 superlegal 19, 10 - eu vou deletar esse produto eu não quero mais trabalhar com ele e vou editar o primeiro produto é o fone; então o fone agora vai ser o fone “muito bom mesmo” o preço dele é 199, quantidade 3.
+
+[14:13] Algo interessante sempre que eu atualizo um produto ele vai para linha de baixo. Vou atualizar o fone bem bonito para “legal e confortável” ele vir aqui para segunda linha de baixo, vamos relembrar porque está acontecendo isso.
+
+[14:31] Ele está conseguindo atualizar, mas está acontecendo na função que busca todos os produtos, quando faz o select traz todos os produtos só que não altera, não passa uma ordem para esses nossos produtos.
+
+[14:48] Não passamos um Order by para ele, para passar essa função, tem colocar no select from produtos no nosso método que busca produtos; vai escrever order by - eu quero ordenar pelo ID e de forma crescente, vou usar asc.
+
+[15:15] Eu salvo para o meu terminal, subo meu servidor de novo, atualizo, vou atualizar e alterar - boné confortável para “boné muito legal” e de 29 para 299, a quantidade para dois. Quando eu ponho atualizar aparece “boné muito legal” 299 e 2 Então conseguimos editar os nossos produtos.
 
 ### Faça como eu fiz na aula
 
+**Sua vez!**
+
+Podemos criar, visualizar ou deletar um produto. Porém, com base no que foi desenvolvido até aqui, não podemos alterar os dados dos produtos, como nome, preço ou quantidade por exemplo.
+
+> Pensando nisso, crie um botão na linha de cada produto que direcione para uma página html chamada edit e carregue os dados do produto selecionado num formulário para atualização dos dados.
+
+**Resumo do código**
+
+- Crie uma nova td com o botão passando o id do produto para editar:
+
+```html
+<td><a href="edit?id={{.Id}}" class="btn btn-info">Editar</a></td>
+```
+
+- Em seguida, adicione uma rota no arquivo routes.go, direcionando para o controle de produtos:
+
+```go
+http.HandleFunc("/edit", controllers.Edit)
+```
+
+No controle de produtos, desenvolva a função Edit e executar o template:
+
+```go
+func Edit(w http.ResponseWriter, r *http.Request) {
+    idDoProduto := r.URL.Query().Get("id")
+    produto := models.EditaProduto(idDoProduto)
+    temp.ExecuteTemplate(w, "Edit", produto)
+}
+```
+
+- No modelo de produtos, busque todas as informações do Id do produto que será atualizado:
+
+```go
+func EditaProduto(id string) Produto {
+    db := db.ConectaComBancoDeDados()
+
+    produtoDoBanco, err := db.Query("select * from produtos where id=$1", id)
+    if err != nil {
+        panic(err.Error())
+    }
+
+    produtoParaAtualizar := Produto{}
+
+    for produtoDoBanco.Next() {
+        var id, quantidade int
+        var nome, descricao string
+        var preco float64
+
+        err = produtoDoBanco.Scan(&id, &nome, &descricao, &preco, &quantidade)
+        if err != nil {
+            panic(err.Error())
+        }
+        produtoParaAtualizar.Id = id
+        produtoParaAtualizar.Nome = nome
+        produtoParaAtualizar.Descricao = descricao
+        produtoParaAtualizar.Preco = preco
+        produtoParaAtualizar.Quantidade = quantidade
+    }
+    defer db.Close()
+    return produtoParaAtualizar
+}
+```
+
+- Para finalizar, crie uma página chamada edit.html, com um formulário para exibir as informações do produto. No link a seguir, você encontra a [página](https://github.com/alura-cursos/web_com_golang/blob/aula_5/templates/edit.html).
+
+```html
+{{define "Edit"}}
+{{template "_head"}}
+
+{{template "_menu"}}
+
+<div class="container">
+
+    <body>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="display-5">Editando produto</h1>
+                <p class="lead">Insira os dados para atualizar ou editar</p>
+            </div>
+        </div>
+        <form method="POST" action="update">
+            <input type="hidden" name="id" value="{{.Id}}" >
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" name="nome" class="form-control" value="{{.Nome}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <input type="text" name="descricao" class="form-control" value="{{.Descricao}}">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="preco">Preço:</label>
+                        <input type="number" name="preco" class="form-control" step="0.01" value="{{.Preco}}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade:</label>
+                        <input type="number" name="quantidade" class="form-control" value="{{.Quantidade}}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" value="salvar" class="btn btn-success">Atualizar</button>
+            <a class="btn btn-info" href="/">Voltar</a>
+        </form>
+    </body>
+
+</html>
+</div>
+</body>
+
+</html>
+{{end}}
+```
+
+**Atualizando o produto**
+
+- Para atualizar o produto, use o verbo POST com a ação update para atualizar:
+
+```html
+<form method="POST" action="update">
+```
+
+- Em seguida, vamos adicionar uma nova rota para atualizar o produto:
+
+```go
+http.HandleFunc("/update", controllers.Update)
+```
+
+- No controle, vamos criar a função que busca as informações do formulário:
+
+```go
+func Update(w http.ResponseWriter, r *http.Request) {
+    if r.Method == "POST" {
+        id := r.FormValue("id")
+        nome := r.FormValue("nome")
+        descricao := r.FormValue("descricao")
+        preco := r.FormValue("preco")
+        quantidade := r.FormValue("quantidade")
+
+        idConvertidaParaInt, err := strconv.Atoi(id)
+        if err != nil {
+            log.Println("Erro na convesão do ID para int:", err)
+        }
+
+        precoConvertidoParaFloat, err := strconv.ParseFloat(preco, 64)
+        if err != nil {
+            log.Println("Erro na convesão do preço para float64:", err)
+        }
+
+        quantidadeConvertidaParaInt, err := strconv.Atoi(quantidade)
+        if err != nil {
+            log.Println("Erro na convesão da quantidade para int:", err)
+        }
+
+        models.AtualizaProduto(idConvertidaParaInt, nome, descricao, precoConvertidoParaFloat, quantidadeConvertidaParaInt)
+    }
+    http.Redirect(w, r, "/", 301)
+}
+```
+
+No modelo de produtos, desenvolva a função para atualizar um produto:
+
+```go
+func AtualizaProduto(id int, nome, descricao string, preco float64, quantidade int) {
+    db := db.ConectaComBancoDeDados()
+
+    AtualizaProduto, err := db.Prepare("update produtos set nome=$1, descricao=$2, preco=$3, quantidade=$4 where id=$5")
+    if err != nil {
+        panic(err.Error())
+    }
+    AtualizaProduto.Exec(nome, descricao, preco, quantidade, id)
+    defer db.Close()
+}
+```
+
+O gabarito deste exercício é o passo a passo demonstrado no vídeo. Tenha certeza de que tudo está certo antes de finalizar o curso.
 
 ### Routes e routes.go
 
+Para manter nosso código organizado, criamos um arquivo de rotas e uma função que carrega as rotas da nossa aplicação, conforme ilustra a imagem abaixo:
+
+func CarregaRotas() {
+    http.HandleFunc("/", controllers.Index)
+    http.HandleFunc("/new", controllers.New)
+    http.HandleFunc("/insert", controllers.Insert)
+    http.HandleFunc("/delete", controllers.Delete)
+    http.HandleFunc("/edit", controllers.Edit)
+    http.HandleFunc("/update", controllers.Update)
+}COPIAR CÓDIGO
+Analisando a função acima e a forma como nossa aplicação foi construída, marque as opções verdadeiras.
+
+- **A rota HandleFunc("/update", controllers.Update) é responsável por atualizar um produto no banco de dados.**
+    - *Certo! Essa rota, é responsável por atualizar um produto no banco de dados com base nos valores alterados do edit.*
+- **A rota HandleFunc("/new", controllers.New) é responsável por abrir o formulário para criar um produto, porém a inserção no banco é feita pela rota HandleFunc("/insert", controllers.Insert).**
+    - *Certo! Na rota do new, abrimos o formulário. Já na rota do insert, buscamos os valores adicionados no new e pedimos para o modelo de produtos executar a inserção no banco.*
+- A rota http.HandleFunc("/edit", controllers.Edit) é responsável por atualizar um produto no banco de dados.
 
 ### O que aprendemos?
 
+**Nessa aula:**
+
+- Criamos um botão na linha de cada produto que nos direciona para a tela de edição;
+- Após criar a tela de edição, preenchemos o formulário com as informações do produto exibindo os dados já cadastrados;
+- Atualizamos o produto, buscando os dados alterados na tela e executando o update(atualização) no banco de dados.
+
+**Projeto final**
+
+Neste [link](https://github.com/alura-cursos/web_com_golang/archive/aula_5.zip), você fará o download do projeto final do curso.
+
+Caso queira visualizar todo o código desenvolvido durante o curso, clique neste [link](https://github.com/alura-cursos/web_com_golang/tree/aula_5).
 
 ### Conclusão
 
+[00:00] Vamos lembrar um pouco que nós fizemos nesse treinamento? Nós criamos aqui uma aplicação web capaz de ler as informações que cadastramos lá no banco de dados, podendo criar novos produtos e editar os produtos.
+
+[00:20] Pode atualizar, e também deletar, remover esse produto, exibindo uma mensagem de verificação. Então, utilizando a linguagem Go, criamos uma aplicação web capaz de executar tudo isso.
+
+[00:30] E utilizamos boas práticas, o padrão mvc, criamos um arquivo só para cuidar das rotas e quem vai ser o controle responsável para atender essa nossa requisição. Criamos no nosso controle as responsabilidades que só cabem a ele.
+
+[00:46] Quando o controle precisa de uma informação do banco de dados, nós pedimos para o nosso modelo de produtos trazer as informações e conectar com o banco de dados. Isso ficou bem legal.
+
+[00:55] Eu espero que você tenha se divertido, que você tenha aprendido nesse cursom e continue estudando a incrível linguagem Go. Espero você em outros cursos e até lá.
 
 ### Parabéns
+
+Neste curso, você recriou uma aplicação web com a linguagem criada pelo Google, capaz de criar, ler, atualizar e deletar os dados que estão no banco de dados Postgres. Além disso, aprendeu a importância da refatoração, para manter o código limpo e legível.
+
+Nossa, quanta coisa legal!
+
+> "Se eu vi mais longe, foi por estar sobre ombros de gigantes."
+>
+> (Isaac Newton)
+
+Parabéns!!!
+
+[Guilherme Lima](https://linktr.ee/guilimadev)
+
 
 
 
