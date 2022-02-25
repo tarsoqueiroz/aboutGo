@@ -1187,21 +1187,245 @@ Vamos criar um botão capaz de deletar um produto que está no banco dados e rem
 
 ### Deletando produtos
 
+[00:00] Tem alguns produtos da minha que eu não vou vender, ou eu quero simplesmente remover, por exemplo, “produto novo”, o que é isso? Todos os nossos outros produtos têm uma descrição legal, nome adequado: camiseta, fone, boné, esse produto criamos quando estávamos desenvolvendo a nossa aplicação.
+
+[00:18] Não queremos mais exibir esse produto na nossa loja, já que nós somos administradores, que tal criar um botão na linha de cada produto escrito deletar, assim que clica remove esse produto lá do nosso banco de dados.
+
+[00:31] Para começar vou acessar a pasta template, vou vir na minha index.html, onde mostra cada produto, eu vou criar uma nova td e vou colocar bela um link, eu vou criar uma rota para eu consegui deletar um produto.
+
+[00:52] Então, /delete, por convenção usa delete, só que eu preciso deletar como? Como que eu consigo identificar cada produto, para cada produto tem um ID, logo poderia pegar o ID daquele produto para deletar.
+
+[01:08] Para pegar o ID vou colocar um ponto de interrogação e falar que ID é igual, repara que estou dentro do range. Eu já peguei o nome, a descrição, preço e quantidade, eu preciso pegar também o ID.
+
+[01:24] Vou fechar com o meu código Go, para esse nosso link ter formato de botão, vou importar uma classe do bootstrap chamada btn btn-danger, dentro desse botãozinho, depois desse danger eu vou escrever deletar, vamos ver como é que ficou. Salvei, derrubei meu terminal go run main.go atualizo.
+
+[02:00] E tem o botão de deletar, repara que quando eu passo o botão em cima, observa no canto esquerdo aparece sempre id zero. Como cada produto está com ID zero? Vamos ver lá no nosso controle.
+
+[02:14] Será que está passando id? Está passando o nome, a descrição, preço e a quantidade lá no nosso controle, vamos na nossa função index eu vou minimizar essas outras funções que têm , vou abrir a função, está passando todos os produtos.
+
+[02:30] Vamos lá no nosso modelo para ver, minimizar também a função do cria produto e a função que busca todos produtos. Faz tudo relacionado ao produto, traz também o ID, só que na hora de passar não está passando.
+
+[02:46] Na hora que cria esse retorno com os produtos não está passando ID, trouxe ID mas não passou, vou colocar p.Id = id que já escaneou, salvei, ele está passando ID também.
+
+[03:08] Tem ID, ele até falou assim ID deveria ser tudo com letra maiúscula, mas pode deixar assim não vai ter problema para nosso projeto, às vezes ele dá uma sugestão, repara que ele não dá um erro, ele deu só uma sugestão, parei meu terminal de novo.
+
+[03:24] Vou rodar de novo, quando eu atualizo temos ID 1, 2, 3, 4. Conseguimos pegar ID do produto, mas quando clico, não acontece nada; ID vem para URL delete id=1, por que não está deletando?
+
+[03:49] Precisa de fato mandar o banco de dados pegar o produto que tenha determinada ID e delete da nossa base de dados.
+
+[04:00] Só que para o banco de dados receber isso, quem é responsável por pegar essa informação daqui e passar para o banco? O nosso controle!
+
+[04:08] Então vamos no nosso produtos controle, vou fechar essa parte. Ficou bem legal, você é chato melhoras ml vamos lá no nosso produtos controle vai criar uma função que deleta o produto.
+
+[04:20] Vou criar uma nova função, essa função vou chamar de delete, vai ter os mesmos parâmetros das nossas funções anteriores, vou copiar os dois parâmetros, response writer e o nosso request.
+
+[04:35] Preciso passar para o meu modelo o ID - vou falar assim “ID do produto que eu quero deletar := é esse que está na URL Como que eu consigo pegar uma informação da URL? Ela não está vindo através da minha requisição.
+
+[05:00] Vou falar r.URL.Query ou seja, eu quero pegar uma informação da minha URL: meu ID. Coloco .get(“id”) dessa forma consegue pegar ID na URL, eu quero pedir para o meu modelo que acesse banco de dados para deletar esse meu produto.
+
+[05:40] “Deleta o produto ID”, eu passo o ID do produto que eu quero deletar, depois que eu deleto eu preciso redimensionar essa janela para algum lugar, então eu vou colocar http.Redirect e vai redirecionar, passando alguns parâmetros response writer através do w.
+
+[06:19] A nossa requisição, para onde quer retornar, vou falar para minha para minha raiz - para página principal e depois eu vou passar o código desse retorno, utiliza 301 por padrão.
+
+[06:35] Para informar que tudo deu certo. Eu vou salvar, ele vai falar modelos delete ainda não existe. Vou no meu modelos, vai criar essa função que deleta produto. No modo vou criar mais uma função que de fato deleta produto.
+
+[07:01] Quando eu crio a função o meu controle já não está mais vermelhinho, ele já achou essa função, existe, mas não está fazendo nada ainda. Precisa deletar, para isso, antes de deletar vamos acessar o nosso banco de dados.
+
+[07:14] Assim, db := db.ConectaComBancoDeDados - estamos conectados com o banco de dados, eu vou preparar o script SQL a query para deletar o produto.
+
+[07:46] Quero deletar o produto. A minha query vai devolver, quando a preparamos ela devolve também mensagem de erro, vou colocar :=db.Prepare ou seja estou preparando a minha query.
+
+[08:05] Eu quero deletar o meu produto, então, ”delete from produto where id=$1”, e depois vai passar aquele ID que vai trazer do produto na nossa função delete. Pegamos ID e estamos passando produto.
+
+[08:42] Esse nosso ID não tem necessidade de converter para string porque não vai colocar e sim remover. Pode deixar como string. Eu passei para a função de DeletaProduto só que na assinatura da minha função eu não informando que eu vou receber algum parâmetro.
+
+[09:01] Vou colocar também que eu recebo ID, que ele é uma string, eu coloquei a minha condição tem meu script SQL preparado, vou verificar se tem alguma mensagem de erro, se não for igual a nulo.
+
+[09:16] Então if err != nil se existir um erro eu quero exibir esse erro, vou usar - panic panic(err.Error) e exibo essa mensagem de erro, vai de fato deletar esse produto pegando esse id que o controle passou.
+
+[09:43] Vou falar assim “deleta o produto” e vou passar ID, só que eu quero executar isso, então eu coloco deleta o produto .exec, ou seja, executa para mim esse script pegando esse valor do ID.
+
+[10:07] Depois de tudo isso preciso fechar a minha conexão, depois de toda essa função for executada db.Close, salvar, o que falta fazer? Já temos script, tem no modelo pegando informação e no controle de fato, tirando banco de dados, vai lá na rota vai preparar essa nossa rota do método delete.
+
+[10:36] Vai falar quem vai atender essa nossa rota. Então vou colocar http.HandleFunc vou criar mais uma rota - que nós queremos preparar essa /delete, quem vai atender a rota? Vai ser o controle no método delete.
+
+[10:53] Deixa ver se ficou certinho o nome do controle, delete, parece que está tudo ok, vamos testar a aplicação, vou subir, vou fechar o meu servidor, derrubei o servidor com “Control + C”.
+
+[11:12] Vou go run main.go mais uma vez, atualizei e meu produto já foi deletado, vou criar um outro produto que vai ser para teste. Assim, é um “produto bom para deletar”.
+
+[11:27] Só para não esquecer, descrição “bom para deletar” também, quantidade um, preço um e quantidade um, salvei, o “produto bom para deletar” - quando eu fico com o mouse em cima repare que mostra ID 5, quando eu clico em deletar meu produto sai da loja sim eu tenho a chance de criar um produto novo e de remover um produto da minha loja.
 
 ### Verificando com Js
 
+[00:00] Assim que clicamos no botão de deletar o produto simplesmente desaparece do banco de dados. Tenho o boné que acidentalmente eu cliquei no delete, o produto desapareceu, não tenho mais nenhuma informação dele, sumiu da base de dados.
+
+[00:18] Isso está um pouco perigoso, porque pode remover um produto sem querer ou o que que pode fazer para tornar os nossos dados um pouco mais seguros através dessa nossa função para remover, para deletar um produto.
+
+[00:31] Poderia perguntar antes, quando a pessoa clica em deletar pergunta “Tem certeza de que deseja deletar esse produto” e quando confirma aí seria para deletar o produto da nossa base de dados. Vamos fazer isso?
+
+[00:45] Para fazer isso - essa é uma aula extra onde vai utilizar código Java script dentro do nosso projeto em Go, estou com o index aberto, tem a rota para de fato remover um produto.
+
+[01:02] Eu vou deixá-la guardada, já vamos usá-la a seguir, vou criar uma nova td com a tag diferente de um botão e o botão ele está escrito a mesma coisa - deletar só que dentro desse botão no lugar de já passar o caminho, eu vou verificar o click.
+
+[01:22] Quando a pessoa clicar eu quero executar uma função JavaScript, vou fazer assim no onclick eu quero executar uma função que vou chamar de ondelete, quando eu clicar nessa função para deletar, para invocar essa função Java script ondelete.
+
+[01:46] Eu quero pegar ID e passar o produto, vou colocar duas aspas simples: o código Go e dentro vou colocar .id, eu chamei uma função, vou chamar uma função dos JavaScript.
+
+[02:05] Para confirmar, para aparecer uma mensagenzinha um pouco para cima, pedindo se tem certeza de que quer confirmar para finalizar, vou deixar o botão com formato de botão, usando Class btn, btn btn-danger deletar.
+
+[02:23] No final do meu código eu vou criar um código JavaScript depois do meu body vou colocar um código Java Script. Então vou colocar a tag script dentro vou colocar um código Java script.
+
+[02:44] E esse código Java script vai ser uma função, exatamente com o nome que demos, função com delete, essa função recebe um parâmetro que eu vou chamar de ID.
+
+[03:00] Assim, {}, vou executar minha função, vai ter uma resposta dessa pergunta, tem certeza que deseja confirmar? Vai aparecer ali eu vou atribuir dentro dessa minha variável a resposta, a confirmação dessa pergunta.
+
+[03:21] Vou colocar a pergunta “Tem certeza que deseja deletar esse produto?”, qual é a resposta? Tem certeza de que deseja deletar é sempre verdadeira ou falsa, sim ou não, já podemos perguntar se a resposta for verdadeira porque ela vai vir como verdadeira ou falsa.
+
+[03:45] Se isso for verdade eu quero mandar para esse caminho onde de fato deleta o nosso produto, vou até copiar essa rota do jeito que está com “control + c” e “control + v”, vou falar “eu quero mandar para aquele caminho, para aquela rota que tem, para aquele endereço”.
+
+[04:12] Utiliza a propriedade window.location = a rota que tem só que no lugar de passar todo dessa forma, já pegou a ID da base de dados, eu passo ID, “/delete?id=” e vou tentar colocar pouquinho mais junto com a ID que pegou como parâmetro.
+
+[04:40] Vamos testar para ver se deu certo, salvei, agora está com dois botões, vou remover a linha deixar só o botão de fato que criamos, derrubei o meu servidor, subindo, não atualizei.
+
+[05:00] Vou criar um produto novo só para colocar de teste no servidor, está subindo, subiu, vou criar um produto para deletar, então “produto para deletar” de teste preço e quantidade um, salvei um produto para deletar, deletar, apareceu.
+
+[05:20] Tem certeza de que deseja deletar esse produto? Não vou deletar, cancela. Teve o comportamento que esperava, cliquei para deletar “tem certeza de que deseja deletar” tenho certeza e assim tira o produto de lá.
+
+[05:24] Estamos criando um projeto Go só que precisava de uma verificação no navegador e utilizamos o código Java script, repara como é fácil criar uma aplicação web utilizando Go e incorporando outras funcionalidades de outras linguagens também.
 
 ### Código duplicado e partials
 
+[00:00] Nós modularizamos nosso código entre view, controle, rotas e modelos para que tenha apenas uma responsabilidade, recebe uma requisição de rotas para quem vai atender essa requisição, o controle pede para o modelo passa informação certa para o modelo.
+
+[00:20] E da ação que quer tomar, fizemos isso e ficou bem legal - só existe um ponto importante nos nossos templates, nas nossas telas, nas nossas views, se acessar repara que toda a primeira parte do doctype até o head tem nas duas páginas tem que copiar esse código, está duplicado.
+
+[00:46] Tem navbar tanto na primeira página index, navbar e aqui no new o mesmo código - o que acontece se eu altero o conteúdo de uma dessas páginas - que eu quero que quando a pessoa clica em Alura loja ela vai para página de uma outra página.
+
+[01:04] Eu tenho que alterar nos dois, isso é ruim porque código duplicado sempre vai dar problema para nós, no lugar de manter o nosso código duplicado, nossos HTML duplicados, o Go também ajuda a criar partição para quebrar as nossas telas em pequenas partes e em pequenos pedaços.
+
+[01:32] E vai renderizar eles em outros lugares também . Observa que eu tenho nesta página e na página de criar um novo eu também tenho Bootstrap, vou fazer toda essa parte aqui do doctype.html até o head (linhas 2 a 14) eu vou criar uma parcial desse conteúdo.
+
+[01:57] Para indicar uma partial eu vim em template vou clicar aqui no ícone para criar um novo arquivo, vou colocar underline na frente eu colocar head.html, na minha página de index, eu vou pegar todo conteúdo do head vou removê-lo.
+
+[02:19] Removi todo esse conteúdo, vou colar ele no Head, salvei, preciso informar através de código Go embebedado - preciso falar que isso aqui é o head, já fizemos isso uma vez.
+
+[02:40] Então eu vou definir isso como sendo aqui _head, e ele termina no final da página. Então vou colocar o código para indicar o local onde ele acaba, está sem o head e preciso executá-lo.
+
+[03:03] O código vou chamar esse nosso template eu vou chamar esse template entre aspas duplas porque eu vou colocar o nome do nosso template que é o head e pronto, só isso já tem o nosso cabeçalho.
+
+[03:30] Vamos testar, eu derrubei o servidor e liguei de novo, vou lá para Alura loja repara que está funcionando, eu vou remover essa página para vocês verem, derrubei servidor, subi servidor, não tem mais as nossas tabelas funcionando, ficou bagunçado. Não queremos isso.
+
+[03:52] Queremos o nosso código funcionando certinho, vou dar um “Control + Z”, era só para mostrar vocês a importância desse nosso código head, em um local específico.
+
+[04:10] Preciso copiar código do New, eu vou remover esse código e vou colocar meu template, ele vai vir, também um outro ponto pode melhorar o nosso projeto é navbar.
+
+[04:27] Tem navbar e no index também tem, queremos em apenas um local, alterando local só, um pedaço do código, ele vai alterar para todos aqueles que precisam dele.
+
+[04:44] Vou criar um novo arquivo e vou chamar de menu.html, vai ter três linhas de código, onde estão os navbar, eu vou definir que minha partial se chama menu e ela acaba na linha 7.
+
+[05:07] Na minha index vou executar aquela parte, eu quero trazer através da palavra template e eu vou trazer o menu. Tanto na index quanto na minha página de new, salvei, que só vem todo mundo vamos escutar.
+
+[05:38] Então vou subir o meu servidor. Vou atualizar tem a página index funcionando certinho, quando vai para página new, funcionando certinho, reparem que Alura loja vou alterar em um local no menu.
+
+[05:53] O nosso cabeçalho, New, excelente, vou alterar em um local e ele vai alterando as duas, estão no lugar de Alura loja vou colocar Alura Super Loja, salvei, derrubei meu servidor.
+
+[06:09] Subi meu servidor de novo, voltei, quando vem para página principal está Alura superloja também, vou voltar. Claro foi um teste, vou deixar Alura loja mesmo. Olha que legal então em um local Só através das partes que criou tem o mesmo.
+
+[06:23] Em um local apenas, através das partials que criei temos o mesmo comportamento para todas as outras, então desde Alura, até página principal tem um comportamento só. isso evita duplicação até nossas tabelas html, nas nossas páginas html.
 
 ### Faça como eu fiz na aula
 
+**Sua vez!**
 
+Existem alguns produtos que gostaria de remover da minha loja, mas com base no código que desenvolvemos, não conseguimos deletar um produto.
+
+Pensando nisso, crie um botão na linha de cada produto capaz de deletar o produto.
+
+**Opinião do instrutor**
+
+Para inserir um botão na linha de cada produto, crie uma nova td dentro do range de produtos:
+
+```html
+<td><button onclick="onDelete('{{.Id}}')" class="btn btn-danger">Deletar</button></td>
+```
+
+Ainda no arquivo index.html, crie a função onDelete com as tags ```<script>```, confirmando se queremos deletar ou não:
+
+```
+<script>
+    function onDelete(id) {
+        let resposta = confirm("Tem certeza que deseja deletar esse produto?")
+        if (resposta) {
+            window.location = "/delete?id=" + id
+        }
+    }
+</script>
+```
+
+No controle de produtos, crie uma função chamada Delete, que busca o ID do produto na url:
+
+```go
+func Delete(w http.ResponseWriter, r *http.Request) {
+    idDoProduto := r.URL.Query().Get("id")
+    models.DeletaProduto(idDoProduto)
+    http.Redirect(w, r, "/", 301)
+}
+```
+
+No modelo de produtos, desenvolva a função que deleta o produto do banco:
+
+```go
+func DeletaProduto(id string) {
+    db := db.ConectaComBancoDeDados()
+
+    deletarOProduto, err := db.Prepare("delete from produtos where id=$1")
+    if err != nil {
+        panic(err.Error())
+    }
+
+    deletarOProduto.Exec(id)
+    defer db.Close()
+```
+
+Para finalizar, adicione a rota para deletar um produto:
+
+```go
+http.HandleFunc("/delete", controllers.Delete)
+```
 ### Quando vamos deletar...
 
+Criamos um botão na linha de cada produto que, quando clicado, encaminha à seguinte url:
+
+```go
+"/delete?id={{.Id}}"
+```
+
+Analisando o código acima, podemos afirmar que:
+
+- É necessário que o controle de produtos converta o valor do id para inteiro antes de passar para o modelo, para deletar com sucesso.
+- **Para recuperar o valor do id no controle de produtos, podemos usar idDoProduto := r.URL.Query().Get("id").**
+  - *Certo! Buscamos a informação da url, através do protocolo get.*
+- É uma boa prática buscar o id da url direto no modelo de produtos.
 
 ### O que aprendemos?
 
+**Nessa aula:**
+
+- Criamos um botão na linha de cada produto que assim que clicado, deletava o produto do banco de dados;
+- Para melhorar a remoção dos produtos, criamos uma função em Javascript perguntando se queremos de fato, deletar o produto;
+- [Removemos o código HTML duplicado](https://github.com/alura-cursos/web_com_golang/tree/aula_4/templates) da index e do arquivo new, criando as seguintes partials: _head.html e _menu.html.
+
+**Projeto desenvolvido nesta aula**
+
+Neste [link(https://github.com/alura-cursos/web_com_golang/archive/aula_4.zip)], você fará o download do projeto feito até esta aula.
+
+Caso queira visualizar o código desenvolvido até aqui, clique neste [link](https://github.com/alura-cursos/web_com_golang/tree/aula_4).
+
+**Na próxima aula**
+
+Vamos possibilitar editar nossos produtos, atualizando as informações no banco de dados!
+
+![print002.png](./images/print002.png)
 
 ## Atualizando e editando produtos (36m)
 
