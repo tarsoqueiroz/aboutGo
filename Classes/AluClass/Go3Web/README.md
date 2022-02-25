@@ -384,7 +384,7 @@ Caso queira visualizar o código desenvolvido até aqui, [clique neste link](htt
 
 Vamos instalar o Postgres para armazenar nossos produtos de forma segura, conectar nosso projeto e exibir os produtos que estão cadastrados no banco de dados!
 
-## Conectando com banco de dados (33m)
+## Conectando com banco de dados
 
 ### Instalando o Postgres
 
@@ -453,7 +453,7 @@ docker network create --driver bridge go3web-network
 
 docker container run --name go3web-postgres --network=go3web-network -e "POSTGRES_PASSWORD=Go3Web-Postgres" -p 5432:5432 -v /Data/Learn/aboutGo/Classes/AluClass/Go3Web/codes/data:/var/lib/postgresql/data -d postgres:10.20-alpine
 
-docker container run --name go3web--pgadmin --network=go3web-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=tarsoqueiroz@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=Go3Web-PgAdmin" -d dpage/pgadmin4
+docker container run --name go3web--pgadmin --network=go3web-network -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=seunome@gmail.com" -e "PGADMIN_DEFAULT_PASSWORD=Go3Web-PgAdmin" -d dpage/pgadmin4
 ```
 
 - Connect to:
