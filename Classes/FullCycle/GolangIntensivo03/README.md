@@ -4,6 +4,7 @@
 
 > [Golang: Oportunidades e primeiros passos](https://www.youtube.com/watch?v=Npoqrxtari4)
 > [Golang: Performance e Multithreading com Kafka + Computação Visual (OpenCV)](https://www.youtube.com/watch?v=1YVHwVl08DE)
+> [Golang: Integração do Chat GPT com WhatsApp](https://www.youtube.com/watch?v=01aejNssbA4)
 
 Esse vídeo faz parte do Golang Intensivo.
 

@@ -1,3 +1,3 @@
 youtube-dl https://www.youtube.com/watch?v=Npoqrxtari4 -o Class01-Golang_OportunidadesPrimeirosPassos.mp4
 youtube-dl https://www.youtube.com/watch?v=1YVHwVl08DE -o Class02-Golang_PerformanceMultithreadingKafkaAndOpenCV.mp4
-# youtube-dl https://www.youtube.com/watch?v=01aejNssbA4 -o Class02-Golang_IntegracaoChatGPTWhatsApp.mp4
+youtube-dl https://www.youtube.com/watch?v=01aejNssbA4 -o Class03-Golang_IntegracaoChatGPTWhatsApp.mp4
