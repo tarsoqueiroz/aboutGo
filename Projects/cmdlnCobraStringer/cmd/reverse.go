@@ -1,10 +1,10 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
+	"cmdlnCobraStringer/pkg/reverse"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -12,8 +12,9 @@ import (
 
 // reverseCmd represents the reverse command
 var reverseCmd = &cobra.Command{
-	Use:   "reverse",
-	Short: "A brief description of your command",
+	Use:     "reverse",
+	Aliases: []string{"rev", "inv"},
+	Short:   "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
 
@@ -21,7 +22,8 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("reverse called")
+		res := reverse.Reverse(args[0])
+		fmt.Println(res)
 	},
 }
 

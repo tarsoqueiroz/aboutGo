@@ -10,10 +10,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var version = "0.1.0"
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "cmdlnCobraStringer",
-	Short: "stringer - a simple CLI to transform and inspect strings",
+	Use:     "cmdlnCobraStringer",
+	Version: version,
+	Short:   "stringer - a simple CLI to transform and inspect strings",
 	Long: `stringer is a super fancy CLI (kidding)
    
 	One can use stringer to modify or inspect strings straight from the terminal`,

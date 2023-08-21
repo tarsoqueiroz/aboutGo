@@ -6,21 +6,23 @@ package cmd
 import (
 	"fmt"
 
+	"cmdlnCobraStringer/pkg/inspect"
+
 	"github.com/spf13/cobra"
-	cmdlnCobraStringer/pkg/inspect
 )
 
 // inspectCmd represents the inspect command
 var inspectCmd = &cobra.Command{
-	Use:   "inspect",
-	Short: "Inspects a string",
+	Use:     "inspect",
+	Aliases: []string{"insp", "verify"},
+	Short:   "Inspects a string",
 	Long: `Inspects 
 a string and show information about it.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 
 		i := args[0]
-		res, kind:=Inspect(i, false)
+		res, kind := inspect.Inspect(i, false)
 
 		pluralS := "s"
 		if res == 1 {
