@@ -43,3 +43,14 @@ go run main.go random
 
 ## Part II
 
+```sh
+go run main.go random --term=hipster
+
+curl -H "Accept: application/json" "https://icanhazdadjoke.com/search?term=hipster"
+curl -H "Accept: application/json" "https://icanhazdadjoke.com/search?term=hipster" | jq .
+
+go run main.go random --term=hipster
+go run main.go random --term=apple
+go run main.go random --term=tree
+go run main.go random --term=ape
+```
