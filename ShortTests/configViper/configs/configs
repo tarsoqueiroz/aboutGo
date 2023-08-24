@@ -1,0 +1,17 @@
+{
+  "databases": {
+    "mysql": {
+      "host": "localhost",
+      "port": 3306,
+      "user": "admin",
+      "pass": "1234abc?"
+    },
+    "mongodb": {
+      "host": "localhost",
+      "port": 27017,
+      "user": "logs",
+      "pass": "log123"
+    }
+  },
+  "environment": "production"
+}
