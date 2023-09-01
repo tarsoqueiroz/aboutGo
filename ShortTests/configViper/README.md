@@ -38,3 +38,16 @@ go run main.go
 ## or
 go run ./cmd/first.go
 ```
+
+## Handling Go configuration with Viper
+
+> [Handling Go configuration with Viper](https://blog.logrocket.com/handling-go-configuration-viper/)
+
+```sh
+# Create the .env file on root path
+
+# Edit file ./cmd/env.go
+
+# Run file
+go run ./cmd/env.go
+```
