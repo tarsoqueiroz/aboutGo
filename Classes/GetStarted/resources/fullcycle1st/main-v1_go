@@ -1,0 +1,27 @@
+package main
+
+import "fmt"
+
+type Carro struct {
+	Nome   string
+	Modelo string
+	Ano    int
+}
+
+func (c Carro) Andar() {
+	fmt.Println("O carro, " + c.Nome + " está andando.")
+}
+
+func (c Carro) Parar() {
+	fmt.Println("O carro, " + c.Nome + " está parando.")
+}
+
+func main() {
+	carro1 := Carro{Nome: "Ford", Modelo: "Mustang", Ano: 1969}
+	carro2 := Carro{Nome: "Chevrolet", Modelo: "Camaro", Ano: 1979}
+
+	carro1.Andar()
+	carro2.Parar()
+	carro1.Parar()
+	carro2.Andar()
+}

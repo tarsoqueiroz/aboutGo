@@ -1,0 +1,16 @@
+package main
+
+import (
+	"fmt"
+)
+
+func main() { // T1
+	canal := make(chan string)
+
+	go func() { // T2
+		canal <- "opa"
+	}()
+
+	msg := <-canal
+	fmt.Println(msg) // T1
+}

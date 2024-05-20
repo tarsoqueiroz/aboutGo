@@ -1,0 +1,32 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func worker(workerID int, data chan int) {
+	for x := range data {
+		fmt.Printf("Worker %d received %d\n", workerID, x)
+		time.Sleep(time.Second)
+	}
+}
+
+func main() { // T1
+	canal := make(chan int)
+
+	go worker(0, canal) // T2 go routine
+	go worker(1, canal) // T3 go routine
+	go worker(2, canal) // T4 go routine
+	go worker(3, canal) // T5 go routine
+	go worker(4, canal) // T6 go routine
+	go worker(5, canal) // T7 go routine
+	go worker(6, canal) // T8 go routine
+	go worker(7, canal) // T9 go routine
+	go worker(8, canal) // T10 go routine
+	go worker(9, canal) // T11 go routine
+
+	for i := 0; i < 100; i++ {
+		canal <- i
+	}
+}
