@@ -179,6 +179,47 @@ time go run main.go # v8
 
 > [Go: API sem Framework, gRPC e Profiling + Pós Go Expert](https://www.youtube.com/watch?v=4w1pXqJMoA0)
 
+```sh
+go mod init fullcycleapi
+
+touch main.go # v01
+
+# v01
+go run main.go
+curl http://localhost:3000
+
+# v02
+go run main.go
+curl http://localhost:3000/users
+```
+
+DB `users.db` on **sqlite3**:
+
+```sh
+sqlite3 users.db
+
+sqlite> create table users (id integer, name text, email text);
+sqlite> .tables
+
+sqlite> insert into users values(1, 'Tarso', 'tarsoqueiroz@gmail.com');
+
+sqlite> select * from users;
+
+sqlite>
+```
+
+Add sqlite3 module to project:
+
+```sh
+go mod tidy # v03
+
+go run main.go
+curl http://localhost:3000/users # or test.http
+
+go run main.go # v04
+# teste.http POST
+```
+
 [Return to top](#get-started-with-golang)
 
 ## to be continue
