@@ -41,3 +41,7 @@
 - Private Chat with your Documents with Ollama and PrivateGPT | Use Case | Easy Set up
 
 > `https://www.youtube.com/watch?v=lhQ8ixnYO2Y`
+
+- Go + Docker: Como criar as melhores imagens Docker para aplicações Golang
+
+> `https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj`
