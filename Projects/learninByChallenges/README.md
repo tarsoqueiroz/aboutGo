@@ -17,3 +17,5 @@
 - [Private Chat with your Documents with Ollama and PrivateGPT | Use Case | Easy Set up](https://www.youtube.com/watch?v=lhQ8ixnYO2Y)
 - [Go + Docker: Como criar as melhores imagens Docker para aplicações Golang](https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj)
 - [Implement data validation in Go](https://dev.to/stackpuz/implement-data-validation-in-go-44ii)
+- [Using defer in Go: Best Practices and Common Use Cases](https://dev.to/zakariachahboun/common-use-cases-for-defer-in-go-1071)
+- [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
