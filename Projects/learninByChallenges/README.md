@@ -10,6 +10,7 @@
 - [Implementing JWTs in Go](https://dev.to/kalashin1/implementing-jwts-in-go-3128)
 - [Como fazer uma API em GO utilizando GIN, Docker e Postgres em 10m.](https://medium.com/@mariarobertap/como-fazer-uma-api-em-go-utilizando-gin-docker-e-postgres-e56a22d97e20)
 - [Golang CRUD Rest API using Mux, Postgres, Docker and Docker Compose](https://dev.to/francescoxx/build-a-crud-rest-api-in-go-using-mux-postgres-docker-and-docker-compose-2a75)
+- [Go Redis Crud quickly example](https://dev.to/luigiescalante/go-redis-crud-quickly-example-2agj)
 - [The Ultimate Golang Framework for Microservices: GoFr](https://dev.to/umang01hash/the-ultimate-golang-framework-for-microservices-gofr-56bj)
 - [Building a Blog with Go: Rendering Markdown as HTML](https://www.youtube.com/watch?v=PWUEXNSrLx4)
 - [Go (Golang) e Prometheus para monitoramento de APIs](https://www.youtube.com/watch?v=JoUkORTdPIM)
