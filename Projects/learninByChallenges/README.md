@@ -2,9 +2,9 @@
 
 ## Challanges
 
-[Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md) 
+- [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md) 
 
-## Challanges on line
+## Challanges list
 
 - [Create an API for DataTables with Go](https://dev.to/stackpuz/create-an-api-for-datatables-with-go-23ng)
 - [Implementing JWTs in Go](https://dev.to/kalashin1/implementing-jwts-in-go-3128)
@@ -20,3 +20,4 @@
 - [Implement data validation in Go](https://dev.to/stackpuz/implement-data-validation-in-go-44ii)
 - [Using defer in Go: Best Practices and Common Use Cases](https://dev.to/zakariachahboun/common-use-cases-for-defer-in-go-1071)
 - [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
+- [Desenvolvimento de APIs em Go](https://johnfercher.medium.com/desenvolvimento-de-apis-em-go-64f945b11d2b)
