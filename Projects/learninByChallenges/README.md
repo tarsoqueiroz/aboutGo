@@ -21,3 +21,5 @@
 - [Using defer in Go: Best Practices and Common Use Cases](https://dev.to/zakariachahboun/common-use-cases-for-defer-in-go-1071)
 - [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
 - [Desenvolvimento de APIs em Go](https://johnfercher.medium.com/desenvolvimento-de-apis-em-go-64f945b11d2b)
+- [Circuit Breaker em aplicações Go](https://dev.to/mfbmina/circuit-breaker-em-aplicacoes-go-445p)
+- [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
