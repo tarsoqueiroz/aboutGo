@@ -24,3 +24,4 @@
 - [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
 - [Circuit Breaker em aplicações Go](https://dev.to/mfbmina/circuit-breaker-em-aplicacoes-go-445p)
 - [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
+- [Generating PDFs in Golang with Maroto](https://dev.to/logrocket/go-long-by-generating-pdfs-in-golang-with-maroto-1g25)
