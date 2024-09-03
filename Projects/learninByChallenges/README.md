@@ -25,3 +25,5 @@
 - [Circuit Breaker em aplicações Go](https://dev.to/mfbmina/circuit-breaker-em-aplicacoes-go-445p)
 - [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
 - [Generating PDFs in Golang with Maroto](https://dev.to/logrocket/go-long-by-generating-pdfs-in-golang-with-maroto-1g25)
+- [Build Your Own SMTP Server in Go](https://dev.to/alexbczpro/build-your-own-smtp-server-in-go-5b90)
+- [gondola: Why not use a lightweight and simple YAML-based reverse proxy?](https://dev.to/bmf_san/gondola-why-not-use-a-lightweight-and-simple-yaml-based-reverse-proxy-3454)
