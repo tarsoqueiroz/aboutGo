@@ -3,6 +3,7 @@
 ## Challanges
 
 - Language
+  - [Handling Errors in Go: A Simple Example](./challenges/language/handlingErrors/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
 - Methods and Techniques
