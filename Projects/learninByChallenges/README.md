@@ -1,8 +1,14 @@
-# Learning by Challanges
+# Learning Golang by Challanges
 
 ## Challanges
 
-- [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md) 
+- Language
+- API's
+  - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
+- Methods and Techniques
+  - Server Sent Event (SSE)
+- Security
+- DB
 
 ## Challanges list
 
@@ -11,6 +17,9 @@
 - [Golang CRUD Rest API using Mux, Postgres, Docker and Docker Compose](https://dev.to/francescoxx/build-a-crud-rest-api-in-go-using-mux-postgres-docker-and-docker-compose-2a75)
 - [Desenvolvimento de APIs em Go](https://johnfercher.medium.com/desenvolvimento-de-apis-em-go-64f945b11d2b)
 - [Go Redis Crud quickly example](https://dev.to/luigiescalante/go-redis-crud-quickly-example-2agj)
+- Server Sent Event (SSE)
+  - [Server Sent Event (SSE) with Go](https://medium.com/@rian.eka.cahya/server-sent-event-sse-with-go-10592d9c2aa1)
+  - [Server-Sent Events (SSE): Comunicação em tempo real](https://www.youtube.com/watch?v=5TN9cyGev1M)
 - [Implementing JWTs in Go](https://dev.to/kalashin1/implementing-jwts-in-go-3128)
 - [The Ultimate Golang Framework for Microservices: GoFr](https://dev.to/umang01hash/the-ultimate-golang-framework-for-microservices-gofr-56bj)
 - [Golang Pub/Sub: Why It’s Better When Combined With GoFr](https://thenewstack.io/golang-pub-sub-why-its-better-when-combined-with-gofr/)
