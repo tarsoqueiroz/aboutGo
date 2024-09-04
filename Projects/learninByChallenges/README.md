@@ -6,7 +6,8 @@
   - [Handling Errors in Go: A Simple Example](./challenges/language/handlingErrors/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
-- Methods and Techniques
+- Containers & Kubernetes
+- Methods & Techniques
   - Server Sent Event (SSE)
 - Security
 - DB
@@ -37,3 +38,4 @@
 - [Generating PDFs in Golang with Maroto](https://dev.to/logrocket/go-long-by-generating-pdfs-in-golang-with-maroto-1g25)
 - [Build Your Own SMTP Server in Go](https://dev.to/alexbczpro/build-your-own-smtp-server-in-go-5b90)
 - [gondola: Why not use a lightweight and simple YAML-based reverse proxy?](https://dev.to/bmf_san/gondola-why-not-use-a-lightweight-and-simple-yaml-based-reverse-proxy-3454)
+- [Dockerizing a Golang API with MySQL and adding Docker Compose Support](https://dev.to/pradumnasaraf/dockerizing-a-golang-api-with-mysql-and-adding-docker-compose-support-9b1)
