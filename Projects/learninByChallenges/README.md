@@ -39,3 +39,5 @@
 - [Build Your Own SMTP Server in Go](https://dev.to/alexbczpro/build-your-own-smtp-server-in-go-5b90)
 - [gondola: Why not use a lightweight and simple YAML-based reverse proxy?](https://dev.to/bmf_san/gondola-why-not-use-a-lightweight-and-simple-yaml-based-reverse-proxy-3454)
 - [Dockerizing a Golang API with MySQL and adding Docker Compose Support](https://dev.to/pradumnasaraf/dockerizing-a-golang-api-with-mysql-and-adding-docker-compose-support-9b1)
+- [Building a File Upload API in Go](https://dev.to/stackpuz/building-a-file-upload-api-in-go-258i)
+- [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
