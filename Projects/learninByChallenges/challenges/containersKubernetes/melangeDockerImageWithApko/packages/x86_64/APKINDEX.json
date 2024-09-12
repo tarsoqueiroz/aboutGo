@@ -1,0 +1,30 @@
+{
+  "Signature": null,
+  "Description": "",
+  "Packages": [
+    {
+      "Name": "golang-apko-example",
+      "Version": "0.1.0-r0",
+      "Arch": "x86_64",
+      "Description": "Build a golang application with melange",
+      "License": "MIT",
+      "Origin": "golang-apko-example",
+      "Maintainer": "",
+      "URL": "",
+      "Checksum": "3zcDsg1JBGUQKZtCe00QGTmf6jQ=",
+      "Dependencies": null,
+      "Provides": [
+        "cmd:golang-apko-example=0.1.0-r0"
+      ],
+      "InstallIf": null,
+      "Size": 2370229,
+      "InstalledSize": 5478682,
+      "ProviderPriority": 0,
+      "BuildTime": "1970-01-01T00:00:00Z",
+      "BuildDate": 0,
+      "RepoCommit": "",
+      "Replaces": null,
+      "DataHash": "819bc12ea4715ad53327f419daed20944a59e8da2a95735b54b8e54c7446d1ec"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+package:
+  name: golang-apko-example
+  version: 0.1.0
+  epoch: 0
+  description: Build a golang application with melange
+  copyright:
+    - license: MIT
+  target-architecture:
+    - x86_64
+    # - all
+
+environment:
+  contents:
+    repositories:
+      - https://packages.wolfi.dev/os
+    keyring:
+      - https://packages.wolfi.dev/os/wolfi-signing.rsa.pub
+
+pipeline:
+  - uses: go/build
+    with:
+      modroot: .
+      packages: .
+      output: golang-apko-example
+  - uses: strip
