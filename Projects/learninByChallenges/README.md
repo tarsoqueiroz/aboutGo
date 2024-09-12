@@ -7,6 +7,7 @@
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
 - Containers & Kubernetes
+  - [Melange and a Docker Image with Apko](https://dev.to/patrickdomnick/building-a-go-package-with-melange-and-a-docker-image-with-apko-141c)
 - Methods & Techniques
   - Server Sent Event (SSE)
 - Security
@@ -41,3 +42,5 @@
 - [Dockerizing a Golang API with MySQL and adding Docker Compose Support](https://dev.to/pradumnasaraf/dockerizing-a-golang-api-with-mysql-and-adding-docker-compose-support-9b1)
 - [Building a File Upload API in Go](https://dev.to/stackpuz/building-a-file-upload-api-in-go-258i)
 - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
+- [Building LLM-powered applications in Go](https://go.dev/blog/llmpowered)
+
