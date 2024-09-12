@@ -30,3 +30,8 @@ go.sum
 # vendor/
 
 data/
+
+# exclude private and public keys
+*.rsa
+*.rsa.pub
+
