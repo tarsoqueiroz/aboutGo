@@ -44,3 +44,4 @@
 - [Building a File Upload API in Go](https://dev.to/stackpuz/building-a-file-upload-api-in-go-258i)
 - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
 - [Building LLM-powered applications in Go](https://go.dev/blog/llmpowered)
+- [A simple MQTT application using Go](https://dev.to/johnscode/a-simple-mqtt-application-using-go-1ca5)
