@@ -5,6 +5,7 @@
 - Language
   - [Handling Errors in Go: A Simple Example](./challenges/language/handlingErrors/README.md)
   - [Practical Cases to Use the Golang Sleep Method](./challenges/language/sleepMethod/README.md)
+  - [Go time and its two clocks](./challenges/language/timeLapse/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
 - Containers & Kubernetes
