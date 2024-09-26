@@ -47,4 +47,4 @@
 - [Building LLM-powered applications in Go](https://go.dev/blog/llmpowered)
 - [A simple MQTT application using Go](https://dev.to/johnscode/a-simple-mqtt-application-using-go-1ca5)
 - [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
-
+- [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
