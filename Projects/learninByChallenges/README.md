@@ -46,3 +46,5 @@
 - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
 - [Building LLM-powered applications in Go](https://go.dev/blog/llmpowered)
 - [A simple MQTT application using Go](https://dev.to/johnscode/a-simple-mqtt-application-using-go-1ca5)
+- [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
+
