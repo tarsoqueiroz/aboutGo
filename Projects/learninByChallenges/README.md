@@ -21,6 +21,7 @@
 - [Como fazer uma API em GO utilizando GIN, Docker e Postgres em 10m.](https://medium.com/@mariarobertap/como-fazer-uma-api-em-go-utilizando-gin-docker-e-postgres-e56a22d97e20)
 - [Golang CRUD Rest API using Mux, Postgres, Docker and Docker Compose](https://dev.to/francescoxx/build-a-crud-rest-api-in-go-using-mux-postgres-docker-and-docker-compose-2a75)
 - [Desenvolvimento de APIs em Go](https://johnfercher.medium.com/desenvolvimento-de-apis-em-go-64f945b11d2b)
+- [Building Your First REST API with Go](https://dev.to/neelp03/building-your-first-rest-api-with-go-3dj6)
 - [Go Redis Crud quickly example](https://dev.to/luigiescalante/go-redis-crud-quickly-example-2agj)
 - Server Sent Event (SSE)
   - [Server Sent Event (SSE) with Go](https://medium.com/@rian.eka.cahya/server-sent-event-sse-with-go-10592d9c2aa1)
@@ -48,4 +49,3 @@
 - [A simple MQTT application using Go](https://dev.to/johnscode/a-simple-mqtt-application-using-go-1ca5)
 - [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
 - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
-- [Building Your First REST API with Go](https://dev.to/neelp03/building-your-first-rest-api-with-go-3dj6)
