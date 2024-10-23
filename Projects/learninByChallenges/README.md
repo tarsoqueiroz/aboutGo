@@ -58,4 +58,7 @@
 - [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
 - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
 - [Concurrency in Go: From Basics to Advanced Concepts](https://dev.to/chanchals7/concurrency-in-go-from-basics-to-advanced-concepts-1b9n)
-- []
+- [Build your Service Mesh:](https://dev.to/ramonberrutti/series/27820)
+  - [The Proxy](https://dev.to/ramonberrutti/build-your-service-mesh-part-1-10ed)
+  - [Admission Controller](https://dev.to/ramonberrutti/build-your-service-mesh-part-2-9c4)
+- [Devops pipeline on a Golang Web App with Gitops and Kubernetes](https://dev.to/pankaj892/devops-pipeline-on-a-golang-web-app-with-gitops-and-kubernetes-4k7m)
