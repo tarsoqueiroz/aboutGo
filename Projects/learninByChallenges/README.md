@@ -6,6 +6,7 @@
   - [Handling Errors in Go: A Simple Example](./challenges/language/handlingErrors/README.md)
   - [Practical Cases to Use the Golang Sleep Method](./challenges/language/sleepMethod/README.md)
   - [Go time and its two clocks](./challenges/language/timeLapse/README.md)
+  - [Understanding Iterators in Go: A Fun Dive!](https://dev.to/tuna99/understanding-iterators-in-go-a-fun-dive-1c57)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
 - Containers & Kubernetes
