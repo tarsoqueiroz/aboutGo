@@ -6,14 +6,20 @@
   - [Handling Errors in Go: A Simple Example](./challenges/language/handlingErrors/README.md)
   - [Practical Cases to Use the Golang Sleep Method](./challenges/language/sleepMethod/README.md)
   - [Go time and its two clocks](./challenges/language/timeLapse/README.md)
-  - [Understanding Iterators in Go: A Fun Dive!](https://dev.to/tuna99/understanding-iterators-in-go-a-fun-dive-1c57)
+  - [Understanding Iterators in Go: A Fun Dive!](./challenges/language/iteratorInGo/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
 - Containers & Kubernetes
-  - [Melange and a Docker Image with Apko](https://dev.to/patrickdomnick/building-a-go-package-with-melange-and-a-docker-image-with-apko-141c)
+  - [Melange and a Docker Image with Apko](./challenges/containersKubernetes/melangeDockerImageWithApko/README.md)
 - Methods & Techniques
   - Server Sent Event (SSE)
 - Security
+  - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
+    - [Unlocking the Power of Go's Crypto Package, Go Crypto 1](./challenges/security/goCryptoSeries/goCrypto1/README.md)
+    - [Cracking Open Go's Crypto Toolbox, Go Crypto 2](./challenges/security/goCryptoSeries/goCrypto2/README.md)
+    - [Cryptographic Building Blocks: The LEGO of Security, Go Crypto 3](./challenges/security/goCryptoSeries/goCrypto3/README.md)
+    - [Symmetric Encryption: The Secret Handshake of Cryptography, Go Crypto 4](https://dev.to/rezmoss/symmetric-encryption-the-secret-handshake-of-cryptography-go-crypto-4-1d17)
+    - [Public-Key Cryptography: The Digital Handshake, Go Crypto 5](https://dev.to/rezmoss/public-key-cryptography-the-digital-handshake-go-crypto-5-167b)
 - DB
 
 ## Challanges list
@@ -31,6 +37,7 @@
   - [Adding API Rate Limiting to Your Go API](https://dev.to/neelp03/adding-api-rate-limiting-to-your-go-api-3fo8)
   - [Dockerizing Your Go API with Multi-Stage Builds](https://dev.to/neelp03/dockerizing-your-go-api-with-multi-stage-builds-3h9c)
 - [Go Redis Crud quickly example](https://dev.to/luigiescalante/go-redis-crud-quickly-example-2agj)
+- [Golang RESTful API with Gin, Gorm, PostgreSQL](https://dev.to/truongpx396/golang-restful-api-with-gin-gorm-postgresql-2hc)
 - Server Sent Event (SSE)
   - [Server Sent Event (SSE) with Go](https://medium.com/@rian.eka.cahya/server-sent-event-sse-with-go-10592d9c2aa1)
   - [Server-Sent Events (SSE): Comunicação em tempo real](https://www.youtube.com/watch?v=5TN9cyGev1M)
