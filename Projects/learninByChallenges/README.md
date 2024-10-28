@@ -18,7 +18,7 @@
     - [Unlocking the Power of Go's Crypto Package, Go Crypto 1](./challenges/security/goCryptoSeries/goCrypto1/README.md)
     - [Cracking Open Go's Crypto Toolbox, Go Crypto 2](./challenges/security/goCryptoSeries/goCrypto2/README.md)
     - [Cryptographic Building Blocks: The LEGO of Security, Go Crypto 3](./challenges/security/goCryptoSeries/goCrypto3/README.md)
-    - [Symmetric Encryption: The Secret Handshake of Cryptography, Go Crypto 4](https://dev.to/rezmoss/symmetric-encryption-the-secret-handshake-of-cryptography-go-crypto-4-1d17)
+    - [Symmetric Encryption: The Secret Handshake of Cryptography, Go Crypto 4](./challenges/security/goCryptoSeries/goCrypto4/README.md)
     - [Public-Key Cryptography: The Digital Handshake, Go Crypto 5](https://dev.to/rezmoss/public-key-cryptography-the-digital-handshake-go-crypto-5-167b)
 - DB
 

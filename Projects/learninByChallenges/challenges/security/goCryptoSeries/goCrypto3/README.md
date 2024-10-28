@@ -53,6 +53,6 @@ go get encoding/binary
 go run main.go 
 ```
 
-## That's all...
+## That's all
 
 ...folks!!!
