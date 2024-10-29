@@ -22,11 +22,13 @@
     - [Public-Key Cryptography: The Digital Handshake, Go Crypto 5](https://dev.to/rezmoss/public-key-cryptography-the-digital-handshake-go-crypto-5-167b)
 - DB
 
-## Challanges list
+## Challenges list
 
+- [Building a simple REST API with Go](https://dev.to/vizalo/building-a-simple-rest-api-with-go-1kj2)
 - [Building RESTful APIs with Go](https://dev.to/neelp03/building-restful-apis-with-go-3ob6)
 - [Create an API for DataTables with Go](https://dev.to/stackpuz/create-an-api-for-datatables-with-go-23ng)
 - [Como fazer uma API em GO utilizando GIN, Docker e Postgres em 10m.](https://medium.com/@mariarobertap/como-fazer-uma-api-em-go-utilizando-gin-docker-e-postgres-e56a22d97e20)
+- [Building Golang RESTful API with Gin, MongoDB](https://dev.to/truongpx396/building-golang-restful-api-with-gin-mongodb-n01)
 - [Golang CRUD Rest API using Mux, Postgres, Docker and Docker Compose](https://dev.to/francescoxx/build-a-crud-rest-api-in-go-using-mux-postgres-docker-and-docker-compose-2a75)
 - [Desenvolvimento de APIs em Go](https://johnfercher.medium.com/desenvolvimento-de-apis-em-go-64f945b11d2b)
 - [Go with the Flow: Building Scalable APIs in Go Series' Articles](https://dev.to/neelp03/series/29062)
