@@ -56,6 +56,7 @@
 - Methods & Techniques
   - [Implement data validation in Go](https://dev.to/stackpuz/implement-data-validation-in-go-44ii)
   - [Como Validar Dados em Golang?](https://dev.to/ortizdavid/como-validar-dados-em-golang-3b0f)
+  - [Simplify Gin Input Validation in Go with ginvalidator](https://dev.to/gbubemi_attah_8220489db16/simplify-input-validation-in-go-with-ginvalidator-5aoc)
   - [Building a Blog with Go: Rendering Markdown as HTML](https://www.youtube.com/watch?v=PWUEXNSrLx4)
   - [Implementing JWTs in Go](https://dev.to/kalashin1/implementing-jwts-in-go-3128)
   - [Build your Service Mesh:](https://dev.to/ramonberrutti/series/27820)
