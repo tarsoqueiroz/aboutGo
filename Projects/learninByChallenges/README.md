@@ -71,6 +71,10 @@
   - [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
   - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
 - Security
+  - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
+    - [TLS and X.509 Certificates: Your Digital Passport and Secure Tunnel, Go Crypto 7](https://dev.to/rezmoss/tls-and-x509-certificates-your-digital-passport-and-secure-tunnel-go-crypto-7-1kc)
+    - [Password Hashing and Key Derivation: Turning Secrets into Secure Gibberish, Go Crypto 8](https://dev.to/rezmoss/password-hashing-and-key-derivation-turning-secrets-into-secure-gibberish-go-crypto-8-4gn)
+  - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
 - Infra & Services
   - DB
   - Blockchain
