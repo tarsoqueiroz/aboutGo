@@ -34,4 +34,5 @@ data/
 # exclude private and public keys
 *.rsa
 *.rsa.pub
-
+*.pem
+*.key
