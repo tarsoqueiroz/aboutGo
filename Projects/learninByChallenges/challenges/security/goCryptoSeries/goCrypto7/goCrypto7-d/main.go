@@ -38,7 +38,8 @@ func main() {
 	}
 
 	// let's visit the secure server!
-	resp, err := client.Get("https://localhost")
+	resp, err := client.Get("https://10.15.18.44")
+	// resp, err := client.Get("https://google.com")
 	if err != nil {
 		panic("===== Oops, our secure journey failed!!!")
 	}
