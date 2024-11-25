@@ -22,6 +22,7 @@
     - [Public-Key Cryptography: The Digital Handshake, Go Crypto 5](./challenges/security/goCryptoSeries/goCrypto5/README.md)
     - [Digital Signatures: Your Cryptographic John Hancock, Go Crypto 6](./challenges/security/goCryptoSeries/goCrypto6/README.md)
     - [TLS and X.509 Certificates: Your Digital Passport and Secure Tunnel, Go Crypto 7](./challenges/security/goCryptoSeries/goCrypto7/README.md)
+    - [Password Hashing and Key Derivation: Turning Secrets into Secure Gibberish, Go Crypto 8](./challenges/security/goCryptoSeries/goCrypto8/README.md)
 - Infra & Services
   - DB
   - Blockchain
@@ -73,7 +74,6 @@
   - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
-    - [Password Hashing and Key Derivation: Turning Secrets into Secure Gibberish, Go Crypto 8](https://dev.to/rezmoss/password-hashing-and-key-derivation-turning-secrets-into-secure-gibberish-go-crypto-8-4gn)
     - [Constant-Time Operations: The Art of Keeping Secrets... Secret! , Go Crypto 9](https://dev.to/rezmoss/constant-time-operations-the-art-of-keeping-secrets-secret-go-crypto-9-26lb)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
 - Infra & Services
