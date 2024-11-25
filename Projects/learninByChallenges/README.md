@@ -74,6 +74,7 @@
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
     - [Password Hashing and Key Derivation: Turning Secrets into Secure Gibberish, Go Crypto 8](https://dev.to/rezmoss/password-hashing-and-key-derivation-turning-secrets-into-secure-gibberish-go-crypto-8-4gn)
+    - [Constant-Time Operations: The Art of Keeping Secrets... Secret! , Go Crypto 9](https://dev.to/rezmoss/constant-time-operations-the-art-of-keeping-secrets-secret-go-crypto-9-26lb)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
 - Infra & Services
   - DB
