@@ -93,4 +93,4 @@
     - [Circuit Breaker em aplicações Go](https://dev.to/mfbmina/circuit-breaker-em-aplicacoes-go-445p)
     - [gondola: Why not use a lightweight and simple YAML-based reverse proxy?](https://dev.to/bmf_san/gondola-why-not-use-a-lightweight-and-simple-yaml-based-reverse-proxy-3454)
     - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
-  devops-pipeline-on-a-golang-web-app-with-gitops-and-kubernetes-4k7m)
+    - [URL Shortener in Go](https://dev.to/jordan_t/url-shortener-in-go-3d8l)
