@@ -36,6 +36,7 @@
   - [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
   - [Concurrency in Go: From Basics to Advanced Concepts](https://dev.to/chanchals7/concurrency-in-go-from-basics-to-advanced-concepts-1b9n)
 - API's
+  - [Como implementar uma API do ZERO com Golang e PostgreSQL!!!](https://www.youtube.com/watch?v=MD7b-iQMC24)
   - [Building a simple REST API with Go](https://dev.to/vizalo/building-a-simple-rest-api-with-go-1kj2)
   - [Building RESTful APIs with Go](https://dev.to/neelp03/building-restful-apis-with-go-3ob6)
   - [Create an API for DataTables with Go](https://dev.to/stackpuz/create-an-api-for-datatables-with-go-23ng)
