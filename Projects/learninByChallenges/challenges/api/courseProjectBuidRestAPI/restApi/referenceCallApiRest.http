@@ -1,0 +1,115 @@
+### Variables
+@urlRestApiServer   = http://localhost:8910
+@pathHidroEstado     = ServiceANA.asmx/HidroEstado
+@pathHidroMunicipio  = ServiceANA.asmx/HidroMunicipio
+@pathHidroRio        = ServiceANA.asmx/HidroRio
+@pathHidroInventario = ServiceANA.asmx/HidroInventario
+
+#### <<<< DOCUMENTAÇÃO >>>> ####
+####
+#### Documentação
+
+### GET Lista de Estados (UF) - HIDRO
+GET {{urlRestApiServer}}/{{pathHidroEstado}}?codUf= HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### GET Lista um Estado (UF) - HIDRO
+# @prompt codigoUF Informe o codigo do Estado (UF)
+GET {{urlRestApiServer}}/{{pathHidroEstado}}?codUf={{codigoUF}} HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### POST Lista de Estados (UF) - HIDRO
+POST {{urlRestApiServer}}/{{pathHidroEstado}}?codUf= HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codUf=
+
+### GET Lista um Estado (UF) - HIDRO
+# @prompt codigoUF Informe o codigo do Estado (UF)
+POST {{urlRestApiServer}}/{{pathHidroEstado}}?codUf= HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codUf={{codigoUF}}
+
+#### <<<< HidroMunicipio >>>> ####
+####
+#### Lista de Municipio - HIDRO
+#### - codMunicipio: Recebe o codigo do Municipio (UF).
+#### Obs.: Campo não obrigatório. Se vazio, retorná todos os Municipios cadastrados.
+
+### GET Lista de Municipios - HIDRO
+GET {{urlRestApiServer}}/{{pathHidroMunicipio}}?codMunicipio= HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### GET Lista um Municipio - HIDRO (Manaus: 3026000)
+# @prompt codigoMunicipio Informe o codigo do Municipio
+GET {{urlRestApiServer}}/{{pathHidroMunicipio}}?codMunicipio={{codigoMunicipio}} HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### POST Lista de Municipios - HIDRO (Manaus: 3026000)
+POST {{urlRestApiServer}}/{{pathHidroMunicipio}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codMunicipio=
+
+### POST Lista um Municipio - HIDRO (Manaus: 3026000)
+# @prompt codigoMunicipio Informe o codigo do Municipio
+POST {{urlRestApiServer}}/{{pathHidroMunicipio}}?codMunicipio={{codigoMunicipio}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codMunicipio={{codigoMunicipio}}
+
+#### <<<< HidroRio >>>> ####
+####
+#### Lista de Rios - HIDRO
+#### - codRio: Recebe o codigo do rio.
+#### Obs.: Campo não obrigatório. Se vazio, retorná todos os rios cadastrados.
+
+### GET Lista de Rios - HIDRO
+GET {{urlRestApiServer}}/{{pathHidroRio}}?codRio= HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### GET Lista um Rio - HIDRO (Rio Madeira: 15200000,; Rio Juma: 13104100,15262220)
+# @prompt codigoRio Informe o codigo do Rio
+GET {{urlRestApiServer}}/{{pathHidroRio}}?codRio={{codigoRio}} HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### POST Lista de Rios - HIDRO (Manaus: 3026000)
+POST {{urlRestApiServer}}/{{pathHidroRio}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codRio=
+
+### POST Lista um Rio - HIDRO (Rio Juma: 13104100 ou 15262220)
+# @prompt codigoRio Informe o codigo do Rio
+POST {{urlRestApiServer}}/{{pathHidroRio}}?codRio={{codigoRio}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codRio={{codigoRio}}
+
+#### <<<< HidroInventario >>>> ####
+####
+#### Inventário pluviométrico/fluviométrico atualizado.
+#### - codEstDE: Código de 8 dígitos da estação - INICIAL (Ex.: 00047000)
+#### - codEstATE: Código de 8 dígitos da estação - FINAL (Ex.: 90300000)
+#### - tpEst: Tipo da estação (1-Flu ou 2-Plu)
+#### - nmEst: Nome da Estação (Ex.: Barra Mansa)
+#### - nmRio: Nome do Rio (Ex.: Rio Javari)
+#### - codSubBacia: Código da Sub-Bacia hidrografica (Ex.: 10)
+#### - codBacia: Código da Bacia hidrografica (Ex.: 1)
+#### - nmMunicipio: Município (Ex.: Itaperuna)
+#### - nmEstado: Estado (Ex.: Rio de Janeiro)
+#### - sgResp: Sigla do Responsável pela estação (Ex.: ANA)
+#### - sgOper: Sigla da Operadora da estação (Ex.: CPRM)
+#### - telemetrica: (Ex: 1-SIM ou 0-NÃO)
+#### Obs.: Campos não obrigatórios. Se vazios, retornão todas as estações cadastradas.
+
+### GET Inventário pluviométrico/fluviométrico
+GET {{urlRestApiServer}}/{{pathHidroInventario}}?codEstDE=&codEstATE=&tpEst=&nmEst=&nmRio=&codSubBacia=15&codBacia=1&nmMunicipio=&nmEstado=&sgResp=&sgOper=&telemetrica= HTTP/1.1
+Content-Type: text/xml; charset=utf-8
+
+### POST Inventário pluviométrico/fluviométrico
+POST {{urlRestApiServer}}/{{pathHidroInventario}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+codEstDE=&codEstATE=&tpEst=&nmEst=&nmRio=&codSubBacia=15&codBacia=1&nmMunicipio=&nmEstado=&sgResp=&sgOper=&telemetrica=
