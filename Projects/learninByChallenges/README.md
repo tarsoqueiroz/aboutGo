@@ -9,6 +9,7 @@
   - [Understanding Iterators in Go: A Fun Dive!](./challenges/language/iteratorInGo/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
+  - [Course Project: Build a REST API](./challenges/api/courseProjectBuidRestAPI/README.md)
 - Containers & Kubernetes
   - [Melange and a Docker Image with Apko](./challenges/containersKubernetes/melangeDockerImageWithApko/README.md)
 - Methods & Techniques
