@@ -1,0 +1,28 @@
+### Variables
+@urlRestApi = http://localhost:8910
+@pathPing   = ping
+@pathEvents = events
+
+#### <<<< Go Event Book REST API >>>> ####
+####
+#### REST API for sample research about REST API
+####
+
+### GET Ping
+GET {{urlRestApi}}/{{pathPing}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+### GET Events
+GET {{urlRestApi}}/{{pathEvents}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+### POST Event
+POST {{urlRestApi}}/{{pathEvents}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+{
+  "name": "Teste event",
+  "description": "A test event",
+  "location": "A test location",
+  "dateTime": "2025-01-13T17:13:00.000Z"
+}

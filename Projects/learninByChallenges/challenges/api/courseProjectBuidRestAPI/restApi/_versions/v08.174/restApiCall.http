@@ -17,7 +17,7 @@ GET {{urlRestApi}}/{{pathEvents}} HTTP/1.1
 Content-Type: application/json; charset=utf-8
 
 ### GET Event by ID
-# @prompt eventID Informe o codigo do Evento
+# @prompt eventID Informe o codigo do Estado (UF)
 GET {{urlRestApi}}/{{pathEvents}}/{{eventID}} HTTP/1.1
 Content-Type: application/json; charset=utf-8
 
@@ -26,25 +26,8 @@ POST {{urlRestApi}}/{{pathEvents}} HTTP/1.1
 Content-Type: application/json; charset=utf-8
 
 {
-  "name": "Teste event 2",
-  "description": "Another test event",
+  "name": "Teste event",
+  "description": "A test event",
   "location": "A test location",
   "dateTime": "2025-01-13T17:13:00.000Z"
 }
-
-### PUT Event
-# @prompt eventID Informe o codigo do Evento
-PUT {{urlRestApi}}/{{pathEvents}}/{{eventID}} HTTP/1.1
-Content-Type: application/json; charset=utf-8
-
-{
-  "name": "Updated test event",
-  "description": "Another test event updated",
-  "location": "A test location updated",
-  "dateTime": "2025-01-14T17:13:13.000Z"
-}
-
-### DELETE Event
-# @prompt eventID Informe o codigo do Evento
-DELETE {{urlRestApi}}/{{pathEvents}}/{{eventID}} HTTP/1.1
-Content-Type: application/json; charset=utf-8

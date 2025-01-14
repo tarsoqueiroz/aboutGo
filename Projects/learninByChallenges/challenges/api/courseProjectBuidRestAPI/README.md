@@ -61,14 +61,14 @@ touch models/event.go
 
 - [V03.164](./restApi/_versions/v03.164/)
 
-## 165-166: Registering a POST route & Testing requests
+## 165.166: Registering a POST route & Testing requests
 
-- [V03.165-166](./restApi/_versions/v04.165-166/)
+- [V04.165.166](./restApi/_versions/v04.165.166/)
 - [VSCode REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 
-## 167: Initializing a database
+## 167: Initializing a Database
 
-**In the next lecture**, we'll add & initialize (i.e., connect to) a SQL database.
+**In the next lecture**, we'll add & initialize (i.e., connect to) a SQL Database.
 
 When writing the code for connecting, there's a minor mistake in the code I'll show you in the next lecture.
 
@@ -81,7 +81,7 @@ func InitDB() {
   DB, err := sql.Open("sqlite3", "api.db")
 
   if err != nil {
-    panic("Could not connect to database.")
+    panic("Could not connect to Database.")
   }
 
   DB.SetMaxOpenConns(10)
@@ -101,7 +101,7 @@ func InitDB() {
   DB, err = sql.Open("sqlite3", "api.db")
 
   if err != nil {
-    panic("Could not connect to database.")
+    panic("Could not connect to Database.")
   }
 
   DB.SetMaxOpenConns(10)
@@ -111,13 +111,84 @@ func InitDB() {
 }
 ```
 
-## Day 2: 167 - 173 (44min)
+## 168.169: Adding a SQL Database & Creating a SQL Database table
 
-## Day 3: 174 - 182 (44min)
+- [sqlite3 package module](https://pkg.go.dev/github.com/mattn/go-sqlite3)
+- [go-sqlite3 Github](https://github.com/mattn/go-sqlite3)
 
-## Day 4: 183 - 188 (47min)
+```sh
+go get github.com/mattn/go-sqlite3
+```
 
-## Day 5: 189 - 197 (45min)
+- [V05.167.168.169](./restApi/_versions/v05.167.168.169/)
+
+```sh
+go run main.go
+```
+
+## 170.171: Storing data in the Database (INSERT) & Getting events from Database (SELECT)
+
+- [V06.170.171](./restApi/_versions/v06.170.171/)
+
+```sh
+go run main.go
+```
+
+## 172: Preparing Statements vs Directly Executing Queries (Prepare() vs Exec()/Query())
+
+In the previous lectures, we started sending SQL commands to the SQLite database.
+
+And we did this by following different approaches:
+
+1. `DB.Exec()` (when we created the tables)
+1. `Prepare()` + `stmt.Exec()` (when we inserted data into the database)
+1. `DB.Query()` (when we fetched data from the database)
+
+Using `Prepare()` is **100% optional**! You could send all your commands directly via `Exec()` or `Query()`.
+
+The difference between those two methods then just is whether you're fetching data from the database (=> use `Query()`) or your manipulating the database / data in the database (=> use `Exec()`).
+
+But what's the advantage of using Prepare()?
+
+`Prepare()` prepares a SQL statement - this can lead to better performance if the same statement is executed multiple times (potentially with different data for its placeholders).
+
+This is only true, if the prepared statement is not closed (`stmt.Close()`) in between those executions. In that case, there wouldn't be any advantages.
+
+And, indeed, in this application, we are calling `stmt.Close()` directly after calling `stmt.Exec()`. So here, it really wouldn't matter which approach you're using.
+
+But in order to show you the different ways of using the sql package, I decided to also include this preparation approach in this course.
+
+## 173: Getting single event data by ID
+
+- [V07.173](./restApi/_versions/v07.173/)
+
+```sh
+go run main.go
+```
+
+## 174: Refactoring code & Outsourcing routes
+
+- [V08.174](./restApi/_versions/v08.174/)
+
+```sh
+go run main.go
+```
+
+## 175.176.177: Registering an "Update Event" & Handler & Updating Events & Deleting Events
+
+- [V09.175.176.177](./restApi/_versions/V09.175.176.177/)
+
+```sh
+go run main.go
+```
+
+## 178: TO AQUI
+
+## Day 3: 178 - 186 (48min)
+
+## Day 4: 187 - 190 (32min)
+
+## Day 5: 191 - 197 (33min)
 
 ## That's all
 
