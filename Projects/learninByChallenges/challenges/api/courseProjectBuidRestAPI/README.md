@@ -182,9 +182,50 @@ go run main.go
 go run main.go
 ```
 
-## 178: TO AQUI
+## 178.179: Adding a "Users" table to the SQL database & Adding user signup
 
-## Day 3: 178 - 186 (48min)
+- [V10.178.179](./restApi/_versions/v10.178.179/)
+
+```sh
+go run main.go
+```
+
+## 180.181: Don't store plain-text passwords & Hashing passwords
+
+- [bcrypt package](https://pkg.go.dev/golang.org/x/crypto/bcrypt)
+
+```sh
+go get -u golang.org/x/crypto
+```
+
+- [V11.180.181](./restApi/_versions/v11.180.181/)
+
+```sh
+go run main.go
+```
+
+## 182.183.184: Getting started with JWT & Getting Started with & Finishing the Login logic route
+
+![Go Event Book REST API - Auth required](./resources/goEventBookRestApiAuth.png)
+
+***Go-powered "Event Booking" REST API - Auth required by endpoint***
+
+- [V12.182.183.184](./restApi/_versions/v12.182.183.184/)
+
+```sh
+go run main.go
+```
+
+## 185.186: Generating JWT & Finishing the JWT logic
+
+- [Golang JWT](https://github.com/golang-jwt/jwt)
+- [V13.185.186](./restApi/_versions/v13.185.186/)
+
+```sh
+go get -u github.com/golang-jwt/jwt/v5
+```
+
+## 187
 
 ## Day 4: 187 - 190 (32min)
 

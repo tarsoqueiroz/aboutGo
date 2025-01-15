@@ -3,7 +3,6 @@
 @pathPing   = ping
 @pathEvents = events
 @pathSignup = signup
-@pathLogin = login
 
 #### <<<< Go Event Book REST API >>>> ####
 ####
@@ -67,17 +66,6 @@ Content-Type: application/json; charset=utf-8
 # @prompt emailUser Informe o email do usuario
 # @prompt passwordUser Informe a password do usuario
 POST {{urlRestApi}}/{{pathSignup}} HTTP/1.1
-Content-Type: application/json; charset=utf-8
-
-{
-  "email": "{{emailUser}}",
-  "password": "{{passwordUser}}"
-}
-
-### POST Login
-# @prompt emailUser Informe o email do usuario
-# @prompt passwordUser Informe a password do usuario
-POST {{urlRestApi}}/{{pathLogin}} HTTP/1.1
 Content-Type: application/json; charset=utf-8
 
 {
