@@ -225,11 +225,17 @@ go run main.go
 go get -u github.com/golang-jwt/jwt/v5
 ```
 
-## 187
+## 187.188.189: Adding token verification & Adding route protection & Retrieving and storing user and event IDs
 
-## Day 4: 187 - 190 (32min)
+- [V14.187.188.189](./restApi/_versions/v14.187.188.189/)
 
-## Day 5: 191 - 197 (33min)
+```sh
+go get -u github.com/golang-jwt/jwt/v5
+```
+
+## 190
+
+## Day 5: 190 - 197 (37min)
 
 ## That's all
 
