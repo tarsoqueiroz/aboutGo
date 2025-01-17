@@ -223,6 +223,8 @@ go run main.go
 
 ```sh
 go get -u github.com/golang-jwt/jwt/v5
+
+go run main.go
 ```
 
 ## 187.188.189: Adding token verification & Adding route protection & Retrieving and storing user and event IDs
@@ -231,11 +233,31 @@ go get -u github.com/golang-jwt/jwt/v5
 
 ```sh
 go get -u github.com/golang-jwt/jwt/v5
+
+go run main.go
 ```
 
-## 190
+## 190.191: Adding an authentication middleware & Enhancing & Using the middleware
 
-## Day 5: 190 - 197 (37min)
+- [V15.190.191](./restApi/_versions/v15.190.191/)
+
+```sh
+go get -u github.com/golang-jwt/jwt/v5
+
+go run main.go
+```
+
+## 192: Adding authorization to restrict user from editing & deleting
+
+- [V16.192](./restApi/_versions/v16.192/)
+
+```sh
+go run main.go
+```
+
+## 193: Adding a registrations table
+
+## Day 6: 193 - 197 (20min)
 
 ## That's all
 
