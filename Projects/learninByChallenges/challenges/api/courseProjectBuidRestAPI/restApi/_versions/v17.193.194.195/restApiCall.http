@@ -69,12 +69,6 @@ POST {{urlRestApi}}/{{pathEvents}}/{{eventID}}/{{pathRegistration}} HTTP/1.1
 Content-Type: application/json; charset=utf-8
 Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzM3NDA1MTgxLCJ1c2VySWQiOjJ9.u3xE_fyOSzVRWkgJefSEox3Ey8iOc8E0wjoO_hdK7R0
 
-### DELETE Registration
-# @prompt eventID Informe o codigo do Evento
-DELETE {{urlRestApi}}/{{pathEvents}}/{{eventID}}/{{pathRegistration}} HTTP/1.1
-Content-Type: application/json; charset=utf-8
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQGV4YW1wbGUuY29tIiwiZXhwIjoxNzM3NDA1MTgxLCJ1c2VySWQiOjJ9.u3xE_fyOSzVRWkgJefSEox3Ey8iOc8E0wjoO_hdK7R0
-
 ####
 #### Users
 ####

@@ -255,9 +255,27 @@ go run main.go
 go run main.go
 ```
 
-## 193: Adding a registrations table
+## 193.194.195: Adding a registrations table & Registering users & Testing and fixing the "register" route
 
-## Day 6: 193 - 197 (20min)
+- [V17.193.194.195](./restApi/_versions/v17.193.194.195/)
+
+```sh
+go run main.go
+```
+
+## 196: Cancelling Registrations
+
+- [V18.196](./restApi/_versions/v18.196/)
+
+```sh
+go run main.go
+```
+
+## FINAL VERSION
+
+It needs some additional validations.
+
+- [V19.final](./restApi/_versions/v19.final/)
 
 ## That's all
 
