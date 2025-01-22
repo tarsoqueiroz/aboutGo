@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    labels:
+        app: httpd-teste6
+    name: httpd-teste6
+    namespace: paas-hml
+spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+        matchLabels:
+            app: httpd-teste6
+    strategy:
+        activeDeadlineSeconds: 21600
+        resources: {}
+        rollingParams:
+            intervalSeconds: 1
+            maxSurge: 25%
+            maxUnavailable: 25%
+            timeoutSeconds: 600
+            updatePeriodSeconds: 1
+        type: RollingUpdate
+    template:
+        metadata:
+            annotations:
+                openshift.io/generated-by: OpenShiftNewApp
+            creationTimestamp: null
+            labels:
+                app: httpd-teste6
+        spec:
+            containers:
+                - image: image-registry.openshift-image-registry.svc:5000/paas-hml/httpd-teste6@sha256:212f61a91651b44e8beb9635885deaae57c8b15a8a50716dd7cebb9a6457b4be
+                  imagePullPolicy: Always
+                  name: httpd-teste6
+                  ports:
+                    - containerPort: 8443
+                      protocol: TCP
+                    - containerPort: 8080
+                      protocol: TCP
+                  resources: {}
+                  terminationMessagePath: /dev/termination-log
+                  terminationMessagePolicy: File
+                  volumeMounts:
+                    - mountPath: /srv/data
+                      name: httpd-teste6-001
+            dnsPolicy: ClusterFirst
+            restartPolicy: Always
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+            volumes:
+                - name: httpd-teste6-001
+                  persistentVolumeClaim:
+                    claimName: httpd-teste6-001
+    test: false
