@@ -7,6 +7,7 @@
   - [Practical Cases to Use the Golang Sleep Method](./challenges/language/sleepMethod/README.md)
   - [Go time and its two clocks](./challenges/language/timeLapse/README.md)
   - [Understanding Iterators in Go: A Fun Dive!](./challenges/language/iteratorInGo/README.md)
+  - [Go Interfaces Simplified: A Beginner's Tutorial](./challenges/language/interfacesSimplified/README.md)
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
   - [Course Project: Build a REST API](./challenges/api/courseProjectBuidRestAPI/README.md)
