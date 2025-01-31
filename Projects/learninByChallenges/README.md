@@ -28,6 +28,7 @@
     - [Constant-Time Operations: The Art of Keeping Secrets... Secret! , Go Crypto 9](./challenges/security/goCryptoSeries/goCrypto9/README.md)
 - Infra & Services
   - DB
+    - [How to Build a Concurrent Key-Value Store in Go](https://dev.to/siddheshk02/how-to-build-a-concurrent-key-value-store-in-go-3pep)
   - Blockchain
 
 ## Challenges list
@@ -82,7 +83,6 @@
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
 - Infra & Services
   - DB
-    - [How to Build a Concurrent Key-Value Store in Go](https://dev.to/siddheshk02/how-to-build-a-concurrent-key-value-store-in-go-3pep)
   - Blockchain
     - [Building a Simple Blockchain in Golang](https://dev.to/thesaltree/building-a-simple-blockchain-in-golang-4351)
   - Messaging
