@@ -1,0 +1,31 @@
+### Variables
+@urlRestApi = http://localhost:3456
+@pathRoot   = 
+@pathSet    = set
+@pathGet    = get
+@pathDelete = delete
+
+#### <<<< kvGo DB REST API >>>> ####
+####
+#### REST API for KV DB in Go
+####
+
+### GET Root
+GET {{urlRestApi}}/{{pathRoot}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+### SET kv
+# @prompt valKey What's the "Key" ?
+# @prompt valValue What's the "Value" ?
+POST {{urlRestApi}}/{{pathSet}}/{{valKey}}/{{valValue}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+### GET kv
+# @prompt valKey What's the "Key" ?
+GET {{urlRestApi}}/{{pathGet}}/{{valKey}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+### DELETE kv
+# @prompt valKey What's the "Key" ?
+DELETE {{urlRestApi}}/{{pathDelete}}/{{valKey}} HTTP/1.1
+Content-Type: application/json; charset=utf-8
