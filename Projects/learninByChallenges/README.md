@@ -15,6 +15,7 @@
   - [Melange and a Docker Image with Apko](./challenges/containersKubernetes/melangeDockerImageWithApko/README.md)
 - Methods & Techniques
   - Server Sent Event (SSE)
+  - Web
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
     - [Unlocking the Power of Go's Crypto Package, Go Crypto 1](./challenges/security/goCryptoSeries/goCrypto1/README.md)
@@ -78,6 +79,8 @@
   - [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
   - [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
   - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
+  - Web
+    - [WebForms Core Technology in GO](https://dev.to/elanatframework/webforms-core-technology-in-go-4bbo)
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
