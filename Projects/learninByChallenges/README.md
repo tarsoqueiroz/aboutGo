@@ -104,3 +104,4 @@
     - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
     - [URL Shortener in Go](https://dev.to/jordan_t/url-shortener-in-go-3d8l)
     - [URL Shortening Service using Go](https://dev.to/siddheshk02/url-shortening-service-using-go-3652)
+    - [Building a URL Shortener in Go](https://dev.to/luthfisauqi17/building-a-url-shortener-in-go-592d)
