@@ -81,6 +81,7 @@
   - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
   - Web
     - [WebForms Core Technology in GO](https://dev.to/elanatframework/webforms-core-technology-in-go-4bbo)
+    - [Building high-performance websites using htmx and Go](https://dev.to/logrocket/building-high-performance-websites-using-htmx-and-go-2beb)
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
