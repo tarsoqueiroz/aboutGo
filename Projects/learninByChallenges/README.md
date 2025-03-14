@@ -40,6 +40,7 @@
   - [Using defer in Go: Best Practices and Common Use Cases](https://dev.to/zakariachahboun/common-use-cases-for-defer-in-go-1071)
   - [A Comprehensive Guide to Type Casting and Conversions in Go](https://dev.to/zakariachahboun/a-comprehensive-guide-to-type-casting-and-conversions-in-go-26di)
   - [Concurrency in Go: From Basics to Advanced Concepts](https://dev.to/chanchals7/concurrency-in-go-from-basics-to-advanced-concepts-1b9n)
+  - [GoFr: Power Up Your Microservices with This Go Framework](https://dev.to/rijon/gofr-power-up-your-microservices-with-this-go-framework-185l)
 - API's
   - [Como implementar uma API do ZERO com Golang e PostgreSQL!!!](https://www.youtube.com/watch?v=MD7b-iQMC24)
   - [Building a simple REST API with Go](https://dev.to/vizalo/building-a-simple-rest-api-with-go-1kj2)
@@ -90,6 +91,7 @@
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
   - [JWT in Action: Secure Authentication & Authorization in Go](https://dev.to/leapcell/jwt-in-action-secure-authentication-authorization-in-go-jde)
+  - [Building a Password Manager in Go](https://dev.to/svemaraju/building-a-password-manager-in-go-31jo)
 - Infra & Services
   - DB
   - Blockchain
@@ -104,6 +106,7 @@
     - [Generating PDFs in Golang with Maroto](https://dev.to/logrocket/go-long-by-generating-pdfs-in-golang-with-maroto-1g25)
     - [Build Your Own SMTP Server in Go](https://dev.to/alexbczpro/build-your-own-smtp-server-in-go-5b90)
     - [Building a File Upload API in Go](https://dev.to/stackpuz/building-a-file-upload-api-in-go-258i)
+    - [Building a Downloader in Go](https://dev.to/riturajborpujari/building-a-downloader-in-go-1d8h)
     - [Circuit Breaker em aplicações Go](https://dev.to/mfbmina/circuit-breaker-em-aplicacoes-go-445p)
     - [gondola: Why not use a lightweight and simple YAML-based reverse proxy?](https://dev.to/bmf_san/gondola-why-not-use-a-lightweight-and-simple-yaml-based-reverse-proxy-3454)
     - [DevOpsifying a Go Web Application: An End-to-End Guide](https://dev.to/iamamash/devopsifying-a-go-web-application-an-end-to-end-guide-17bm)
