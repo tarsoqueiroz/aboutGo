@@ -11,6 +11,7 @@
 - API's
   - [Como criar uma REST API completa do zero com GO](./comoCriarRestApi/README.md)
   - [Course Project: Build a REST API](./challenges/api/courseProjectBuidRestAPI/README.md)
+  - Fiber Framework
 - Containers & Kubernetes
   - [Melange and a Docker Image with Apko](./challenges/containersKubernetes/melangeDockerImageWithApko/README.md)
 - Methods & Techniques
@@ -58,6 +59,8 @@
     - [Dockerizing Your Go API with Multi-Stage Builds](https://dev.to/neelp03/dockerizing-your-go-api-with-multi-stage-builds-3h9c)
   - [Golang RESTful API with Gin, Gorm, PostgreSQL](https://dev.to/truongpx396/golang-restful-api-with-gin-gorm-postgresql-2hc)
   - [Calculator Backend-API In Go](https://dev.to/jordan_t/calculator-backend-api-in-go-2173)
+  - Fiber Framework
+    - [Building a Basic REST API in Go using Fiber](https://tutorialedge.net/golang/basic-rest-api-go-fiber/)
 - Containers & Kubernetes
   - [Dockerizing a Golang API with MySQL and adding Docker Compose Support](https://dev.to/pradumnasaraf/dockerizing-a-golang-api-with-mysql-and-adding-docker-compose-support-9b1)
   - [Go + Docker: Como criar as melhores imagens Docker para aplicações Golang](https://dev.to/rflpazini/go-docker-como-criar-as-melhores-imagens-docker-para-aplicacoes-golang-ikj)
