@@ -83,21 +83,19 @@
   - [Manipulação de Datas em Golang](https://dev.to/ortizdavid/manipulacao-de-datas-em-golang-3j5i)
   - [Resiliência na comunicação entre microsserviços usando a lib failsafe-go](https://eltonminetto.dev/post/2024-08-24-resilience-in-communication-between-microservices-using-the-failsafe-go-lib/)
   - [Command-Line Tools with Go: Piping Data](https://dev.to/googlecloud/command-line-tools-with-go-piping-data-2jco): Intro guide wrote on standard library features of Go that are useful for creating command line tools (look at [Go for CLI Apps and Tools](https://codesnip.sh/go/command-line-programs/commands).
+  - [Go Tools: Yet Another Configuration Tool for Go Applications — zerocfg](https://dev.to/nikita_rykhlov/go-tools-yet-another-configuration-tool-for-go-applications-zerocfg-1fij)
+  - [Caching in Go: Doing It Right](https://dev.to/leapcell/caching-in-go-doing-it-right-25i5)
   - Web
     - [WebForms Core Technology in GO](https://dev.to/elanatframework/webforms-core-technology-in-go-4bbo)
     - [Building high-performance websites using htmx and Go](https://dev.to/logrocket/building-high-performance-websites-using-htmx-and-go-2beb)
     - [Mastering Go Web Servers: From Zero to Hero](https://dev.to/leapcell/mastering-go-web-servers-from-zero-to-hero-58i3)
-- Security
-  - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
-  - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
-  - [JWT in Action: Secure Authentication & Authorization in Go](https://dev.to/leapcell/jwt-in-action-secure-authentication-authorization-in-go-jde)
-  - [Building a Password Manager in Go](https://dev.to/svemaraju/building-a-password-manager-in-go-31jo)
 - Infra & Services
   - DB
   - Blockchain
     - [Building a Simple Blockchain in Golang](https://dev.to/thesaltree/building-a-simple-blockchain-in-golang-4351)
   - Messaging
     - [A simple MQTT application using Go](https://dev.to/johnscode/a-simple-mqtt-application-using-go-1ca5)
+    - [Build High-Performance Persistent Message Queue in Go: Complete Implementation Guide](https://dev.to/aaravjoshi/build-high-performance-persistent-message-queue-in-go-complete-implementation-guide-4hgb)
   - Services
     - [Go Redis Crud quickly example](https://dev.to/luigiescalante/go-redis-crud-quickly-example-2agj)
     - [Go (Golang) e Prometheus para monitoramento de APIs](https://www.youtube.com/watch?v=JoUkORTdPIM)
@@ -113,3 +111,10 @@
     - [URL Shortener in Go](https://dev.to/jordan_t/url-shortener-in-go-3d8l)
     - [URL Shortening Service using Go](https://dev.to/siddheshk02/url-shortening-service-using-go-3652)
     - [Building a URL Shortener in Go](https://dev.to/luthfisauqi17/building-a-url-shortener-in-go-592d)
+- Security
+  - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
+  - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
+  - [JWT in Action: Secure Authentication & Authorization in Go](https://dev.to/leapcell/jwt-in-action-secure-authentication-authorization-in-go-jde)
+  - [Building a Password Manager in Go](https://dev.to/svemaraju/building-a-password-manager-in-go-31jo)
+  - [How is a public key really generated? (with Golang)](https://dev.to/diego_cnd/how-a-public-key-is-really-generated-with-golang-16o9)
+  - [How to Implement Argon2 for Secure Password Hashing in Go](https://dev.to/nesniv/how-to-implement-argon2-for-secure-password-hashing-in-go-54ec)
