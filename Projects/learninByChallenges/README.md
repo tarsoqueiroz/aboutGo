@@ -111,6 +111,7 @@
     - [URL Shortener in Go](https://dev.to/jordan_t/url-shortener-in-go-3d8l)
     - [URL Shortening Service using Go](https://dev.to/siddheshk02/url-shortening-service-using-go-3652)
     - [Building a URL Shortener in Go](https://dev.to/luthfisauqi17/building-a-url-shortener-in-go-592d)
+    - [Building a Simple URL Shortener with Go and Redis](https://dev.to/dinithi_pramodya_ad93a533/building-a-simple-url-shortener-with-go-and-redis-1i62)
 - Security
   - [Go Crypto Series' Articles](https://dev.to/rezmoss/series/29138)
   - [Step-by-Step Guide to Implementing JWT Authentication in Go (Golang)](https://dev.to/1shubham7/step-by-step-guide-to-implementing-jwt-authentication-in-go-golang-2e24)
