@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../go-micro/front-end"
+		}
+	],
+	"settings": {}
+}
