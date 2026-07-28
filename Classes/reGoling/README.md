@@ -85,14 +85,203 @@ Crie um programa que imprima "Hello, K8s!" usando módulos. Compile e execute.
 
 **Para aprofundar**: [Documentação oficial de módulos](https://go.dev/doc/modules/managing-dependencies)
 
-### 
+### Instalação
 
+Seguir roteiro em [GO: Download and install](https://go.dev/doc/install).
 
+### Entendendo Módulos
 
+Em Go, um módulo é simplesmente uma coleção de pacotes Go com um arquivo go.mod na raiz. Pense nele como:
 
+- O `pom.xml` do **Maven** ou o `package.json` do **NPM** para Go.
+- O `go.mod` declara o nome do seu módulo e lista as dependências externas (bibliotecas) que seu código precisa.
+- O `go.sum` é um arquivo de bloqueio que contém hashes criptográficos das dependências, garantindo que todos que baixarem seu projeto usem exatamente as mesmas versões.
 
+**O que mudou?** Antigamente (pré-1.11) usávamos o `GOPATH`, que forçava uma estrutura de pastas rígida. **Com módulos, você pode trabalhar em qualquer diretório do seu computador.** Esqueça o `GOPATH`!
 
+### Criando Seu Primeiro Módulo
 
+Vamos colocar a mão na massa. Abra seu terminal e siga:
+
+```sh
+# 1. Crie uma pasta para o projeto (pode ser em qualquer lugar)
+mkdir -p dia1/t1-hellok8s && cd dia1/t1-hellok8s/
+
+# 2. Inicie o módulo. O nome é importante: use um caminho que reflita onde ele ficará (ex: github.com/seu-usuario/hellok8s)
+go mod init github.com/tarsoqueiroz/regod1t1-hellok8s
+
+# 3. Veja o arquivo criado
+cat go.mod
+```
+
+O go.mod deve aparecer assim:
+
+```text
+module github.com/tarsoqueiroz/regod1t1-hellok8s
+
+go 1.26
+```
+
+> **Dica importante**: Escolha um nome de módulo que você acredite que será único. Se for um projeto pessoal, pode usar algo como `meuprojeto` ou `exemplo/hellok8s`. O importante é que não vai conflitar com módulos públicos.
+
+### Escrevendo o Código
+
+Crie um arquivo `main.go` com o conteúdo:
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Println("Hello, K8s!")
+}
+```
+
+### Compilando e Executando
+
+Agora, veja a mágica dos módulos:
+
+```sh
+# Execute diretamente (sem compilar)
+go run main.go
+
+# Compile para um binário executável
+go build -o hellok8s main.go
+
+# Execute o binário compilado (no Linux/Mac)
+./hellok8s
+# Ou no Windows: hellok8s.exe
+```
+
+### Entendendo a Estrutura de Pastas
+
+A estrutura de um projeto Go comum que você verá em ferramentas de K8s é:
+
+```text
+meu-projeto/
+├── go.mod          # Declaração do módulo e dependências
+├── go.sum          # Checksums das dependências (segurança)
+├── main.go         # Ponto de entrada
+├── pkg/            # Código que pode ser importado por outros
+│   └── k8s/
+│       └── client.go
+└── cmd/            # Executáveis (se houver mais de um)
+    └── myapp/
+        └── main.go
+```
+
+### Adicionando uma Dependência
+
+Agora vamos fazer algo mais útil: importar uma biblioteca externa. Por exemplo, a biblioteca para manipular YAML, muito usada com Kubernetes.
+
+```sh
+# Adicione a dependência
+go get gopkg.in/yaml.v3
+```
+
+Observe:
+
+- O `go.mod` foi atualizado com uma nova linha `require`
+- O `go.sum` foi criado/atualizado com o hash da biblioteca
+
+Execute novamente `go run main.go` - tudo continua funcionando.
+
+### Erros e Confusões Comuns
+
+| Erro | Por que acontece? | Como resolver? |
+| :--- | :---------------- | :------------- |
+| `go: cannot find main module` | Você está executando `go` em um diretório sem `go.mod` | Crie o módulo com `go mod init` |
+| `go: module example.com/... found, but does not contain package` | Você tentou importar um submódulo que não existe | Verifique o caminho do pacote na documentação |
+| `invalid version: unknown revision` | A versão especificada não existe | Use `@latest` ou verifique as tags no repositório |
+| Esquecer de adicionar `go.mod` no repositório | Outros desenvolvedores não saberão as dependências | Sempre comite `go.mod` e `go.sum` |
+
+### Exercício para Fixar
+
+**Objetivo**: Criar um programa que use uma dependência externa para ler e exibir uma configuração em YAML.
+
+- Crie um novo módulo chamado `exercicio-dia1`.
+- Adicione a dependência `gopkg.in/yaml.v3`.
+- Crie uma estrutura (`struct`) `Config` com campos `Timeout` (`int`) e Retries (`int`).
+- Crie uma variável com dados **YAML** simulando uma configuração:
+
+```yaml
+timeout: 30
+retries: 5
+```
+
+- Use a biblioteca **YAML** para "parsear" (desserializar) o YAML para a struct.
+- Imprima os valores formatados.
+
+> **Dica**: A função para desserializar é `yaml.Unmarshal([]byte(yamlString), &config)`.
+
+**Solução**:
+
+```sh
+# criar pasta para o projeto
+mkdir -p dia1/exerc-d1 && cd dia1/exerc-d1
+
+# inicializar o modulo
+go mod init github.com/tarsoqueiroz/regod1e1-exercicio
+
+# adicionar dependência
+go get gopkg.in/yaml.v3
+
+# criar arquivo do app
+touch main.go
+```
+
+- `main.go`
+
+```go
+package main
+
+import (
+    "fmt"
+    "gopkg.in/yaml.v3"
+)
+
+type Config struct {
+    Timeout int `yaml:"timeout"`
+    Retries int `yaml:"retries"`
+}
+
+func main() {
+    yamlData := `
+timeout: 30
+retries: 5
+`
+    var config Config
+    err := yaml.Unmarshal([]byte(yamlData), &config)
+    if err != nil {
+        fmt.Println("Erro ao parsear YAML:", err)
+        return
+    }
+    fmt.Printf("Configuração carregada: Timeout=%d, Retries=%d\n", config.Timeout, config.Retries)
+}
+```
+
+```sh
+# executando o código
+go run main.go
+```
+
+### O que Estudar para Aprofundar
+
+- **Documentação oficial**: [Managing dependencies](https://go.dev/doc/modules/managing-dependencies) - especialmente a seção sobre `replace` para usar versões locais de módulos (muito útil quando você está desenvolvendo e testando localmente).
+- **Comandos úteis**: 
+  - `go mod tidy`: limpa dependências não usadas
+  - `go mod vendor`: cria uma cópia local das dependências
+- **Proxy e privacidade**: A seção sobre `GOPROXY` e `GOPRIVATE` no link acima - essencial para empresas que usam repositórios privados.
+
+### Checklist de Conclusão do Dia 1
+
+- □ Criei um módulo com `go mod init`
+- □ Escrevi um programa simples e executei com `go run`
+- □ Compilei um binário com `go build`
+- □ Adicionei uma dependência com `go get`
+- □ Entendi que `go.mod` lista as dependências e `go.sum` garante integridade
+- □ Completei o exercício do YAML
 
 ## DIA 2: Pacotes e Exportação
 
@@ -128,7 +317,23 @@ Crie pacote k8s com função GetPodName() (exportada) e parseYaml() (não export
 
 **Para aprofundar**: Organização de pacotes em GO
 
-### 
+### 1. A Estrutura de Pacotes: A Base da Organização (10 min)
+
+Em Go, a organização é simples e direta: cada diretório é um pacote. O nome do pacote é definido pela primeira linha do arquivo, com package nome.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## DIA 3: Tipos e Structs
 
