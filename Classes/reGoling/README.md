@@ -107,7 +107,7 @@ Vamos colocar a mão na massa. Abra seu terminal e siga:
 # 1. Crie uma pasta para o projeto (pode ser em qualquer lugar)
 mkdir -p dia1/t1-hellok8s && cd dia1/t1-hellok8s/
 
-# 2. Inicie o módulo. O nome é importante: use um caminho que reflita onde ele ficará (ex: github.com/seu-usuario/hellok8s)
+# 2. Inicie o módulo. O nome é importante: use um caminho que reflita onde ele ficará (ex: github.com/tarsoqueiroz/hellok8s)
 go mod init github.com/tarsoqueiroz/regod1t1-hellok8s
 
 # 3. Veja o arquivo criado
@@ -317,45 +317,371 @@ Crie pacote k8s com função GetPodName() (exportada) e parseYaml() (não export
 
 **Para aprofundar**: Organização de pacotes em GO
 
-### 1. A Estrutura de Pacotes: A Base da Organização (10 min)
+### A Estrutura de Pacotes: A Base da Organização
 
-Em Go, a organização é simples e direta: cada diretório é um pacote. O nome do pacote é definido pela primeira linha do arquivo, com package nome.
+Em Go, a organização é simples e direta: **cada diretório é um pacote**. O nome do pacote é definido pela primeira linha do arquivo, com `package nome`.
 
+**Analogia Prática**: Imagine um escritório de arquitetura:
 
+- **Pacotes** = Gavetas do arquivo (cada uma com uma função)
+- **Funções exportadas (Maiúsculas)** = Documentos que podem ser compartilhados com outros escritórios
+- **Funções não exportadas (Minúsculas)** = Anotações internas que só seu escritório vê
 
+**A Regra de Ouro**:
 
+- ✅ `func GetPodName()` → Exportada (visível para outros pacotes)
+- ❌ `func parseYaml()` → Não exportada (visível apenas dentro do mesmo pacote)
+- ✅ `type PodInfo struct` → Exportada
+- ❌ `type podCache struct` → Não exportada
 
+### Estrutura de Diretórios na Prática
 
+Vamos criar a estrutura que você verá em 90% dos projetos Go profissionais:
 
+```sh
+# Crie um novo projeto para o dia 2
+mkdir projetodia2 && cd projetodia2
+go mod init github.com/tarsoqueiroz/projetodia2
 
+# Crie a estrutura de pastas
+mkdir k8s
+mkdir utils
 
+# Crie os arquivos
+touch main.go
+touch k8s/helpers.go
+touch utils/strings.go
+```
 
+Sua estrutura agora é:
 
+```text
+projetodia2/
+├── go.mod
+├── main.go
+├── k8s/
+│   └── helpers.go
+└── utils/
+    └── strings.go
+```
 
+### Implementando os Pacotes
 
+Arquivo `k8s/helpers.go`:
 
+```go
+package k8s
+
+import "fmt"
+
+// GetPodName é uma função EXPORTADA (maiúscula)
+// Pode ser usada por outros pacotes
+func GetPodName(namespace, name string) string {
+    return fmt.Sprintf("%s/%s", namespace, name)
+}
+
+// parseYaml é uma função NÃO EXPORTADA (minúscula)
+// Só pode ser usada dentro do pacote k8s
+func parseYaml(yamlData string) string {
+    // Simulação: num cenário real, usaria a biblioteca yaml
+    return "Parsed: " + yamlData
+}
+
+// PodInfo é uma struct EXPORTADA
+type PodInfo struct {
+    Name      string
+    Namespace string
+    Ready     bool
+}
+
+// podCache é uma struct NÃO EXPORTADA (uso interno)
+type podCache struct {
+    pods []PodInfo
+}
+```
+
+Arquivo `utils/strings.go`:
+
+```go
+package utils
+
+import "strings"
+
+// UpperExportada - função exportada
+func UpperExportada(texto string) string {
+    return strings.ToUpper(texto)
+}
+
+// lowerInterna - função não exportada
+func lowerInterna(texto string) string {
+    return strings.ToLower(texto)
+}
+```
+
+Arquivo `main.go`:
+
+```go
+package main
+
+import (
+    "fmt"
+    
+    // Importando nossos pacotes locais
+    "github.com/tarsoqueiroz/projetodia2/k8s"
+    "github.com/tarsoqueiroz/projetodia2/utils"
+)
+
+func main() {
+    // Usando função exportada do pacote k8s
+    podName := k8s.GetPodName("default", "nginx-pod")
+    fmt.Println("Nome do Pod:", podName)
+    
+    // Usando função exportada do pacote utils
+    upper := utils.UpperExportada("hello kubernetes")
+    fmt.Println("Upper:", upper)
+    
+    // ❌ Isso NÃO funciona - parseYaml não é exportada
+    // k8s.parseYaml("teste")  // Erro de compilação!
+    
+    // Usando struct exportada
+    pod := k8s.PodInfo{
+        Name:      "nginx-pod",
+        Namespace: "default",
+        Ready:     true,
+    }
+    fmt.Printf("Pod: %+v\n", pod)
+    
+    // ✅ CORRETO: usar o alias para simplificar
+    // k8s é o nome do pacote, não precisa de alias a menos que haja conflito
+}
+```
+
+### Alias de Importação: Quando Usar
+
+Às vezes você precisa dar um apelido para o pacote:
+
+```go
+import (
+    "fmt"
+    
+    // Alias "k8sclient" para o pacote
+    k8sclient "github.com/tarsoqueiroz/projetodia2/k8s"
+    
+    // Alias "_" para ignorar (útil para init())
+    _ "github.com/lib/pq"  // Inicializa o driver PostgreSQL
+)
+
+func main() {
+    // Agora usa o alias
+    nome := k8sclient.GetPodName("default", "pod")
+}
+```
+
+### O Pacote `main` é Especial
+
+- `package main` define um programa executável
+- Deve ter a função `func main()`
+- Não pode ser importado por outros pacotes
+- É o ponto de entrada do seu binário
+
+### Erros e Confusões Comuns
+
+| Erro | Sintoma | Solução |
+| :--- | :------ | :------ |
+| Exportação esquecida | `undefined: k8s.parseYaml` | Mude para `ParseYaml` (maiúscula) |
+| Pacote com nome diferente da pasta | `import "projeto/k8s"` mas `package kubernetes` | Nome do pacote DEVE ser `k8s` |
+| Importação com caminho errado | `cannot find package` | Use o caminho completo do módulo + pasta |
+| Ciclo de importação | `import cycle not allowed` | Pacote A importa B, e B importa A - reorganize |
+| Função main em pacote não-main | `main redeclared` | Só pode ter `func main()` no pacote `main` |
+
+### Exercício para Fixar
+
+**Objetivo**: Criar um sistema simples de gerenciamento de "Pods" com pacotes bem organizados.
+
+**Instruções**:
+
+- Estrutura:
+
+```text
+gerenciador-pods/
+├── go.mod
+├── main.go
+├── pods/
+│   ├── manager.go     // Gerencia operações com pods
+│   └── types.go       // Define structs de pod
+└── utils/
+    └── logger.go      // Funções de log
+```
+
+- Requisitos:
+
+Em `pods/types.go`: Crie struct `Pod` exportada com campos: `Name`, `Namespace`, `Status` (string)
+
+Em pods/manager.go:
+
+- Função exportada `ListPods()` que retorna um slice de `Pod` (simule com 2-3 pods)
+- Função não exportada `validatePod(p Pod) bool` (verifica se Name não está vazio)
+
+Em `utils/logger.go`:
+
+- Função exportada `Info(msg string)` que imprime `[INFO] msg`
+- Função não exportada `logWithLevel(level, msg string)`
+
+Em `main.go`:
+
+- Importe os pacotes
+- Liste os pods usando pods.ListPods()
+- Log cada pod usando utils.Info()
+
+**Execute e veja funcionar**.
+
+### Solução
+
+```sh
+# criando estrutura de diretórios
+mkdir -p gerenciador-pods/{pods,utils}
+cd gerenciador-pods/
+
+# gerando 
+touch main.go pods/manager.go pods/types.go utils/logger.go
+```
+
+- `pods/types.go`:
+
+```go
+package pods
+
+// Pod - exportada
+type Pod struct {
+    Name      string
+    Namespace string
+    Status    string
+}
+```
+
+- `pods/manager.go`:
+
+```go
+package pods
+
+// ListPods - exportada
+func ListPods() []Pod {
+    // Simulando dados
+    return []Pod{
+        {Name: "nginx", Namespace: "default", Status: "Running"},
+        {Name: "redis", Namespace: "cache", Status: "Pending"},
+        {Name: "api", Namespace: "production", Status: "Running"},
+    }
+}
+
+// validatePod - NÃO exportada
+func validatePod(p Pod) bool {
+    return p.Name != ""
+}
+```
+
+- `utils/logger.go`:
+
+```go
+package utils
+
+import "fmt"
+
+// Info - exportada
+func Info(msg string) {
+    logWithLevel("INFO", msg)
+}
+
+// logWithLevel - NÃO exportada
+func logWithLevel(level, msg string) {
+    fmt.Printf("[%s] %s\n", level, msg)
+}
+```
+
+- `main.go`:
+
+```go
+package main
+
+import (
+    "fmt"
+    
+    "github.com/tarsoqueiroz/gerenciador-pods/pods"
+    "github.com/tarsoqueiroz/gerenciador-pods/utils"
+)
+
+func main() {
+    utils.Info("Iniciando gerenciador de pods")
+    
+    podsList := pods.ListPods()
+    utils.Info(fmt.Sprintf("Encontrados %d pods", len(podsList)))
+    
+    for _, pod := range podsList {
+        utils.Info(fmt.Sprintf("Pod: %s/%s - %s", 
+            pod.Namespace, pod.Name, pod.Status))
+    }
+    
+    // ❌ Isto não compila (validatePod não é exportada)
+    // pods.validatePod(pods.Pod{Name: "teste"})
+}
+```
+
+```sh
+# inicializando o projeto
+go mod init  github.com/tarsoqueiroz/gerenciador-pods
+
+# executando o programa
+go run main.go 
+```
+
+### O que Estudar para Aprofundar
+
+- **Pacotes internos (`internal/`)**: [Go Internal Packages](https://go.dev/doc/go1.4#internalpackages) - como criar pacotes que só podem ser usados dentro do seu módulo.
+- **Inicialização (`init()`)**: [Package initialization](https://go.dev/doc/effective_go#init) - funções `init()` rodam antes do `main()`.
+- **Pacotes com múltiplos arquivos**: Todos os arquivos no mesmo diretório devem ter o mesmo `package nome`.
+- **Blank identifier em imports**: `_ "pacote"` para importar apenas para executar init().
+
+### Checklist de Conclusão do Dia 2
+
+- □ Entendi que **exportado = Maiúsculo, não exportado = Minúsculo**
+- □ Criei pacotes em subdiretórios
+- □ Importei e usei meus próprios pacotes
+- □ Entendi a diferença entre `package main` e outros pacotes
+- □ Completei o exercício do gerenciador de pods
+- □ Testei o que acontece quando tento usar uma função não exportada
+
+### Dica para seu Contexto (Kubernetes)
+
+Em projetos reais de Kubernetes com Go, você verá esta estrutura frequentemente:
+
+```go
+// client-go usa este padrão
+import (
+    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"  // Alias comum
+    corev1 "k8s.io/api/core/v1"                    // Alias para versão
+)
+```
+
+O padrão é: `<pacote>v<versão>` para clientes de API, permitindo várias versões simultâneas.
 
 ## DIA 3: Tipos e Structs
 
 ### Proposta
 
-Conceitos:
+**Conceitos**:
 
-Tipos básicos: string, int, bool, float64
+- Tipos básicos: string, int, bool, float64
+- Structs = objetos (mas sem herança)
+- Métodos em structs
+- Ponteiros (* e &) - quando usar
 
-Structs = objetos (mas sem herança)
+**Analogia**: Struct é como uma classe em Java, mas só dados. Métodos são funções anexadas.
 
-Métodos em structs
+**Relação**: Structs são usados para modelar recursos Kubernetes (Pod, Service, etc).
 
-Ponteiros (* e &) - quando usar
+**Aplicação prática**:
 
-Analogia: Struct é como uma classe em Java, mas só dados. Métodos são funções anexadas.
-
-Relação: Structs são usados para modelar recursos Kubernetes (Pod, Service, etc).
-
-Aplicação prática:
-
-go
+```go
 type Pod struct {
     Name      string
     Namespace string
@@ -365,14 +691,37 @@ type Pod struct {
 func (p Pod) GetFullName() string {
     return p.Namespace + "/" + p.Name
 }
-Erro comum: Esquecer que GO passa tudo por valor (cópia) - use ponteiros para modificar.
+```
 
-Exercício:
+**Erro comum**: Esquecer que GO passa tudo por valor (cópia) - use ponteiros para modificar.
+
+**Exercício**:
+
 Crie struct Deployment com campos Name, Replicas, Image. Adicione método Scale() que altera replicas.
 
-Para aprofundar: Métodos e ponteiros
+**Para aprofundar**: Métodos e ponteiros
 
-### 
+### O Que São Structs? A Base dos Dados (10 min)
+
+Analogia: Structs são como "formulários" ou "fichas cadastrais" - um molde que define quais campos um dado deve ter. Pense em um formulário de cadastro de Pod:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## DIA 4: Interfaces
 
