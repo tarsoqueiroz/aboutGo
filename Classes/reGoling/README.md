@@ -701,59 +701,563 @@ Crie struct Deployment com campos Name, Replicas, Image. Adicione método Scale(
 
 **Para aprofundar**: Métodos e ponteiros
 
-### O Que São Structs? A Base dos Dados (10 min)
+### O Que São Structs? A Base dos Dados
 
-Analogia: Structs são como "formulários" ou "fichas cadastrais" - um molde que define quais campos um dado deve ter. Pense em um formulário de cadastro de Pod:
+**Analogia**: Structs são como "formulários" ou "fichas cadastrais" - um molde que define quais campos um dado deve ter. Pense em um formulário de cadastro de Pod:
 
+```text
+Formulário do Pod:
+- Nome: _____________ (string)
+- Namespace: ________ (string) 
+- Réplicas: _________ (int)
+- Ready: ____________ (bool)
+```
 
+Em Go, isso se torna:
 
+```go
+type Pod struct {
+    Name      string
+    Namespace string
+    Replicas  int
+    Ready     bool
+}
+```
 
+**Comparação com outras linguagens**:
 
+- **Java/C#**: Struct é como uma classe POJO, mas sem herança
+- **Python**: Similar a uma dataclass, mas com métodos separados
+- **JavaScript**: Como um objeto com tipagem estática
 
+> **Importante**: Structs são tipos de valor (passados por cópia), não referência como classes em Java.
 
+### Criando e Usando Structs
 
+```go
+package main
 
+import "fmt"
 
+// Definindo uma struct
+type Pod struct {
+	Name      string
+	Namespace string
+	Replicas  int
+	Ready     bool
+}
 
+// Struct aninhada (comum em Kubernetes)
+type Deployment struct {
+	Name   string
+	Pod    Pod // Composição (não herança)
+	Labels map[string]string
+}
 
+func main() {
+	// Forma 1: Declarativa (recomendada)
+	pod1 := Pod{
+		Name:      "nginx",
+		Namespace: "default", // Vírgula obrigatória mesmo na última linha
+		Replicas:  1,
+		Ready:     true,
+	}
 
+	// Forma 2: Posicional (NÃO RECOMENDADO - frágil)
+	pod2 := Pod{"redis", "cache", 3, false}
 
+	// Forma 3: Vazia (campos com valores zero)
+	pod3 := Pod{}
 
+	// Forma 4: Parcial (campos não especificados ficam com valor zero)
+	pod4 := Pod{Name: "api", Namespace: "prod"}
 
+	fmt.Println(pod1)
+	fmt.Printf("Pod 1: %+v\n", pod1) // %+v mostra nomes dos campos
+	fmt.Printf("Pod 2: %+v\n", pod2) // %+v mostra nomes dos campos
+	fmt.Printf("Pod 3: %+v\n", pod3) // %+v mostra nomes dos campos
+	fmt.Printf("Pod 4: %+v\n", pod4) // %+v mostra nomes dos campos
+}
+```
 
+### Métodos: Comportamento Anexado à Struct
 
+**Analogia**: Se a struct é um "formulário", os métodos são as "ações" que você pode fazer com esse formulário.
+
+```go
+package main
+
+import "fmt"
+
+type Pod struct {
+	Name      string
+	Namespace string
+	Replicas  int
+	Ready     bool
+}
+
+// Método com RECEPTOR POR VALOR (cópia) - NÃO MODIFICA o original
+func (p Pod) GetFullName() string {
+	return p.Namespace + "/" + p.Name
+}
+
+// Método com RECEPTOR POR PONTEIRO (*) - PODE MODIFICAR o original
+func (p *Pod) SetReplicas(n int) {
+	p.Replicas = n // Modifica o campo
+}
+
+// Método com RECEPTOR POR PONTEIRO - útil para validação
+func (p *Pod) IsValid() bool {
+	return p.Name != "" && p.Namespace != ""
+}
+
+// Método que retorna uma cópia modificada
+func (p Pod) WithReadyStatus(ready bool) Pod {
+	p.Ready = ready
+	return p // Retorna uma nova struct
+}
+
+func main() {
+	pod := Pod{Name: "nginx", Namespace: "default", Replicas: 1, Ready: true}
+
+	fmt.Printf("Pod: %+v\n", pod) // %+v mostra nomes dos campos
+
+	// Método com receptor por valor (cópia)
+	fullName := pod.GetFullName()
+	fmt.Println("Nome completo:", fullName)
+
+	// Método com receptor por ponteiro (modifica original)
+	pod.SetReplicas(3)
+	fmt.Printf("Pod após SetReplicas: %+v\n", pod)
+
+	// Método que retorna nova cópia
+	newPod := pod.WithReadyStatus(false)
+	fmt.Printf("Novo Pod: %+v\n", newPod)
+	fmt.Printf("Pod original ainda é: %+v\n", pod) // Não mudou
+}
+```
+
+### Regra de Ouro: Quando Usar Ponteiro vs Valor?
+
+| Situação | Use  | Motivo |
+| :------- | :--- | :----- |
+| Precisa MODIFICAR a struct               | `*Pod`          | Ponteiro permite alterar o original |
+| A struct é GRANDE (ex: > 64 bytes)       | `*Pod`          | Evita cópia cara |
+| Precisa garantir que a struct é IMUTÁVEL | `Pod`           | Cópia segura |
+| Método que apenas LÊ dados               | `Pod` ou `*Pod` | Ambos funcionam, mas valor é mais seguro |
+| A struct contém um MUTEX ou similar      | `*Pod`          | Mutex deve ser passado por ponteiro |
+
+> **Dica Prática**: Em dúvida, use ponteiro (`*Pod`). É mais seguro e performático.
+
+### Campos com Tags: Metadados para Serialização
+
+Tags são anotações que dizem como a struct deve ser serializada/deserializada. **Essencial para Kubernetes**:
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"gopkg.in/yaml.v3"
+)
+
+type ConfigMap struct {
+	Name      string            `json:"name" yaml:"name"`
+	Namespace string            `json:"namespace,omitempty" yaml:"namespace,omitempty"`
+	Data      map[string]string `json:"data" yaml:"data"`
+	Internal  string            `json:"-" yaml:"-"` // Ignorado em ambos
+}
+
+func main() {
+	cm := ConfigMap{
+		Name:      "app-config",
+		Namespace: "default",
+		Data:      map[string]string{"key": "value", "timeout": "30s"},
+		Internal:  "segredo",
+	}
+
+	// Serializando para JSON
+	jsonData, _ := json.MarshalIndent(cm, "", "  ")
+	fmt.Println("=== JSON ===")
+	fmt.Println(string(jsonData))
+
+	// Serializando para YAML
+	yamlData, _ := yaml.Marshal(cm)
+	fmt.Println("\n=== YAML ===")
+	fmt.Println(string(yamlData))
+}
+```
+
+### Diferenças Importantes entre JSON e YAML
+
+| Característica | JSON | YAML |
+| :------------- | :--- | :--- |
+| Uso em K8s     | API Server (internamente)  | Manifestos (arquivos .yaml) |
+| Legibilidade   | Boa, mas com muitas chaves | Excelente, mais limpo |
+| Comentários    | Não suporta                | Suporta (# comentário) |
+| Estrutura      | Chaves e colchetes         | Indentação (como Python) |
+| Tags           | `json:"nome"`              | `yaml:"nome"` |
+
+### Caso Real: Lendo e Escrevendo ConfigMap do Kubernetes
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"gopkg.in/yaml.v3"
+)
+
+type ConfigMap struct {
+	Name      string            `yaml:"name"`
+	Namespace string            `yaml:"namespace"`
+	Data      map[string]string `yaml:"data"`
+}
+
+func main() {
+	// Simulando um ConfigMap que você leu de um arquivo
+	yamlString := `
+name: nginx-config
+namespace: production
+data:
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+    }
+  timeout: 60s
+`
+
+	var cm ConfigMap
+	err := yaml.Unmarshal([]byte(yamlString), &cm)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("\n=== ConfigMap lido ===")
+	fmt.Printf("ConfigMap lido: %+v\n", cm)
+
+	// Modificando e salvando de volta
+	cm.Data["new-key"] = "new-value"
+
+	novoYAML, _ := yaml.Marshal(cm)
+	fmt.Println("\n=== ConfigMap modificado ===")
+	fmt.Println("\nConfigMap modificado:")
+	fmt.Println(string(novoYAML))
+}
+```
+
+### Dica para seu Contexto:
+
+No dia a dia com Kubernetes, você vai usar **YAML para arquivos de manifesto** e **JSON para comunicação com a API** (via client-go). Por isso, é comum ver structs com **ambas as tags**:
+
+```go
+type Pod struct {
+    Name      string `json:"name" yaml:"name"`
+    Namespace string `json:"namespace,omitempty" yaml:"namespace,omitempty"`
+    // Em K8s real, você veria muitas outras tags como `protobuf:"..."`
+}
+```
+
+### Erros e Confusões Comuns
+
+| Erro | Sintoma | Solução |
+| :--- | :------ | :------ |
+| Esquecer vírgula na última linha              | `missing ',' before newline`               | TODAS as linhas de campos têm vírgula |
+| Usar valor sem ponteiro e esperar modificação | `p.Replicas = 3` não altera o original     | Use receptor com ponteiro: `(p *Pod)` |
+| Esquecer `&` ao criar ponteiro                | `&Pod{Name: "test"}` para criar referência | Use `&` ou `new(Pod)` |
+| Campo com nome maiúsculo não exportado?       | Campo começa com maiúscula = exportado     | Minúsculo para interno |
+| Comparar structs com campos não comparáveis   | `map` ou `slice` causam erro               | Use `DeepEqual` do pacote `reflect` |
+
+### Exercício para Fixar
+
+**Objetivo**: Modelar um recurso Kubernetes Deployment com métodos para gerenciá-lo.
+
+**Instruções**:
+
+- Crie um novo módulo `k8s-model`:
+
+```bash
+mkdir k8s-model && cd k8s-model
+go mod init github.com/seu-usuario/k8s-model
+```
+
+- Crie o arquivo `main.go` com:
+  - **Parte 1 - Definir Structs**:
+    - `Pod`: campos Name (string), Image (string), Ports ([]int)
+    - `Deployment`: campos Name (string), Replicas (int), PodTemplate (Pod)
+    - `DeploymentStatus`: campos Ready (bool), AvailableReplicas (int)
+    - `Annotations`: campos (map[string]string)
+  - **Parte 2 - Métodos**:
+    - `(d *Deployment) Scale(n int)`: atualiza Replicas
+    - `(d Deployment) GetFullName() string`: retorna "deployment/name"
+    - `(d *Deployment) Validate() bool`: verifica se Name != "" e Replicas > 0
+    - `(d *Deployment) Status() DeploymentStatus`: retorna status (Ready = Replicas > 0)
+  - **Parte 3 - Teste**:
+    - Crie um deployment com 3 réplicas
+    - Escale para 5 réplicas
+    - Valide e mostre o status
+    - Serializar o deployment em YAML e JSON
+    - Imprimir ambos os formatos
+- Execute e veja funcionar.
+
+### Solução
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+
+	"gopkg.in/yaml.v3"
+)
+
+// Pod representa um pod Kubernetes
+type Pod struct {
+	Name  string `json:"name" yaml:"name"`
+	Image string `json:"image" yaml:"image"`
+	Ports []int  `json:"ports,omitempty" yaml:"ports,omitempty"`
+}
+
+// Deployment representa um deployment Kubernetes
+type Deployment struct {
+	Name        string            `json:"name" yaml:"name"`
+	Replicas    int               `json:"replicas" yaml:"replicas"`
+	PodTemplate Pod               `json:"podTemplate" yaml:"podTemplate"`
+	Annotations map[string]string `json:"annotations,omitempty" yaml:"annotations,omitempty"`
+}
+
+// DeploymentStatus representa o status de um deployment
+type DeploymentStatus struct {
+	Ready             bool `json:"ready" yaml:"ready"`
+	AvailableReplicas int  `json:"availableReplicas" yaml:"availableReplicas"`
+}
+
+// Scale - modifica o número de réplicas (PONTEIRO)
+func (d *Deployment) Scale(n int) {
+	if n > 0 {
+		d.Replicas = n
+	}
+}
+
+// GetFullName - retorna nome completo (VALOR - apenas leitura)
+func (d Deployment) GetFullName() string {
+	return "deployment/" + d.Name
+}
+
+// Validate - verifica se o deployment é válido (PONTEIRO)
+func (d *Deployment) Validate() bool {
+	return d.Name != "" && d.Replicas > 0
+}
+
+// Status - retorna o status atual (VALOR - cria cópia)
+func (d Deployment) Status() DeploymentStatus {
+	return DeploymentStatus{
+		Ready:             d.Replicas > 0,
+		AvailableReplicas: d.Replicas,
+	}
+}
+
+// String - implementa a interface fmt.Stringer (método especial)
+func (d Deployment) String() string {
+	return fmt.Sprintf("Deployment: %s (replicas: %d)", d.Name, d.Replicas)
+}
+
+func main() {
+	// Criando um deployment
+	deploy := Deployment{
+		Name:     "nginx-deployment",
+		Replicas: 3,
+		PodTemplate: Pod{
+			Name:  "nginx-pod",
+			Image: "nginx:1.21",
+			Ports: []int{80},
+		},
+		Annotations: map[string]string{
+			"description": "Test deployment for Day 3",
+			"owner":       "arquiteto",
+			"environment": "dev",
+		},
+	}
+
+	fmt.Println("=== INFORMAÇÕES DO DEPLOYMENT ===")
+	fmt.Println("Criado:", deploy.String())
+	fmt.Println("Nome completo:", deploy.GetFullName())
+	fmt.Println("Válido?", deploy.Validate())
+
+	// Status inicial
+	status := deploy.Status()
+	fmt.Printf("Status inicial: %+v\n", status)
+
+	// Escalando
+	deploy.Scale(5)
+	fmt.Println("Após scale:", deploy.String())
+
+	// Novo status
+	newStatus := deploy.Status()
+	fmt.Printf("Novo status: %+v\n", newStatus)
+
+	// Teste com deployment inválido
+	invalid := Deployment{Name: ""}
+	fmt.Println("Deployment inválido é válido?", invalid.Validate())
+
+	// ============================================
+	// SERIALIZAÇÃO EM JSON E YAML (conforme solicitado)
+	// ============================================
+	fmt.Println("\n=== SERIALIZAÇÃO ===")
+
+	// Serializando para JSON
+	jsonData, err := json.MarshalIndent(deploy, "", "  ")
+	if err != nil {
+		fmt.Println("Erro ao serializar para JSON:", err)
+	} else {
+		fmt.Println("JSON:")
+		fmt.Println(string(jsonData))
+	}
+
+	// Serializando para YAML
+	yamlData, err := yaml.Marshal(deploy)
+	if err != nil {
+		fmt.Println("Erro ao serializar para YAML:", err)
+	} else {
+		fmt.Println("\nYAML:")
+		fmt.Println(string(yamlData))
+	}
+
+	// ============================================
+	// DEMONSTRAÇÃO DE DESERIALIZAÇÃO (bônus)
+	// ============================================
+	fmt.Println("\n=== DESERIALIZAÇÃO A PARTIR DO YAML ===")
+	yamlString := `
+name: redis-deployment
+replicas: 2
+podTemplate:
+  name: redis-pod
+  image: redis:alpine
+  ports:
+  - 6379
+annotations:
+  description: Redis cache
+  team: database
+`
+	var newDeploy Deployment
+	err = yaml.Unmarshal([]byte(yamlString), &newDeploy)
+	if err != nil {
+		fmt.Println("Erro ao desserializar YAML:", err)
+	} else {
+		fmt.Println("Deployment criado a partir do YAML:")
+		fmt.Printf("  Nome: %s\n", newDeploy.Name)
+		fmt.Printf("  Réplicas: %d\n", newDeploy.Replicas)
+		fmt.Printf("  Pod: %s (%s)\n", newDeploy.PodTemplate.Name, newDeploy.PodTemplate.Image)
+		fmt.Printf("  Portas: %v\n", newDeploy.PodTemplate.Ports)
+		fmt.Printf("  Anotações: %v\n", newDeploy.Annotations)
+	}
+}
+```
+
+### O que Estudar para Aprofundar
+
+- **Métodos com ponteiro vs valor em profundidade**: [Go Tour - Methods](https://go.dev/tour/methods/1) - seção completa
+- **Embedding de structs (composição)**: [Composition with Structs](https://go.dev/doc/effective_go#embedding) - como "herdar" campos
+- **Tags customizadas**: [Struct Tags](https://go.dev/ref/spec#Tag) - para criar suas próprias anotações
+- **Comparação de structs**: `reflect.DeepEqual` e `cmp.Diff` para testes
+- **Métodos com receptores `nil`**: Quando o ponteiro pode ser `nil` e como tratar
+
+### Contexto Kubernetes: Como Você Vai Usar Isso
+
+No mundo real com client-go, você verá structs como estas:
+
+```go
+import (
+    corev1 "k8s.io/api/core/v1"
+    metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+)
+
+// Pod do Kubernetes (versão simplificada da real)
+type Pod struct {
+    metav1.TypeMeta   `json:",inline"`
+    metav1.ObjectMeta `json:"metadata"`
+    Spec    PodSpec   `json:"spec"`
+    Status  PodStatus `json:"status"`
+}
+```
+
+**Padrão**:
+
+- `ObjectMeta` contém Name, Namespace, Labels, etc.
+- `Spec` é o "desejo" (o que você quer)
+- `Status` é a "realidade" (o que está acontecendo)
+- Métodos usam ponteiros para modificar o Spec
+
+### Checklist de Conclusão do Dia 3
+
+- □ Entendi que struct = molde para dados (como formulário)
+- □ Sei criar structs de 4 formas diferentes
+- □ Compreendo a diferença entre receptor por valor (`p Pod`) e ponteiro (`p *Pod`)
+- □ Sei quando usar ponteiro vs valor para métodos
+- □ Usei tags `json` e `yaml` para serialização
+- □ Completei o exercício do Deployment
+- □ Compreendo que em K8s, `Spec` = desejo, `Status` = realidade
 
 ## DIA 4: Interfaces
 
 ### Proposta
 
-Conceitos:
+**Conceitos**:
 
-Interface = contrato de métodos
+- Interface = contrato de métodos
+- Satisfação implícita (não precisa declarar "implements")
+- Interface vazia (interface{}) = any
 
-Satisfação implícita (não precisa declarar "implements")
+**Analogia**: Interface é como uma API que você precisa implementar, mas sem declaração explícita.
 
-Interface vazia (interface{}) = any
+**Relação**: Interfaces permitem desacoplar código - essencial para testabilidade.
 
-Analogia: Interface é como uma API que você precisa implementar, mas sem declaração explícita.
+**Aplicação prática**:
 
-Relação: Interfaces permitem desacoplar código - essencial para testabilidade.
-
-Aplicação prática:
-
-go
+```go
 type K8sClient interface {
     GetPods(namespace string) ([]Pod, error)
     DeletePod(name string) error
 }
-Erro comum: Pensar que precisa declarar que implementa uma interface.
+```
 
-Exercício:
-Crie interface Logger com método Log(message string). Implemente com FileLogger e ConsoleLogger.
+**Erro comum**: Pensar que precisa declarar que implementa uma interface.
 
-Para aprofundar: Interfaces no GO
+**Exercício**:
 
-### 
+- Crie interface Logger com método Log(`message string`). Implemente com FileLogger e ConsoleLogger.
+
+**Para aprofundar**: Interfaces no GO
+
+### Roteiro do Dia 4 (30-45 minutos)
+
+### 1. O Que São Interfaces? O Contrato (10 min)
+
+
+...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## DIA 5: Goroutines e Channels (Parte 1)
 

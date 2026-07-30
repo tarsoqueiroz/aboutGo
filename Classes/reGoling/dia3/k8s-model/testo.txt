@@ -1,0 +1,86 @@
+package main
+
+import "fmt"
+
+// Pod representa um pod Kubernetes
+type Pod struct {
+	Name  string
+	Image string
+	Ports []int
+}
+
+// Deployment representa um deployment Kubernetes
+type Deployment struct {
+	Name        string
+	Replicas    int
+	PodTemplate Pod
+}
+
+// DeploymentStatus representa o status de um deployment
+type DeploymentStatus struct {
+	Ready             bool
+	AvailableReplicas int
+}
+
+// Scale - modifica o número de réplicas (PONTEIRO)
+func (d *Deployment) Scale(n int) {
+	if n > 0 {
+		d.Replicas = n
+	}
+}
+
+// GetFullName - retorna nome completo (VALOR - apenas leitura)
+func (d Deployment) GetFullName() string {
+	return "deployment/" + d.Name
+}
+
+// Validate - verifica se o deployment é válido (PONTEIRO)
+func (d *Deployment) Validate() bool {
+	return d.Name != "" && d.Replicas > 0
+}
+
+// Status - retorna o status atual (VALOR - cria cópia)
+func (d Deployment) Status() DeploymentStatus {
+	return DeploymentStatus{
+		Ready:             d.Replicas > 0,
+		AvailableReplicas: d.Replicas,
+	}
+}
+
+// String - implementa a interface fmt.Stringer (método especial)
+func (d Deployment) String() string {
+	return fmt.Sprintf("Deployment: %s (replicas: %d)", d.Name, d.Replicas)
+}
+
+func main() {
+	// Criando um deployment
+	deploy := Deployment{
+		Name:     "nginx-deployment",
+		Replicas: 3,
+		PodTemplate: Pod{
+			Name:  "nginx-pod",
+			Image: "nginx:1.21",
+			Ports: []int{80},
+		},
+	}
+
+	fmt.Println("Criado________________________:", deploy.String())
+	fmt.Println("Nome completo_________________:", deploy.GetFullName())
+	fmt.Println("Válido________________________?", deploy.Validate())
+
+	// Status inicial
+	status := deploy.Status()
+	fmt.Printf("Status inicial________________: %+v\n", status)
+
+	// Escalando
+	deploy.Scale(5)
+	fmt.Println("Após scale____________________:", deploy.String())
+
+	// Novo status
+	newStatus := deploy.Status()
+	fmt.Printf("Novo status___________________: %+v\n", newStatus)
+
+	// Teste com deployment inválido
+	invalid := Deployment{Name: ""}
+	fmt.Println("Deployment inválido é válido__?", invalid.Validate())
+}
