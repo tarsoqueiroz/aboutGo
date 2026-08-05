@@ -2247,9 +2247,663 @@ msg := <-ch
 
 **Para aprofundar**: Padrões de concorrência
 
+### O Que São Channels? Filas Thread-Safe
+
+**Analogia**: Channels são como **esteiras rolantes** em uma fábrica:
+
+- **Unbuffered**: Esteira onde o operador só coloca a peça quando o próximo operador está pronto para pegar
+- **Buffered**: Esteira com capacidade para N peças, permitindo que o operador continue trabalhando mesmo se o próximo estiver ocupado
+
+**Características**:
+
+- Comunicação segura entre goroutines (sem locks manuais)
+- Bloqueiam automaticamente quando necessário
+- Podem ser bidirecionais ou direcionais (só enviar, só receber)
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+    // Criando um channel
+    ch := make(chan string)  // Unbuffered (sem buffer)
+    
+    // Enviar e receber em goroutines separadas
+    go func() {
+        ch <- "mensagem"  // Envia
+    }()
+    
+    msg := <-ch  // Recebe
+    fmt.Println(msg)
+}
+```
+
+### Unbuffered vs Buffered Channels
+
+**Unbuffered (sem buffer)**:
+
+- Só permite enviar quando há um receptor pronto
+- Só permite receber quando há um emissor pronto
+- **Sincronização garantida** - emissor e receptor se encontram
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+// Unbuffered - comunicação síncrona
+func unbufferedExample() {
+	ch := make(chan int) // Sem buffer
+
+	fmt.Println("Chamando func inline pra enviar via channel")
+	go func() {
+		ch <- 42 // BLOQUEIA até alguém receber
+		fmt.Println("Enviado!")
+	}()
+
+	fmt.Println("Dando um tempo pra ver o sync")
+	time.Sleep(2 * time.Second) // Simula atraso
+
+	valor := <-ch // BLOQUEIA até alguém enviar
+	fmt.Println("Recebido:", valor)
+}
+
+func main() {
+	fmt.Println("Call unbuffered channel function")
+	unbufferedExample()
+	fmt.Println("Voltei do call da unbuffered channel function")
+}
+```
+
+**Buffered (com buffer)**:
+
+- Permite enviar até que o buffer esteja cheio
+- Permite receber até que o buffer esteja vazio
+- **Comunicação assíncrona** (até o limite do buffer)
+
+```go
+package main
+
+import (
+	"fmt"
+)
+
+// Buffered - comunicação assíncrona
+func bufferedExample() {
+	ch := make(chan int, 3) // Buffer de 3
+
+	// Pode enviar 3 mensagens sem receptor
+	fmt.Println("Enviando msg 1")
+	ch <- 1
+	fmt.Println("Enviando msg 2")
+	ch <- 2
+	fmt.Println("Enviando msg 3")
+	ch <- 3
+	fmt.Println("Enviadas")
+
+	// Agora recebe
+	fmt.Println("Recebendo msg 1")
+	fmt.Println(<-ch) // 1
+	fmt.Println("Recebendo msg 2")
+	fmt.Println(<-ch) // 2
+	fmt.Println("Recebendo msg 3")
+	fmt.Println(<-ch) // 3
+	fmt.Println("Recebidas")
+}
+
+func main() {
+	fmt.Println("Call buffered channel function")
+	bufferedExample()
+	fmt.Println("Voltei do call da buffered channel function")
+}
+```
+
+**Quando usar cada um**?
+
+| Tipo | Uso  |
+| :--- | :--- |
+| **Unbuffered** | Sincronização exata, garantia de entrega      |
+| **Buffered**   | Processamento em lote, amortecimento de picos |
+
+### Select: Multiplexando Channels
+
+**Select** permite esperar por múltiplos canais simultaneamente - como um "switch" para canais.
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	ch1 := make(chan string)
+	ch2 := make(chan string)
+
+	// Duas goroutines enviando em canais diferentes
+	go func() {
+		fmt.Println("go func 1")
+		time.Sleep(2 * time.Second)
+		fmt.Println("go func 1: enviando msg")
+		ch1 <- "mensagem do canal 1"
+		fmt.Println("go func 1: msg enviada")
+	}()
+
+	go func() {
+		fmt.Println("go func 2")
+		time.Sleep(1 * time.Second)
+		fmt.Println("go func 2: enviando msg")
+		ch2 <- "mensagem do canal 2"
+		fmt.Println("go func 2: msg enviada")
+	}()
+
+	// Select espera o primeiro canal que receber dados
+	for i := 0; i < 2; i++ {
+		fmt.Println("Quem mandou msg?")
+		select {
+		case msg1 := <-ch1:
+			fmt.Println("Recebido do canal 1:", msg1)
+		case msg2 := <-ch2:
+			fmt.Println("Recebido do canal 2:", msg2)
+		case <-time.After(3 * time.Second):
+			fmt.Println("Timeout!")
+			return
+		}
+	}
+	fmt.Println("Saindo")
+}
+```
+
+**Padrões com Select**:
+
+```go
+// Timeout
+select {
+case msg := <-ch:
+    processar(msg)
+case <-time.After(5 * time.Second):
+    fmt.Println("Timeout!")
+}
+
+// Non-blocking (default)
+select {
+case msg := <-ch:
+    processar(msg)
+default:
+    fmt.Println("Nenhuma mensagem disponível")
+}
+
+// Tentar enviar sem bloquear
+select {
+case ch <- valor:
+    fmt.Println("Enviado!")
+default:
+    fmt.Println("Canal cheio, não enviou")
+}
+```
+
+### Range sobre Channels
+
+`range` pode iterar sobre canais até que eles sejam fechados.
+
+```go
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func produtor(ch chan<- int) {
+	fmt.Println("Entrando no produtor")
+	for i := 1; i <= 5; i++ {
+		fmt.Println("Enviando:", i)
+		ch <- i
+		time.Sleep(100 * time.Millisecond)
+	}
+	close(ch) // Fecha o canal quando terminar
+	fmt.Println("Saindo do produtor")
+}
+
+func consumidor(ch <-chan int) {
+	fmt.Println("Entrando no consumidor")
+	for valor := range ch { // Loop até canal ser fechado
+		fmt.Println("Recebido:", valor)
+	}
+	fmt.Println("Canal fechado!")
+	fmt.Println("Saindo do consumidor")
+}
+
+func main() {
+	fmt.Println("range Channel iniciado!")
+	ch := make(chan int)
+
+	fmt.Println("Chamando produtor")
+	go produtor(ch)
+	fmt.Println("Chamando consumidor")
+	consumidor(ch)
+}
+```
+
+**⚠️ Importante sobre fechar canais**:
+
+- Só o **produtor** deve fechar o canal
+- Nunca feche um canal que outros podem estar enviando
+- Receber de um canal fechado retorna o valor zero
+- Use `v, ok := <-ch` para verificar se está aberto
+
+### Pipeline: Produtor → Processador → Consumidor
+
+**Pipeline** é um padrão clássico onde dados fluem por uma série de estágios.
+
+```go
+package main
+
+import (
+	"fmt"
+	"sync"
+	"time"
+)
+
+// Estágio 1: Produtor - gera números
+func produtor(nums ...int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for _, n := range nums {
+			fmt.Printf("📦 Produtor enviou: %d\n", n)
+			out <- n
+			time.Sleep(100 * time.Millisecond)
+		}
+		close(out)
+		fmt.Println("📦 Produtor finalizado")
+	}()
+	return out
+}
+
+// Estágio 2: Processador - dobra os números
+func processador(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		for n := range in {
+			resultado := n * 2
+			fmt.Printf("⚙️  Processador: %d → %d\n", n, resultado)
+			out <- resultado
+			time.Sleep(50 * time.Millisecond)
+		}
+		close(out)
+		fmt.Println("⚙️  Processador finalizado")
+	}()
+	return out
+}
+
+// Estágio 3: Consumidor - imprime os resultados
+func consumidor(in <-chan int, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for resultado := range in {
+		fmt.Printf("✅ Consumidor recebeu: %d\n", resultado)
+	}
+	fmt.Println("✅ Consumidor finalizado")
+}
+
+// Pipeline com múltiplos workers em paralelo
+func pipelineParalelo() {
+	fmt.Println("\n=== PIPELINE COM WORKERS PARALELOS ===")
+
+	// Entrada
+	numeros := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
+	// Estágio 1: Produtor
+	prod := produtor(numeros...)
+
+	// Estágio 2: Processadores paralelos (fan-out)
+	numWorkers := 3
+	processadores := make([]<-chan int, numWorkers)
+	for i := 0; i < numWorkers; i++ {
+		processadores[i] = processador(prod)
+	}
+
+	// Estágio 3: Consumidor (fan-in)
+	consumidorChan := make(chan int)
+	var wg sync.WaitGroup
+
+	// Fan-in: junta os resultados dos processadores
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		for _, ch := range processadores {
+			for v := range ch {
+				consumidorChan <- v
+			}
+		}
+		close(consumidorChan)
+	}()
+
+	// Consumidor final
+	wg.Add(1)
+	go consumidor(consumidorChan, &wg)
+
+	wg.Wait()
+}
+
+// Pipeline com contexto (cancellation)
+func pipelineComContexto() {
+	// Veremos amanhã com Context
+	fmt.Println("\n=== PIPELINE COM CONTEXTO (amanhã) ===")
+}
+
+func main() {
+	fmt.Println("=== PIPELINE SIMPLES ===")
+	// Pipeline simples
+	prod := produtor(1, 2, 3, 4, 5)
+	proc := processador(prod)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	consumidor(proc, &wg)
+	wg.Wait()
+
+	// Pipeline com workers paralelos
+	pipelineParalelo()
+}
+```
+
+### Direcionalidade: `chan<-` e `<-chan`
+
+Especifica se um canal só pode enviar ou só receber - aumenta segurança.
+
+```go
+// Função que só ENVIA
+func sender(ch chan<- int) {
+    ch <- 42
+    // <-ch  // ERRO! Não pode receber
+}
+
+// Função que só RECEBE
+func receiver(ch <-chan int) {
+    valor := <-ch
+    // ch <- 42  // ERRO! Não pode enviar
+}
+
+// Função que pode enviar E receber
+func bidirectional(ch chan int) {
+    ch <- 42
+    valor := <-ch
+}
+```
+
+### Erros e Confusões Comuns
+
+| Erro | Sintoma | Solução |
+| :--- | :------ | :------ |
+| Deadlock enviando sem receptor | `fatal error: all goroutines are asleep` | Use buffer ou goroutine para enviar |
+| Deadlock recebendo sem emissor | `fatal error: all goroutines are asleep` | Garanta que alguém enviará ou feche o canal |
+| Enviar em canal fechado        | `panic: send on closed channel`          | Apenas o produtor deve fechar |
+| Esquecer de fechar canal       | Loop `range` nunca termina               | Feche quando não houver mais dados |
+| Canal sem buffer em loop       | Deadlock ou performance ruim             | Use buffer para processamento em lote |
+
+### Exercício para Fixar
+
+**Objetivo**: Criar um pipeline de processamento de logs com 3 estágios.
+
+**Instruções**:
+
+- **Estágio 1 - Coletor de Logs (`produtor`)**:
+  - Gera 100 mensagens de log simuladas
+  - Cada mensagem tem: timestamp, nível (`INFO/WARN/ERROR`), mensagem
+  - Envia para o próximo estágio
+- **Estágio 2 - Filtro e Processador**:
+  - Recebe logs
+  - Filtra apenas logs com nível INFO (opcional: pode receber um filtro)
+  - Converte para maiúsculas
+  - Envia para o próximo estágio
+- **Estágio 3 - Consumidor**:
+  - Recebe logs processados
+  - Imprime cada log com prefixo "`[PROCESSADO]`"
+  - Mantém estatísticas (total recebido, total processado)
+- **Bônus**: Use múltiplos workers no estágio 2 (fan-out) e combine os resultados (fan-in)
+
+**Esboço da Solução**:
+
+```go
+type Log struct {
+    Timestamp time.Time
+    Level     string
+    Message   string
+}
+
+// Funções de pipeline
+func coletorLogs() <-chan Log { /* ... */ }
+func filtroProcessador(in <-chan Log, filtro string) <-chan string { /* ... */ }
+func consumidor(in <-chan string, wg *sync.WaitGroup) { /* ... */ }
+```
+
+### Solução
+
+```go
+package main
+
+import (
+	"fmt"
+	"strings"
+	"sync"
+	"time"
+)
+
+// Log - struct representando uma entrada de log
+type Log struct {
+	Timestamp time.Time
+	Level     string
+	Message   string
+}
+
+// Stage 1: Coletor de Logs (Produtor)
+func coletorLogs(numLogs int) <-chan Log {
+	out := make(chan Log, numLogs)
+	levels := []string{"INFO", "WARN", "ERROR", "INFO", "INFO"}
+	messages := []string{
+		"Serviço iniciado",
+		"Conexão estabelecida",
+		"Timeout na requisição",
+		"Cache atualizado",
+		"Usuário autenticado",
+		"Erro no banco de dados",
+		"Processamento concluído",
+		"Health check OK",
+	}
+
+	go func() {
+		defer close(out)
+		for i := 0; i < numLogs; i++ {
+			log := Log{
+				Timestamp: time.Now(),
+				Level:     levels[i%len(levels)],
+				Message:   fmt.Sprintf("%s [%d]", messages[i%len(messages)], i),
+			}
+			fmt.Printf("📝 Coletor: [%s] %s\n", log.Level, log.Message)
+			out <- log
+			time.Sleep(50 * time.Millisecond) // Simula coleta
+		}
+		fmt.Println("📝 Coletor finalizado")
+	}()
+	return out
+}
+
+// Stage 2: Filtro e Processador (com múltiplos workers)
+func filtroProcessador(in <-chan Log, nivelFiltro string, numWorkers int) <-chan string {
+	out := make(chan string, 100)
+	var wg sync.WaitGroup
+
+	// Worker function
+	worker := func(id int) {
+		defer wg.Done()
+		for log := range in {
+			// Filtra pelo nível
+			if log.Level != nivelFiltro {
+				continue
+			}
+
+			// Processa: converte mensagem para maiúsculas
+			processed := fmt.Sprintf("[Worker %d] %s | %s",
+				id,
+				log.Timestamp.Format("15:04:05"),
+				strings.ToUpper(log.Message))
+
+			fmt.Printf("⚙️  Worker %d processou: %s\n", id, log.Message)
+			out <- processed
+			time.Sleep(20 * time.Millisecond) // Simula processamento
+		}
+	}
+
+	// Inicia workers
+	for i := 0; i < numWorkers; i++ {
+		wg.Add(1)
+		go worker(i)
+	}
+
+	// Fecha o canal de saída quando todos os workers terminarem
+	go func() {
+		wg.Wait()
+		close(out)
+		fmt.Println("⚙️  Processador finalizado")
+	}()
+
+	return out
+}
+
+// Stage 3: Consumidor
+func consumidor(in <-chan string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	var totalRecebidos, totalProcessados int
+	var mutex sync.Mutex
+
+	var innerWg sync.WaitGroup
+	innerWg.Add(1)
+
+	go func() {
+		defer innerWg.Done()
+		for processed := range in {
+			mutex.Lock()
+			totalRecebidos++
+			totalProcessados++
+			mutex.Unlock()
+
+			fmt.Printf("✅ Consumidor: %s\n", processed)
+		}
+	}()
+
+	// Timeout para mostrar estatísticas mesmo se pipeline demorar
+	select {
+	case <-time.After(5 * time.Second):
+		fmt.Println("⏰ Timeout no consumidor")
+	case <-func() <-chan struct{} {
+		ch := make(chan struct{})
+		go func() {
+			innerWg.Wait()
+			close(ch)
+		}()
+		return ch
+	}():
+		// Pipeline completou
+	}
+
+	fmt.Printf("📊 Estatísticas: %d logs processados\n", totalProcessados)
+}
+
+func main() {
+	fmt.Println("=== PIPELINE DE PROCESSAMENTO DE LOGS ===")
+	fmt.Println()
+
+	// Stage 1: Coletor (100 logs)
+	logs := coletorLogs(20)
+
+	// Stage 2: Processador (filtra INFO, 3 workers)
+	processed := filtroProcessador(logs, "INFO", 3)
+
+	// Stage 3: Consumidor
+	var wg sync.WaitGroup
+	wg.Add(1)
+	consumidor(processed, &wg)
+
+	wg.Wait()
+	fmt.Println("\n✅ Pipeline completo!")
+}
+```
+
+### O que Estudar para Aprofundar
+
+- **Padrões de concorrência**: Fan-out, Fan-in, Worker pools
+- **Select com timeouts**: `time.After()`, `time.Ticker()`, `time.Tick()`
+- **Channel ownership**: Quem cria, quem fecha, quem usa
+- **Context com channels**: Cancela pipelines (Dia 8)
+- **Benchmarks**: Performance de unbuffered vs buffered
+
+### Contexto Kubernetes: Como Você Vai Usar Isso
+
+Em operadores K8s, channels são usados para:
+
+- **Watch events**: Processar eventos de recursos K8s
+- **Work queues**: Filas de reconciliação (controller-runtime)
+- **Log aggregation**: Coletar e processar logs de múltiplos pods
+- **Health checks**: Monitorar status de serviços
+
+```go
+// Exemplo real: controller-runtime usa work queues
+type RateLimitingInterface interface {
+    Add(item interface{})
+    Get() (item interface{}, shutdown bool)
+    Done(item interface{})
+}
+// Internamente usa channels e goroutines
+```
+
+### Checklist de Conclusão do Dia 6
+
+- □ Entendo a diferença entre buffered e unbuffered channels
+- □ Sei usar `select` para multiplexar canais
+- □ Uso `range` para iterar sobre canais
+- □ Compreendo direcionalidade (`chan<-` e `<-chan`)
+- □ Evito deadlocks (não enviar sem receptor)
+- □ Completei o exercício do pipeline de logs
+- □ Entendo quando fechar canais (só o produtor)
+
+## DIA 7: Tratamento de Erros
+
+### Proposta
+
+**Conceitos**:
+
+- `error` é uma interface
+- Retorno múltiplo (`valor, err`)
+- `Errors.Is` e `errors.As` para wrapping
+- `Panic/recover` - NÃO USE em código normal
+
+**Analogia**: Diferente de exceptions (`try/catch`), erros são valores de retorno.
+
+**Relação**: Crucial para serviços long-running em K8s - erros não podem quebrar tudo.
+
+**Aplicação prática**:
+
+```go
+result, err := doSomething()
+if err != nil {
+    return fmt.Errorf("processando pod %s: %w", podName, err)
+}
+```
+
+**Erro comum**: Ignorar erros com _ - SEMPRE trate ou propague.
+
+**Exercício**:
+
+- Crie função que tenta conectar a um servidor (mock), retry com backoff exponencial.
+
+**Para aprofundar**: Erros em GO
+
 ### 
-
-
 
 
 
@@ -2271,40 +2925,6 @@ msg := <-ch
 
 
 ...
-
-## DIA 7: Tratamento de Erros
-
-### Proposta
-
-Conceitos:
-
-error é uma interface
-
-Retorno múltiplo (valor, err)
-
-Errors.Is e errors.As para wrapping
-
-Panic/recover - NÃO USE em código normal
-
-Analogia: Diferente de exceptions (try/catch), erros são valores de retorno.
-
-Relação: Crucial para serviços long-running em K8s - erros não podem quebrar tudo.
-
-Aplicação prática:
-
-go
-result, err := doSomething()
-if err != nil {
-    return fmt.Errorf("processando pod %s: %w", podName, err)
-}
-Erro comum: Ignorar erros com _ - SEMPRE trate ou propague.
-
-Exercício:
-Crie função que tenta conectar a um servidor (mock), retry com backoff exponencial.
-
-Para aprofundar: Erros em GO
-
-### 
 
 ## DIA 8: Context e Timeouts
 
