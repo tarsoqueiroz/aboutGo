@@ -2903,28 +2903,682 @@ if err != nil {
 
 **Para aprofundar**: Erros em GO
 
-### 
+### Erros São Valores, Não Exceções
 
+**Analogia**: Em Java/C#, erros são como **alarmes** que interrompem o fluxo (try/catch). Em Go, erros são como **notas fiscais** - você recebe junto com o produto e decide o que fazer com ela.
 
+**Características**:
 
+- `error` é uma interface com um único método: `Error() string`
+- Funções retornam `(valor, error)` - o erro é o último valor
+- Você **deve** verificar erros explicitamente
+- Não há `try/catch` - você decide como lidar com cada erro
 
+```go
+package main
 
+import (
+	"errors"
+	"fmt"
+)
 
+// error é uma interface
+type error interface {
+	Error() string
+}
 
+// Criando erros simples
+func dividir(a, b float64) (float64, error) {
+	if b == 0 {
+		return 0, errors.New("divisão por zero não permitida")
+	}
+	return a / b, nil
+}
 
+func main() {
+	// Padrão: sempre verifique o erro
+	resultado, err := dividir(10, 2)
+	if err != nil {
+		fmt.Println("Erro:", err)
+		return
+	}
+	fmt.Println("Resultado:", resultado)
 
+	// Erro esperado
+	resultado, err = dividir(10, 0)
+	if err != nil {
+		fmt.Println("Erro esperado:", err)
+		// Não retorna, continua execução
+	}
+}
+```
 
+### Criando e Usando Erros Customizados
 
+```package main
+package main
 
+import (
+	"fmt"
+	"time"
+)
 
+// Erro customizado com mais informações
+type TimeoutError struct {
+	Operation string
+	Timeout   time.Duration
+	Cause     error
+}
 
+func (e TimeoutError) Error() string {
+	if e.Cause != nil {
+		return fmt.Sprintf("timeout na operação '%s' após %v: %v",
+			e.Operation, e.Timeout, e.Cause)
+	}
+	return fmt.Sprintf("timeout na operação '%s' após %v",
+		e.Operation, e.Timeout)
+}
 
+// Função que pode retornar erro customizado
+func operacaoComTimeout(operation string, timeout time.Duration) error {
+	// Simula uma operação que pode timeout
+	if timeout < time.Second {
+		return TimeoutError{
+			Operation: operation,
+			Timeout:   timeout,
+			Cause:     fmt.Errorf("timeout muito curto"),
+		}
+	}
+	return nil
+}
 
+func main() {
+	err := operacaoComTimeout("conectar", 100*time.Millisecond)
+	if err != nil {
+		// Type assertion para acessar campos específicos
+		if timeoutErr, ok := err.(TimeoutError); ok {
+			fmt.Printf("⚠️  Erro customizado: %s\n", timeoutErr.Error())
+			fmt.Printf("   Operação: %s\n", timeoutErr.Operation)
+			fmt.Printf("   Timeout: %v\n", timeoutErr.Timeout)
+		}
+	}
+}
+```
 
+### Wrapping de Erros: `fmt.Errorf` com `%w`
 
+Wrapping permite adicionar contexto a erros sem perder a causa original.
 
+```go
+package main
 
-...
+import (
+	"errors"
+	"fmt"
+)
+
+// Função de baixo nível
+func conectarServidor(addr string) error {
+	// Simula erro de conexão
+	return fmt.Errorf("servidor %s: conexão recusada", addr)
+}
+
+// Função de médio nível
+func iniciarServico(servico string) error {
+	err := conectarServidor("localhost:8080")
+	if err != nil {
+		// %w mantém a causa original
+		return fmt.Errorf("iniciando serviço %s: %w", servico, err)
+	}
+	return nil
+}
+
+// Função de alto nível
+func main() {
+	err := iniciarServico("api-gateway")
+	if err != nil {
+		// Verifica se o erro contém uma causa específica
+		if errors.Is(err, fmt.Errorf("conexão recusada")) {
+			fmt.Println("Erro específico detectado!")
+		}
+
+		// Desempacota para ver a cadeia
+		fmt.Printf("Erro completo: %v\n", err)
+
+		// Desempacota para ver a causa raiz
+		fmt.Printf("Causa raiz: %v\n", errors.Unwrap(err))
+	}
+}
+```
+
+### `errors.Is` vs `errors.As`
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+)
+
+type ValidationError struct {
+	Field   string
+	Value   interface{}
+	Message string
+}
+
+func (e ValidationError) Error() string {
+	return fmt.Sprintf("validação falhou para %s (%v): %s",
+		e.Field, e.Value, e.Message)
+}
+
+func validarCampo(field string, value interface{}) error {
+	if value == nil || value == "" {
+		return ValidationError{
+			Field:   field,
+			Value:   value,
+			Message: "valor não pode ser vazio",
+		}
+	}
+	return nil
+}
+
+func processarDados() error {
+	err := validarCampo("nome", "")
+	if err != nil {
+		return fmt.Errorf("processando dados: %w", err)
+	}
+	return nil
+}
+
+func main() {
+	err := processarDados()
+	if err != nil {
+		// errors.Is: verifica se o erro (ou sua causa) é de um tipo específico
+		if errors.Is(err, ValidationError{}) {
+			fmt.Println("❌ Erro de validação detectado")
+		}
+
+		// errors.As: extrai o erro para um tipo específico
+		var valErr ValidationError
+		if errors.As(err, &valErr) {
+			fmt.Printf("⚠️  Campo: %s, Mensagem: %s\n",
+				valErr.Field, valErr.Message)
+		}
+	}
+}
+```
+
+### Panic e Recover: Use com MUITA CUIDADO
+
+**Regra de Ouro**: `panic` é para **erros irrecuperáveis**, não para fluxo normal.
+
+```go
+package main
+
+import "fmt"
+
+// ❌ NUNCA faça isso para fluxo normal
+func exemploErrado() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Println("Recuperado:", r)
+		}
+	}()
+
+	panic("algo deu errado") // Isso é um anti-pattern!
+}
+
+// ✅ Use panic apenas para erros que não podem ser recuperados
+func exemploCorreto() {
+	// Exemplo: arquivo de configuração obrigatório não existe
+	// Aqui panic é aceitável porque o programa não pode continuar
+	config := lerConfiguracaoObrigatoria()
+	// ... continua
+}
+
+func lerConfiguracaoObrigatoria() string {
+	// Se não encontrar, panic é aceitável
+	// ...
+	return "config"
+}
+
+// ✅ Em serviços long-running, use retry com erros, não panic
+func operacaoComRetry() error {
+	for i := 0; i < 3; i++ {
+		err := operacaoArriscada()
+		if err == nil {
+			return nil
+		}
+		// Log do erro e tenta novamente
+	}
+	return fmt.Errorf("falha após 3 tentativas")
+}
+
+func operacaoArriscada() error {
+	return fmt.Errorf("erro simulado")
+}
+```
+
+### Padrão de Retry com Backoff Exponencial (Exercício Prático)
+
+Este é um padrão essencial para sistemas que interagem com serviços externos.
+
+```go
+package main
+
+import (
+	"errors"
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+// Erro de conexão customizado
+type ConnectionError struct {
+	Address string
+	Attempt int
+	Cause   error
+}
+
+func (e ConnectionError) Error() string {
+	return fmt.Sprintf("conexão com %s falhou na tentativa %d: %v",
+		e.Address, e.Attempt, e.Cause)
+}
+
+// Simula conexão com servidor (sucesso ou falha aleatória)
+func conectarServidor(addr string) error {
+	// Simula latência de rede
+	time.Sleep(50 * time.Millisecond)
+
+	// 70% de chance de falha
+	if rand.Float32() < 0.7 {
+		return fmt.Errorf("servidor %s não respondeu", addr)
+	}
+	return nil
+}
+
+// Função com retry e backoff exponencial
+func conectarComRetry(addr string, maxRetries int) error {
+	var lastErr error
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		// Tentativa de conexão
+		err := conectarServidor(addr)
+		if err == nil {
+			fmt.Printf("✅ Conexão com %s estabelecida na tentativa %d\n",
+				addr, attempt+1)
+			return nil
+		}
+
+		// Erro na tentativa
+		lastErr = ConnectionError{
+			Address: addr,
+			Attempt: attempt + 1,
+			Cause:   err,
+		}
+
+		// Se for a última tentativa, retorna o erro
+		if attempt == maxRetries {
+			break
+		}
+
+		// Calcula backoff exponencial: 1s, 2s, 4s, 8s...
+		backoff := time.Duration(1<<uint(attempt)) * time.Second
+		// Adiciona jitter (variação aleatória) para evitar "thundering herd"
+		jitter := time.Duration(rand.Intn(500)) * time.Millisecond
+		waitTime := backoff + jitter
+
+		fmt.Printf("⚠️  Tentativa %d falhou. Aguardando %v antes de tentar novamente...\n",
+			attempt+1, waitTime)
+		time.Sleep(waitTime)
+	}
+
+	return fmt.Errorf("falha ao conectar com %s após %d tentativas: %w",
+		addr, maxRetries+1, lastErr)
+}
+
+// Versão com jitter e backoff mais sofisticado
+func conectarComRetryAvancado(addr string, maxRetries int) error {
+	var lastErr error
+	baseDelay := 1 * time.Second
+	maxDelay := 30 * time.Second
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		err := conectarServidor(addr)
+		if err == nil {
+			fmt.Printf("✅ Conexão com %s estabelecida na tentativa %d\n",
+				addr, attempt+1)
+			return nil
+		}
+
+		lastErr = ConnectionError{
+			Address: addr,
+			Attempt: attempt + 1,
+			Cause:   err,
+		}
+
+		if attempt == maxRetries {
+			break
+		}
+
+		// Backoff exponencial com jitter
+		// Formula: min(maxDelay, baseDelay * 2^attempt)
+		backoff := baseDelay * time.Duration(1<<uint(attempt))
+		if backoff > maxDelay {
+			backoff = maxDelay
+		}
+
+		// Jitter: adiciona +/- 20% de variação
+		jitterRange := float64(backoff) * 0.2
+		jitter := time.Duration(rand.Float64()*jitterRange*2 - jitterRange)
+		waitTime := backoff + jitter
+
+		fmt.Printf("⚠️  Tentativa %d falhou. Aguardando %v antes de tentar novamente...\n",
+			attempt+1, waitTime)
+		time.Sleep(waitTime)
+	}
+
+	return fmt.Errorf("falha ao conectar com %s após %d tentativas: %w",
+		addr, maxRetries+1, lastErr)
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	fmt.Println("=== RETRY COM BACKOFF EXPONENCIAL ===")
+	err := conectarComRetry("api.k8s.local", 4)
+	if err != nil {
+		fmt.Printf("❌ Erro final: %v\n", err)
+
+		// Verifica se é ConnectionError
+		var connErr ConnectionError
+		if errors.As(err, &connErr) {
+			fmt.Printf("   Última tentativa: %d, Endereço: %s\n",
+				connErr.Attempt, connErr.Address)
+		}
+	}
+
+	fmt.Println("\n=== RETRY AVANÇADO COM JITTER ===")
+	err = conectarComRetryAvancado("database.k8s.local", 5)
+	if err != nil {
+		fmt.Printf("❌ Erro final: %v\n", err)
+	}
+}
+```
+
+### Erros e Confusões Comuns
+
+| Erro | Sintoma | Solução |
+| :--- | :------ | :------ |
+| Ignorar erro com `_`           | `result, _ := doSomething()`       | Sempre trate ou propague o erro   |
+| Não propagar erro com `%w`     | Perde a causa original             | Use `fmt.Errorf("...: %w", err)`  |
+| Usar `panic` para fluxo normal | Programa quebra desnecessariamente | Use error para erros esperados    |
+| Comparar erros com `==`        | Não funciona com wrapped errors    | Use `errors.Is()` e `errors.As()` |
+| Não verificar erro em `defer`  | `defer file.Close()` pode falhar   | Verifique erros em `defer` também |
+
+### Exercício para Fixar
+
+**Objetivo**: Criar um sistema de conexão com retry e circuit breaker.
+
+**Instruções**:
+
+- **Crie uma função `conectarAPI()` que**:
+  - Simula conexão com API externa
+  - Falha com 60% de chance
+  - Pode retornar diferentes tipos de erro: Timeout, AuthError, RateLimitError
+- **Implemente retry com backoff**:
+  - Máximo de 5 tentativas
+  - Backoff exponencial: 1s, 2s, 4s, 8s, 16s
+  - Com jitter
+- **Implemente Circuit Breaker**:
+  - Se houver 3 falhas consecutivas, abre o circuito
+  - Fica aberto por 10 segundos
+  - Depois tenta novamente (half-open)
+- **Teste diferentes cenários**:
+  - Sucesso na primeira tentativa
+  - Falhas com sucesso no retry
+  - Falhas que abrem o circuit breaker
+
+**Esboço da Solução**:
+
+```go
+type CircuitBreaker struct {
+    state           string  // "closed", "open", "half-open"
+    failures        int
+    maxFailures     int
+    timeout         time.Duration
+    lastFailureTime time.Time
+}
+
+func (cb *CircuitBreaker) Call(fn func() error) error {
+    // Implementa lógica do circuit breaker
+}
+```
+
+### Solução
+
+```package main
+
+import (
+	"errors"
+	"fmt"
+	"math/rand"
+	"time"
+)
+
+// Tipos de erros
+type TimeoutError struct {
+	Duration time.Duration
+}
+
+func (e TimeoutError) Error() string {
+	return fmt.Sprintf("timeout após %v", e.Duration)
+}
+
+type AuthError struct {
+	Reason string
+}
+
+func (e AuthError) Error() string {
+	return fmt.Sprintf("erro de autenticação: %s", e.Reason)
+}
+
+type RateLimitError struct {
+	RetryAfter time.Duration
+}
+
+func (e RateLimitError) Error() string {
+	return fmt.Sprintf("rate limit: aguarde %v", e.RetryAfter)
+}
+
+// Circuit Breaker
+type CircuitBreaker struct {
+	state           string
+	failures        int
+	maxFailures     int
+	timeout         time.Duration
+	lastFailureTime time.Time
+	mutex           chan struct{} // Simples mutex com channel
+}
+
+func NewCircuitBreaker(maxFailures int, timeout time.Duration) *CircuitBreaker {
+	return &CircuitBreaker{
+		state:       "closed",
+		maxFailures: maxFailures,
+		timeout:     timeout,
+		mutex:       make(chan struct{}, 1),
+	}
+}
+
+func (cb *CircuitBreaker) lock()   { cb.mutex <- struct{}{} }
+func (cb *CircuitBreaker) unlock() { <-cb.mutex }
+
+func (cb *CircuitBreaker) Call(fn func() error) error {
+	cb.lock()
+	defer cb.unlock()
+
+	// Verifica estado do circuit breaker
+	if cb.state == "open" {
+		if time.Since(cb.lastFailureTime) > cb.timeout {
+			fmt.Println("🔄 Circuit half-open: testando novamente...")
+			cb.state = "half-open"
+		} else {
+			return fmt.Errorf("circuit breaker aberto (falhas: %d)", cb.failures)
+		}
+	}
+
+	// Executa a função
+	err := fn()
+
+	if err != nil {
+		cb.failures++
+		cb.lastFailureTime = time.Now()
+
+		// Verifica se deve abrir o circuito
+		if cb.failures >= cb.maxFailures {
+			cb.state = "open"
+			fmt.Printf("🔴 Circuit breaker ABERTO (falhas: %d)\n", cb.failures)
+		}
+		return fmt.Errorf("chamada falhou: %w", err)
+	}
+
+	// Sucesso: reset
+	if cb.state == "half-open" {
+		fmt.Println("🟢 Circuit half-open: sucesso! Circuito fechado")
+	}
+	cb.state = "closed"
+	cb.failures = 0
+	return nil
+}
+
+// API simulada
+func chamadaAPI() error {
+	// Simula latência
+	time.Sleep(50 * time.Millisecond)
+
+	// Diferentes tipos de erro
+	randVal := rand.Float32()
+	switch {
+	case randVal < 0.2:
+		return TimeoutError{Duration: 5 * time.Second}
+	case randVal < 0.35:
+		return AuthError{Reason: "token expirado"}
+	case randVal < 0.5:
+		return RateLimitError{RetryAfter: 2 * time.Second}
+	case randVal < 0.7:
+		return fmt.Errorf("erro interno do servidor")
+	default:
+		return nil // Sucesso
+	}
+}
+
+// Função com retry e circuit breaker
+func chamadaComRetry(cb *CircuitBreaker, maxRetries int) error {
+	var lastErr error
+	baseDelay := 1 * time.Second
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		err := cb.Call(chamadaAPI)
+		if err == nil {
+			fmt.Printf("✅ Chamada bem-sucedida na tentativa %d\n", attempt+1)
+			return nil
+		}
+
+		lastErr = err
+
+		// Verifica se é erro de rate limit
+		var rateErr RateLimitError
+		if errors.As(err, &rateErr) {
+			fmt.Printf("⏳ Rate limit: aguardando %v\n", rateErr.RetryAfter)
+			time.Sleep(rateErr.RetryAfter)
+			continue
+		}
+
+		if attempt == maxRetries {
+			break
+		}
+
+		// Backoff exponencial com jitter
+		backoff := baseDelay * time.Duration(1<<uint(attempt))
+		jitter := time.Duration(rand.Intn(500)) * time.Millisecond
+		waitTime := backoff + jitter
+
+		fmt.Printf("⚠️  Tentativa %d falhou: %v. Aguardando %v...\n",
+			attempt+1, err, waitTime)
+		time.Sleep(waitTime)
+	}
+
+	return fmt.Errorf("falha após %d tentativas: %w", maxRetries+1, lastErr)
+}
+
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	fmt.Println("=== SISTEMA DE CONEXÃO COM RETRY E CIRCUIT BREAKER ===")
+
+	cb := NewCircuitBreaker(3, 5*time.Second)
+
+	// Cenário 1: Múltiplas chamadas
+	for i := 1; i <= 10; i++ {
+		fmt.Printf("\n--- Chamada %d ---\n", i)
+		err := chamadaComRetry(cb, 3)
+		if err != nil {
+			fmt.Printf("❌ Erro final: %v\n", err)
+		}
+
+		// Espera entre chamadas
+		time.Sleep(1 * time.Second)
+	}
+}
+```
+
+### O que Estudar para Aprofundar
+
+- **Erros customizados com `errors.New()`**: [Error handling best practices](https://go.dev/blog/error-handling)
+- **Wrapping de erros em cadeia**: [Go 1.13 error wrapping](https://go.dev/blog/go1.13-errors)
+- **Sentry/Logging**: Como integrar com ferramentas de monitoramento
+- **Circuit Breaker patterns**: [Resilience patterns](https://resilience4j.readme.io/docs/circuitbreaker)
+- **Error types em client-go**: Veja como o Kubernetes trata erros
+
+### Contexto Kubernetes: Como Você Vai Usar Isso
+
+Em operadores K8s, o tratamento de erros é crítico:
+
+```go
+// Exemplo real: controller-runtime
+func (r *PodReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+    // Busca o pod
+    var pod corev1.Pod
+    if err := r.Get(ctx, req.NamespacedName, &pod); err != nil {
+        if errors.Is(err, &NotFoundError{}) {
+            // Pod não existe - requeue com delay
+            return ctrl.Result{RequeueAfter: 5 * time.Minute}, nil
+        }
+        // Erro inesperado - requeue imediato
+        return ctrl.Result{}, fmt.Errorf("erro ao buscar pod: %w", err)
+    }
+    
+    // Processa o pod com retry
+    if err := r.processPodWithRetry(&pod); err != nil {
+        // Erro pode ser temporário - requeue com backoff
+        return ctrl.Result{RequeueAfter: r.calculateBackoff()}, nil
+    }
+    
+    return ctrl.Result{}, nil
+}
+```
+
+### Checklist de Conclusão do Dia 7
+
+- □ Entendo que `error` é uma interface, não exceção
+- □ Sei criar erros customizados com informações adicionais
+- □ Uso `fmt.Errorf("%w")` para wrapping
+- □ Sei diferença entre `errors.Is` e `errors.As`
+- □ Compreendo que `panic/recover` é para casos extremos
+- □ Implementei retry com backoff exponencial
+- □ Entendo o padrão Circuit Breaker
+- □ Completei o exercício prático
 
 ## DIA 8: Context e Timeouts
 
